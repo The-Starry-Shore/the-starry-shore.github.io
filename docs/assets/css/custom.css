@@ -151,3 +151,7 @@ pre:hover .copy-button {
 .md-footer .md-copyright {
     display: none;
 }
+
+.none {
+    display: none;
+}
