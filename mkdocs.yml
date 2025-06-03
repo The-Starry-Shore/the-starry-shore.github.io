@@ -1,0 +1,94 @@
+site_name: The Starry Shore
+site_url: https://the-starry-shore.github.io
+
+theme:
+    # favicon: assets/favicon.ico
+    logo: assets/img/logo.jpg
+    name: "material"
+    features:
+        - navigation.tabs
+        - navigation.sections
+        - navigation.expand
+        - navigation.instant
+        - navigation.tabs.sticky
+        # - navigation.path
+        - navigation.indexes
+        - toc.follow
+        # - toc.integrate
+        - header.autohide
+
+    palette:
+        # Light mode
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          primary: blue grey
+          accent: light blue
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Switch to dark mode
+
+        # Dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: blue grey
+          accent: light blue
+          toggle:
+              icon: material/toggle-switch
+              name: Switch to light mode
+
+extra:
+    consent:
+        title: Cookie Consent
+        actions:
+            - accept
+            - reject
+        description: >-
+            We use cookies to remember your preferences, such as your selected items in the shop
+            and your light/dark mode settings. This helps us provide a more personalized and
+            consistent experience when you return. We do not store any personal information on
+            our server beyond what GitHub Pages itself stores. By accepting cookies, you're helping
+            us to offer better functionality and convenience. You can choose to accept or reject
+            cookies at any time.
+
+# Extensions
+markdown_extensions:
+    - admonition
+    - codehilite
+    - footnotes
+    - md_in_html
+    - meta
+    - attr_list
+    - def_list
+    - wikilinks
+    - toc:
+          permalink: true
+    - pymdownx.critic
+    - pymdownx.caret
+    - pymdownx.keys
+    - pymdownx.mark
+    - pymdownx.tilde
+    - pymdownx.superfences
+    - pymdownx.details
+    - pymdownx.arithmatex:
+          generic: true
+    - pymdownx.tasklist:
+          custom_checkbox: true
+    - pymdownx.magiclink
+
+plugins:
+    - awesome-pages
+    - search
+    - roamlinks
+
+extra_css:
+    - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css
+    - assets/css/custom.css
+    - assets/css/obsidian-style-callouts.css
+
+extra_javascript:
+    - https://unpkg.com/mermaid/dist/mermaid.min.js
+    - https://code.jquery.com/jquery-3.7.1.min.js
+    - assets/js/obsidian-style-callouts.js
+    - assets/js/copy-inline-code.js
+    - assets/js/copy-code.js
+    - assets/js/copy-image-url.js
