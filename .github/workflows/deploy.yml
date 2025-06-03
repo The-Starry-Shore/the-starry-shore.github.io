@@ -1,0 +1,31 @@
+name: Deploy MkDocs to GitHub Pages
+
+on:
+    push:
+        branches:
+            - main # Deploy every time you push to main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.x"
+
+            - name: Install MkDocs and dependencies
+              run: |
+                  pip install mkdocs-material mkdocs-roamlinks-plugin mkdocs-rss-plugin
+
+            - name: Deploy to GitHub Pages
+              run: mkdocs gh-deploy --clean --force --strict
+              env:
+                  GIT_AUTHOR_NAME: github-actions
+                  GIT_AUTHOR_EMAIL: github-actions@github.com
+                  GIT_COMMITTER_NAME: github-actions
+                  GIT_COMMITTER_EMAIL: github-actions@github.com
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
