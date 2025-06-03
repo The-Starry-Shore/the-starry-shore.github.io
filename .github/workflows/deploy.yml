@@ -1,31 +1,39 @@
-name: Deploy MkDocs to GitHub Pages
+name: Deploy MkDocs site to GitHub Pages
 
 on:
     push:
         branches:
-            - main # Deploy every time you push to main
+            - main # Or whichever branch you want to trigger deploys from
+
+permissions:
+    contents: write
+    pages: write
+    id-token: write
 
 jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+            - name: Checkout repo
+              uses: actions/checkout@v4
 
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
-                  python-version: "3.x"
+                  python-version: "3.11"
 
-            - name: Install MkDocs and dependencies
+            - name: Install dependencies
               run: |
-                  pip install mkdocs-material mkdocs-roamlinks-plugin mkdocs-rss-plugin
+                  pip install mkdocs-material
+                  pip install mkdocs-roamlinks-plugin mkdocs-blog-plugin mkdocs-rss-plugin mkdocs-awesome-pages-plugin pymdown-extensions mkdocs-exclude
+
+            - name: Build site
+              run: mkdocs build --strict
 
             - name: Deploy to GitHub Pages
-              run: mkdocs gh-deploy --clean --force --strict
-              env:
-                  GIT_AUTHOR_NAME: github-actions
-                  GIT_AUTHOR_EMAIL: github-actions@github.com
-                  GIT_COMMITTER_NAME: github-actions
-                  GIT_COMMITTER_EMAIL: github-actions@github.com
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./site
+                  publish_branch: gh-pages
+                  force_orphan: true # Makes a clean, orphaned gh-pages branch if needed
