@@ -1,0 +1,160 @@
+/* =====================================
+   🌟 BASE STYLES
+===================================== */
+.obsidian-callout {
+    border-radius: 6px;
+    font-size: 0.95em;
+    background-color: var(--callout-bg);
+    border-left: 4px solid var(--callout-border);
+    margin: 1em 0;
+    padding: 0.75em 1em;
+    transition: background-color 0.3s ease;
+    overflow: visible;
+}
+
+/* =====================================
+   🎯 HEADER STYLES
+===================================== */
+.callout-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* =====================================
+   ⬇️ CONTENT STYLES
+===================================== */
+.callout-content {
+    display: block;
+}
+
+.callout-content[style*="display: none"] {
+    display: none !important;
+}
+
+.obsidian-callout.collapsed .callout-content {
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+/* Remove margin from last paragraph */
+.callout-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* =====================================
+   🧩 ICON STYLES
+===================================== */
+.callout-icon {
+    font-size: 1em;
+    width: 1.25em;
+    text-align: center;
+}
+
+/* =====================================
+   🎨 CALL OUT COLORS (THEME)
+   Use rgba to blend nicely with dark themes
+===================================== */
+.callout-note {
+    --callout-border: #4e88e2;
+    --callout-bg: rgba(78, 136, 226, 0.15);
+}
+.callout-abstract {
+    --callout-border: #6c757d;
+    --callout-bg: rgba(173, 181, 189, 0.1);
+}
+.callout-info {
+    --callout-border: #17a2b8;
+    --callout-bg: rgba(23, 162, 184, 0.1);
+}
+.callout-tip {
+    --callout-border: #28a745;
+    --callout-bg: rgba(40, 167, 69, 0.1);
+}
+.callout-success {
+    --callout-border: #198754;
+    --callout-bg: rgba(25, 135, 84, 0.1);
+}
+.callout-question {
+    --callout-border: #f39c12;
+    --callout-bg: rgba(243, 156, 18, 0.08);
+}
+.callout-warning {
+    --callout-border: #ffc107;
+    --callout-bg: rgba(255, 193, 7, 0.08);
+}
+.callout-failure {
+    --callout-border: #fd7e14;
+    --callout-bg: rgba(253, 126, 20, 0.08);
+}
+.callout-danger {
+    --callout-border: #dc3545;
+    --callout-bg: rgba(220, 53, 69, 0.08);
+}
+.callout-bug {
+    --callout-border: #e83e8c;
+    --callout-bg: rgba(232, 62, 140, 0.08);
+}
+.callout-example {
+    --callout-border: #20c997;
+    --callout-bg: rgba(32, 201, 151, 0.08);
+}
+.callout-quote {
+    --callout-border: #ced4da;
+    --callout-bg: rgba(206, 212, 218, 0.05);
+}
+.callout-summary {
+    --callout-border: #0d6efd;
+    --callout-bg: rgba(13, 110, 253, 0.1);
+}
+
+/* =====================================
+   🎨 HEADER TEXT COLORS (MATCH BORDER)
+===================================== */
+.callout-note .callout-header {
+    color: #4e88e2;
+}
+.callout-abstract .callout-header {
+    color: #adb5bd;
+}
+.callout-info .callout-header {
+    color: #17a2b8;
+}
+.callout-tip .callout-header {
+    color: #28a745;
+}
+.callout-success .callout-header {
+    color: #198754;
+}
+.callout-question .callout-header {
+    color: #f39c12;
+}
+.callout-warning .callout-header {
+    color: #ffc107;
+}
+.callout-failure .callout-header {
+    color: #fd7e14;
+}
+.callout-danger .callout-header {
+    color: #dc3545;
+}
+.callout-bug .callout-header {
+    color: #e83e8c;
+}
+.callout-example .callout-header {
+    color: #20c997;
+}
+.callout-quote .callout-header {
+    color: #ced4da;
+}
+.callout-summary .callout-header {
+    color: #0d6efd;
+}

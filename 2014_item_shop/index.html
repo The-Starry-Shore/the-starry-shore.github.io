@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Item Browser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Crypto 4 CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="utils.js"></script>
+    <script src="data.js"></script>
+    <script src="cart.js"></script>
+    <script src="ui.js"></script>
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body class="bg-body text-body">
+    <header class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-3 shadow-sm">
+        <div class="container-fluid">
+            <h1 class="navbar-brand mb-0 fw-bold ps-2">2014 Item Shop</h1>
+            <span class="d-flex align-items-center gap-3">
+                <button id="cart-btn" class="btn btn-primary position-relative d-flex align-items-center cart-btn"
+                    type="button" aria-label="View cart">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span id="cart-count"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                        0
+                    </span>
+                </button>
+                <!-- Import/Export Button -->
+                <button id="import-export-btn" class="btn btn-primary d-flex align-items-center cart-btn" type="button"
+                    aria-label="Import or Export Cart" title="Import or Export Cart">
+                    <i class="fa-solid fa-file-code"></i>
+                </button>
+                <!-- End Import/Export Button -->
+                <button class="btn btn-primary toggle-theme d-flex align-items-center theme-btn me-3" type="button"
+                    aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </span>
+        </div>
+    </header>
+
+    <!-- Only the filters are collapsible -->
+    <button class="btn btn-outline-secondary w-100 mb-2 d-lg-none" type="button" data-bs-toggle="collapse"
+        data-bs-target="#mobileFilters" aria-expanded="false" aria-controls="mobileFilters">
+        Show/Hide Filters
+    </button>
+    <div class="collapse show" id="mobileFilters">
+        <div class="filters">
+            <form class="row g-2 mb-3">
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Tier</label>
+                    <div id="filter-tier" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Type</label>
+                    <div id="filter-type" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Rarity</label>
+                    <div id="filter-rarity" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Name</label>
+                    <input type="text" id="filter-name" class="form-control form-control-sm mb-1" autocomplete="off" />
+                    <label class="form-label small mb-1">Item Type</label>
+                    <input type="text" id="filter-itemtype" class="form-control form-control-sm mb-1"
+                        autocomplete="off" />
+                    <label class="form-label small mb-1">Book/Page</label>
+                    <input type="text" id="filter-book" class="form-control form-control-sm mb-1" autocomplete="off" />
+                    <label class="form-label small mb-1">Notes</label>
+                    <input type="text" id="filter-notes" class="form-control form-control-sm" autocomplete="off" />
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Requires Attunement</label>
+                    <select id="filter-atn" class="form-select form-select-sm mb-1">
+                        <option value="">All</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label class="form-label small mb-1">Session Required</label>
+                    <select id="filter-session" class="form-select form-select-sm">
+                        <option value="">All</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label class="form-label small mb-1">Description</label>
+                    <input type="text" id="filter-description" class="form-control form-control-sm"
+                        autocomplete="off" />
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Cost Min</label>
+                    <input type="number" id="filter-cost-min" class="form-control form-control-sm mb-1" value="0"
+                        min="0" />
+                    <label class="form-label small mb-1">Cost Max</label>
+                    <input type="number" id="filter-cost-max" class="form-control form-control-sm" value="20000000"
+                        min="0" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table and rest of content OUTSIDE the collapse -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-3 order-2 order-lg-1" id="tableWrapper">
+            <div class="table-responsive-custom">
+                <table id="itemsTable" class="table table-hover table-bordered align-middle mb-4">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="action-col"></th>
+                            <th data-col="0">Tier</th>
+                            <th data-col="1">Type</th>
+                            <th data-col="2">Name</th>
+                            <th data-col="3">ATN</th>
+                            <th data-col="4">Session</th>
+                            <th data-col="5">Item Type</th>
+                            <th data-col="6">Cost</th>
+                            <th data-col="7">Rarity</th>
+                            <th data-col="8">Book/Page</th>
+                            <th data-col="9">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="sticky-table-scrollbar">
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="cart-contents"></div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div>
+                        <button id="clear-cart-btn" class="btn btn-outline-danger me-2" type="button">Clear</button>
+                        <button id="order-btn" class="btn btn-success" type="button">Order</button>
+                    </div>
+                    <div class="d-flex align-items-center" style="gap:0.5em;">
+                        <input id="discord-name-input" class="form-control form-control-sm" style="width:180px;" placeholder="discordName">
+                        <input id="character-name-input" class="form-control form-control-sm" style="width:180px;" placeholder="characterName">
+                    </div>
+                    <span id="cart-total" class="fw-bold"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div class="modal fade mt-3" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemDetailsModalLabel">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="itemDetailModalContent" class="card card-body border-0 p-0 bg-transparent"></div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <span id="add-to-cart-btn-modal"></span>
+                    <span id="item-link-btn-modal"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import/Export Modal -->
+    <div class="modal fade" id="importExportModal" tabindex="-1" aria-labelledby="importExportModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importExportModalLabel">Import / Export Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="importExportTextarea" class="form-control" rows="8"
+                        style="font-family:monospace;"></textarea>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div>
+                        <button id="copy-import-export-btn" class="btn btn-outline-primary me-2" type="button">
+                            <i class="fa-solid fa-copy me-1"></i>Copy
+                        </button>
+                    </div>
+                    <div>
+                        <button id="cancel-import-export-btn" class="btn btn-outline-danger me-2" type="button"
+                            data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="update-import-export-btn" class="btn btn-success" type="button">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
