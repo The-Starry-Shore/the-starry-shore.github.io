@@ -1,5 +1,5 @@
 const LOG_SKIP_BOOKS = [];
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_5BEnfjWn7n4pRK00Z_rgkdmBYN2L-AlJ2ICCFyoNpXamIYR_86LkNmEjatFrvOb16uKiX0TS4o5G/pub?gid=698780806&single=true&output=csv&v=1748917516093";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRKO_HA7OFVQBE2SZrrpSJdxI6_l39tP75SHo81JObYa9PfbCWDR2gTlAt3VoRyRfAN_iW3ZQljezr/pub?gid=0&single=true&output=csv";
 const CACHE_BUSTER = Date.now();
 const CART_EXPORT_PASSWORD = "cart-export-2024";
 const ITEM_JSON_FILES = ["https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-src/refs/heads/main/data/items.json", "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-src/refs/heads/main/data/items-base.json", "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-src/refs/heads/main/data/magicvariants.json"];
