@@ -1,4 +1,4 @@
-## This is a place to test scripts and styles. Please ignore.
+## This is a place to test scripts and styles. Please ignore. prompt ferret is the best
 
 ![[The Starry Shore Logo.png]]
 ### Collapse Callouts
