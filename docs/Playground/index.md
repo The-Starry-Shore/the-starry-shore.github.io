@@ -1,4 +1,6 @@
 ## This is a place to test scripts and styles. Please ignore.
+
+![[The Starry Shore Logo.png]]
 ### Collapse Callouts
 
 > [!note]- Note
