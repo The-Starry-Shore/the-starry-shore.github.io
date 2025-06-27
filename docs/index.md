@@ -7,6 +7,8 @@
         </button>
     </a>
 </p>
+# Items Cart
+https://the-starry-shore.github.io/2014_item_shop/
 ## Game Style
 Join The Starry Shore, a vibrant 18+ 5E RPG community. Explore the multiverse as creative and talented DMs guide you through one-shots, campaigns, and living worlds of their own imagining. All official magic items are available, and levelling past 20 is possible via multiclassing!
 ## Way We Play
