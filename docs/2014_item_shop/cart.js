@@ -1,10 +1,12 @@
 let cart = [];
+let cartIdCounter = 0;
 
 function addToCart(name) {
     const row = allData.find(row => row[2] === name);
     let costField = row ? (row[6] || '') : '';
     let needsBase = costField.includes('+');
     cart.push({
+        id: ++cartIdCounter,
         name,
         quantity: 1,
         base: 0,

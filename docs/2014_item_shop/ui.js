@@ -657,6 +657,18 @@ function setupEvents() {
             if (val) {
                 const imported = decryptCart(val);
                 if (imported && Array.isArray(imported)) {
+                    // Ensure imported items have unique IDs
+                    let maxId = 0;
+                    imported.forEach(item => {
+                        if (!item.id) {
+                            item.id = ++cartIdCounter;
+                        } else {
+                            maxId = Math.max(maxId, item.id);
+                        }
+                    });
+                    // Update cartIdCounter to be higher than any existing ID
+                    cartIdCounter = Math.max(cartIdCounter, maxId);
+                    
                     cart = imported;
                     updateCartCount();
                     renderCart();
@@ -786,8 +798,8 @@ function renderCart() {
         <tbody>`;
     let grandTotal = 0;
     sortedCart.forEach((item, idx) => {
-        // Find the original index in the cart array
-        const originalIdx = cart.findIndex((c) => c.name === item.name);
+        // Find the original index in the cart array using the unique ID
+        const originalIdx = cart.findIndex((c) => c.id === item.id);
 
         // Find item data for price and link
         const row = allData.find((row) => row[2] === item.name);
