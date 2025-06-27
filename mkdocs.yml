@@ -88,6 +88,7 @@ extra_css:
 extra_javascript:
     - https://unpkg.com/mermaid/dist/mermaid.min.js
     - https://code.jquery.com/jquery-3.7.1.min.js
+    - assets/js/counter.js
     - assets/js/obsidian-style-callouts.js
     - assets/js/copy-inline-code.js
     - assets/js/copy-code.js
