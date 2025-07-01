@@ -367,6 +367,10 @@
     vertical-align: middle;
 }
 
+.table th:not(.action-col) {
+    cursor: pointer;
+}
+
 .table > :not(caption) > * > * {
     background: none;
     border-bottom-width: 1px;

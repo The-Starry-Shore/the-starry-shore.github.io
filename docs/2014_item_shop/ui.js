@@ -72,17 +72,39 @@ function applyFilters() {
         data = allData;
     }
 
-    if (sortCol !== null) {
+    // Adjust for action column (first column is not in data)
+    let dataSortCol = sortCol === null ? null : sortCol - 1;
+
+    if (dataSortCol !== null && dataSortCol >= 0) {
         data.sort((a, b) => {
-            let vA = a[sortCol],
-                vB = b[sortCol];
-            // Try numeric sort if both are numbers
-            const nA = parseFloat(vA),
-                nB = parseFloat(vB);
-            if (!isNaN(nA) && !isNaN(nB)) {
+            let vA = a[dataSortCol],
+                vB = b[dataSortCol];
+
+            // Custom sort for Tier (column 0)
+            if (dataSortCol === 0) {
+                const nA = parseInt(vA, 10);
+                const nB = parseInt(vB, 10);
                 return sortAsc ? nA - nB : nB - nA;
             }
-            return sortAsc ? String(vA).localeCompare(String(vB)) : String(vB).localeCompare(String(vA));
+
+            // Custom sort for Cost (column 6 in data, so dataSortCol === 6)
+            if (dataSortCol === 6) {
+                const getCost = (val) => {
+                    if (!val || typeof val !== "string") return 0;
+                    const match = val.replace(/,/g, "").match(/(\d+)/);
+                    return match ? parseInt(match[1], 10) : 0;
+                };
+                const nA = getCost(vA);
+                const nB = getCost(vB);
+                return sortAsc ? nA - nB : nB - nA;
+            }
+
+            // All other columns: string compare
+            vA = (vA ?? "").toString().toLowerCase();
+            vB = (vB ?? "").toString().toLowerCase();
+            if (vA < vB) return sortAsc ? -1 : 1;
+            if (vA > vB) return sortAsc ? 1 : -1;
+            return 0;
         });
     }
 
