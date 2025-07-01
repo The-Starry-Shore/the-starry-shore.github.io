@@ -523,10 +523,7 @@ function setupEvents() {
     });
     document.getElementById("order-btn").addEventListener("click", () => {
         // Get names from inputs
-        let discordName = document.getElementById("discord-name-input")?.value.trim() || "discordName";
         const characterName = document.getElementById("character-name-input")?.value.trim() || "characterName";
-        // Strip any leading @ from discordName
-        if (discordName.startsWith("@")) discordName = discordName.slice(1);
 
         // Filter out items with blank or 0 quantity
         const filtered = cart.filter((item) => {
@@ -577,9 +574,7 @@ function setupEvents() {
             lines.push(`     (${qty}x) ${displayName} ${perItem.toLocaleString()} - ${itemTotal.toLocaleString()} GP`);
         });
 
-        // Only add @ if discordName was changed from the default
-        let discordPrefix = discordName !== "discordName" ? `@${discordName}` : discordName;
-        let output = `${discordPrefix} as ${characterName} buys:\n${lines.join("\n")}\nTotal ${total.toLocaleString()} GP`;
+        let output = `${characterName} buys:\n${lines.join("\n")}\nTotal ${total.toLocaleString()} GP`;
 
         // Copy to clipboard
         const orderBtn = document.getElementById("order-btn");
@@ -659,7 +654,7 @@ function setupEvents() {
                 if (imported && Array.isArray(imported)) {
                     // Ensure imported items have unique IDs
                     let maxId = 0;
-                    imported.forEach(item => {
+                    imported.forEach((item) => {
                         if (!item.id) {
                             item.id = ++cartIdCounter;
                         } else {
@@ -668,7 +663,7 @@ function setupEvents() {
                     });
                     // Update cartIdCounter to be higher than any existing ID
                     cartIdCounter = Math.max(cartIdCounter, maxId);
-                    
+
                     cart = imported;
                     updateCartCount();
                     renderCart();
