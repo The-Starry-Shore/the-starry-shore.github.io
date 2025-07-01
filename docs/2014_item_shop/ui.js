@@ -401,21 +401,75 @@ function updateItemLinkBtnModal(name, link) {
             if (!content) return;
             screenshotBtn.disabled = true;
             screenshotBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+
+            const root = document.documentElement;
+            const theme = root.getAttribute("data-bs-theme") || "light";
+            const originalVars = {
+                "--pf-gold-dark": root.style.getPropertyValue("--pf-gold-dark"),
+                "--pf-gold-hover": root.style.getPropertyValue("--pf-gold-hover"),
+                "--pf-gold-hover-dark": root.style.getPropertyValue("--pf-gold-hover-dark"),
+                "--pf-title-dark": root.style.getPropertyValue("--pf-title-dark"),
+                "--pf-source-dark": root.style.getPropertyValue("--pf-source-dark"),
+                "--pf-title": root.style.getPropertyValue("--pf-title"),
+                "--pf-source": root.style.getPropertyValue("--pf-source"),
+                "--pf-title-light": root.style.getPropertyValue("--pf-title-light"),
+                "--pf-source-light": root.style.getPropertyValue("--pf-source-light"),
+            };
+
+            if (theme === "dark") {
+                root.style.setProperty("--pf-gold-dark", "#c96a36");
+                root.style.setProperty("--pf-gold-hover", "#ff9b66");
+                root.style.setProperty("--pf-gold-hover-dark", "#ffb185");
+                root.style.setProperty("--pf-title-dark", "#f4b942");
+                root.style.setProperty("--pf-source-dark", "#d1b2ff");
+                root.style.setProperty("--pf-gold", "#f4874c");
+                root.style.setProperty("--pf-title", "#7a3c00");
+                root.style.setProperty("--pf-source", "#4c2c91");
+                root.style.setProperty("--pf-title-light", "#7a3c00");
+                root.style.setProperty("--pf-source-light", "#4c2c91");
+            } else {
+                root.style.setProperty("--pf-gold", "#f4874c");
+                root.style.setProperty("--pf-gold-hover", "#ff9b66");
+                root.style.setProperty("--pf-gold-hover-dark", "#ffb185");
+                root.style.setProperty("--pf-gold-dark", "#c96a36");
+                root.style.setProperty("--pf-title", "#7a3c00");
+                root.style.setProperty("--pf-title-dark", "#f4b942");
+                root.style.setProperty("--pf-title-light", "#7a3c00");
+                root.style.setProperty("--pf-source", "#4c2c91");
+                root.style.setProperty("--pf-source-dark", "#d1b2ff");
+                root.style.setProperty("--pf-source-light", "#4c2c91");
+            }
+
+            // --- Add these lines ---
+            const originalBg = content.style.backgroundColor;
+            if (theme === "dark") {
+                content.style.backgroundColor = "#23272b"; // or your dark modal bg
+            } else {
+                content.style.backgroundColor = "#fff"; // or your light modal bg
+            }
+
             try {
-                // Use html2canvas to render the content
                 const canvas = await html2canvas(content, {
-                    backgroundColor: window.getComputedStyle(content).backgroundColor || "#fff",
+                    backgroundColor: content.style.backgroundColor,
                     scale: window.devicePixelRatio || 2,
                     useCORS: true,
                 });
-                // Create a download link
                 const link = document.createElement("a");
                 link.download = `${name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_details.png`;
                 link.href = canvas.toDataURL("image/png");
                 link.click();
             } catch (e) {
+                console.log(e);
                 alert("Screenshot failed. Try again or use your OS screenshot tool.");
             }
+            // --- Restore original background ---
+            content.style.backgroundColor = originalBg;
+
+            // Restore originalVars, etc...
+            Object.entries(originalVars).forEach(([key, val]) => {
+                if (val) root.style.setProperty(key, val);
+                else root.style.removeProperty(key);
+            });
             screenshotBtn.disabled = false;
             screenshotBtn.innerHTML = `<i class="fa-solid fa-camera"></i>`;
         };
