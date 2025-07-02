@@ -647,10 +647,18 @@ function setupEvents() {
                 displayName += ` (${item.customName.trim()})`;
             }
 
-            lines.push(`     (${qty}x) ${displayName} ${perItem.toLocaleString()} - ${itemTotal.toLocaleString()} GP`);
+            lines.push({
+                qty,
+                displayName,
+                perItem,
+                itemTotal,
+            });
         });
 
-        let output = `${characterName} buys:\n${lines.join("\n")}\nTotal ${total.toLocaleString()} GP`;
+        // Sort lines by itemTotal descending
+        lines.sort((a, b) => b.itemTotal - a.itemTotal);
+
+        let output = `${characterName} buys:\n${lines.map((l) => `     (${l.qty}x) ${l.displayName} ${l.perItem.toLocaleString()} - ${l.itemTotal.toLocaleString()} GP`).join("\n")}\nTotal ${total.toLocaleString()} GP`;
 
         // Copy to clipboard
         const orderBtn = document.getElementById("order-btn");
