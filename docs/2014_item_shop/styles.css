@@ -508,6 +508,21 @@ body {
     color: #222 !important;
 }
 
+/* --- Disabled Add to Cart Button --- */
+.btn.disabled,
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn.disabled:hover,
+.btn:disabled:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #222 !important;
+}
+
 /* --- Misc --- */
 a {
     color: var(--bs-link-color, #0d6efd);

@@ -135,8 +135,12 @@ function renderTable(data) {
         const [tier, type, name, atnVal, sessVal, itemType, cost, rarity, book, notes, link] = row;
 
         const showBase = typeof cost === "string" && cost.includes("+");
+        const isDisabled = shouldDisableAddToCart(type, rarity, sessVal);
+        const disabledClass = isDisabled ? " disabled" : "";
+        const disabledAttr = isDisabled ? " disabled" : "";
+        
         let btnHtml = `
-            <button class="btn btn-primary btn-sm add-table-cart" data-name="${encodeURIComponent(name)}" data-base="${showBase ? 1 : 0}" title="Add to Cart">
+            <button class="btn btn-primary btn-sm add-table-cart${disabledClass}" data-name="${encodeURIComponent(name)}" data-base="${showBase ? 1 : 0}" title="Add to Cart"${disabledAttr}>
                 <i class="fa fa-cart-plus"></i>
             </button>
             <button class="btn btn-primary btn-sm ms-1 table-share-btn" data-name="${encodeURIComponent(name)}" title="Share item">
@@ -214,6 +218,12 @@ function handleTableClick(e) {
     if (e.target.closest(".add-table-cart")) {
         e.stopPropagation();
         const btn = e.target.closest(".add-table-cart");
+        
+        // Check if button is disabled
+        if (btn.disabled || btn.classList.contains('disabled')) {
+            return; // Don't add to cart if disabled
+        }
+        
         const name = decodeURIComponent(btn.getAttribute("data-name"));
         addToCart(name);
         return;
@@ -374,7 +384,7 @@ function renderDetails(rowData, highlightText = "") {
     if (modalContent) modalContent.innerHTML = html;
 
     // Update modal Add to Cart button
-    updateAddToCartBtnModal(name);
+    updateAddToCartBtnModal(name, rowData);
 
     // Update modal link/share buttons
     updateItemLinkBtnModal(name, link);
@@ -448,18 +458,31 @@ async function takeItemScreenshot(name) {
 }
 
 // Add these helper functions:
-function updateAddToCartBtnModal(name) {
+function updateAddToCartBtnModal(name, rowData = null) {
     const btn = document.getElementById("add-to-cart-btn-modal");
     if (!btn) return;
+    
+    let isDisabled = false;
+    if (rowData) {
+        const [tier, type, nameRow, atnVal, sessVal, itemType, cost, rarity, book, notes, link] = rowData;
+        isDisabled = shouldDisableAddToCart(type, rarity, sessVal);
+    }
+    
+    const disabledClass = isDisabled ? " disabled" : "";
+    const disabledAttr = isDisabled ? " disabled" : "";
+    
     btn.innerHTML = `
-        <button class="btn btn-primary btn-sm" title="Add to Cart">
+        <button class="btn btn-primary btn-sm${disabledClass}" title="Add to Cart"${disabledAttr}>
             <i class="fa-solid fa-cart-plus"></i>
         </button>
     `;
-    btn.querySelector("button").onclick = () => {
-        addToCart(name);
-        updateAddToCartBtnModal(name);
-    };
+    
+    if (!isDisabled) {
+        btn.querySelector("button").onclick = () => {
+            addToCart(name);
+            updateAddToCartBtnModal(name, rowData);
+        };
+    }
 }
 
 function updateItemLinkBtnModal(name, link) {
@@ -1143,6 +1166,20 @@ function getItemLookupMap() {
 function getItemByName(name) {
     const lookupMap = getItemLookupMap();
     return lookupMap.get(name.toLowerCase());
+}
+
+// Helper function to check if add to cart should be disabled
+function shouldDisableAddToCart(type, rarity, sessionRequired) {
+    // Convert to lowercase for case-insensitive comparison
+    const lowerType = (type || '').toLowerCase();
+    const lowerRarity = (rarity || '').toLowerCase();
+    
+    // Disable if type is "boons", rarity is "artifact", or session is required
+    // Session required can be: true, 'true', 1, '✔', or any truthy value
+    return lowerType === 'boons' || 
+           lowerRarity === 'artifact' || 
+           sessionRequired === '✔' || 
+           (sessionRequired && sessionRequired.toString().trim() !== '');
 }
 
 initialLoad();
