@@ -384,6 +384,69 @@ function renderDetails(rowData, highlightText = "") {
     modal.show();
 }
 
+// Helper function to suppress CORS-related console errors
+function suppressCORSErrors(originalError, originalWarn) {
+    const isCORSError = (message) => {
+        return message.includes('Failed to load resource') || 
+               message.includes('CORS') || 
+               message.includes('cross-origin') ||
+               message.includes('Access to fetch') ||
+               message.includes('No \'Access-Control-Allow-Origin\'') ||
+               message.includes('has been blocked by CORS policy') ||
+               message.includes('domtoimage: Error while reading CSS rules') ||
+               message.includes('SecurityError: Failed to read the \'cssRules\' property') ||
+               (message.includes('Error') && (message.includes('bootstrap') || message.includes('fontawesome') || message.includes('font-awesome')));
+    };
+
+    console.error = function(...args) {
+        const message = args.join(' ');
+        if (!isCORSError(message)) {
+            originalError.apply(console, args);
+        }
+    };
+    
+    console.warn = function(...args) {
+        const message = args.join(' ');
+        if (!isCORSError(message)) {
+            originalWarn.apply(console, args);
+        }
+    };
+}
+
+// Fast screenshot function
+async function takeItemScreenshot(name) {
+    const content = document.getElementById("itemDetailModalContent");
+    if (!content) {
+        throw new Error("Content not found");
+    }
+
+    // Suppress CORS console spam
+    const originalConsoleError = console.error;
+    const originalConsoleWarn = console.warn;
+    suppressCORSErrors(originalConsoleError, originalConsoleWarn);
+
+    try {
+        const dataUrl = await domtoimage.toPng(content, {
+            quality: 0.95,
+            bgcolor: document.documentElement.getAttribute("data-bs-theme") === "dark" ? "#212529" : "#ffffff"
+        });
+        
+        const link = document.createElement("a");
+        link.download = `${name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_details.png`;
+        link.href = dataUrl;
+        link.click();
+        URL.revokeObjectURL(dataUrl);
+        
+    } catch (error) {
+        console.error("Screenshot failed:", error);
+        alert("Screenshot failed. Please try again or use your browser's built-in screenshot tool.");
+    } finally {
+        // Always restore original console methods
+        console.error = originalConsoleError;
+        console.warn = originalConsoleWarn;
+    }
+}
+
 // Add these helper functions:
 function updateAddToCartBtnModal(name) {
     const btn = document.getElementById("add-to-cart-btn-modal");
@@ -444,82 +507,25 @@ function updateItemLinkBtnModal(name, link) {
     // Screenshot button event
     const screenshotBtn = document.getElementById("item-screenshot-btn-modal");
     if (screenshotBtn) {
-        screenshotBtn.onclick = async () => {
-            const content = document.getElementById("itemDetailModalContent");
-            if (!content) return;
+        screenshotBtn.onclick = async (e) => {
+            // Immediately disable button and show spinner
             screenshotBtn.disabled = true;
             screenshotBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
-
-            const root = document.documentElement;
-            const theme = root.getAttribute("data-bs-theme") || "light";
-            const originalVars = {
-                "--pf-gold-dark": root.style.getPropertyValue("--pf-gold-dark"),
-                "--pf-gold-hover": root.style.getPropertyValue("--pf-gold-hover"),
-                "--pf-gold-hover-dark": root.style.getPropertyValue("--pf-gold-hover-dark"),
-                "--pf-title-dark": root.style.getPropertyValue("--pf-title-dark"),
-                "--pf-source-dark": root.style.getPropertyValue("--pf-source-dark"),
-                "--pf-title": root.style.getPropertyValue("--pf-title"),
-                "--pf-source": root.style.getPropertyValue("--pf-source"),
-                "--pf-title-light": root.style.getPropertyValue("--pf-title-light"),
-                "--pf-source-light": root.style.getPropertyValue("--pf-source-light"),
-            };
-
-            if (theme === "dark") {
-                root.style.setProperty("--pf-gold-dark", "#c96a36");
-                root.style.setProperty("--pf-gold-hover", "#ff9b66");
-                root.style.setProperty("--pf-gold-hover-dark", "#ffb185");
-                root.style.setProperty("--pf-title-dark", "#f4b942");
-                root.style.setProperty("--pf-source-dark", "#d1b2ff");
-                root.style.setProperty("--pf-gold", "#f4874c");
-                root.style.setProperty("--pf-title", "#7a3c00");
-                root.style.setProperty("--pf-source", "#4c2c91");
-                root.style.setProperty("--pf-title-light", "#7a3c00");
-                root.style.setProperty("--pf-source-light", "#4c2c91");
-            } else {
-                root.style.setProperty("--pf-gold", "#f4874c");
-                root.style.setProperty("--pf-gold-hover", "#ff9b66");
-                root.style.setProperty("--pf-gold-hover-dark", "#ffb185");
-                root.style.setProperty("--pf-gold-dark", "#c96a36");
-                root.style.setProperty("--pf-title", "#7a3c00");
-                root.style.setProperty("--pf-title-dark", "#f4b942");
-                root.style.setProperty("--pf-title-light", "#7a3c00");
-                root.style.setProperty("--pf-source", "#4c2c91");
-                root.style.setProperty("--pf-source-dark", "#d1b2ff");
-                root.style.setProperty("--pf-source-light", "#4c2c91");
-            }
-
-            // --- Add these lines ---
-            const originalBg = content.style.backgroundColor;
-            if (theme === "dark") {
-                content.style.backgroundColor = "#23272b"; // or your dark modal bg
-            } else {
-                content.style.backgroundColor = "#fff"; // or your light modal bg
-            }
-
+            
+            // Force immediate UI update
+            screenshotBtn.offsetHeight; // Trigger reflow
+            
             try {
-                const canvas = await html2canvas(content, {
-                    backgroundColor: content.style.backgroundColor,
-                    scale: window.devicePixelRatio || 2,
-                    useCORS: true,
-                });
-                const link = document.createElement("a");
-                link.download = `${name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_details.png`;
-                link.href = canvas.toDataURL("image/png");
-                link.click();
+                // Use setTimeout to ensure spinner shows before heavy work
+                await new Promise(resolve => setTimeout(resolve, 50));
+                await takeItemScreenshot(name);
             } catch (e) {
-                console.log(e);
-                alert("Screenshot failed. Try again or use your OS screenshot tool.");
+                console.error("Screenshot failed:", e);
+                alert("Screenshot failed. Please try again or use your browser's built-in screenshot tool.");
+            } finally {
+                screenshotBtn.disabled = false;
+                screenshotBtn.innerHTML = `<i class="fa-solid fa-camera"></i>`;
             }
-            // --- Restore original background ---
-            content.style.backgroundColor = originalBg;
-
-            // Restore originalVars, etc...
-            Object.entries(originalVars).forEach(([key, val]) => {
-                if (val) root.style.setProperty(key, val);
-                else root.style.removeProperty(key);
-            });
-            screenshotBtn.disabled = false;
-            screenshotBtn.innerHTML = `<i class="fa-solid fa-camera"></i>`;
         };
     }
 

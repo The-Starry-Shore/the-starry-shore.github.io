@@ -6,12 +6,14 @@
     --pf-source: #4c2c91;
     --pf-secondary: #666;
 
-    /* Derived colors using color-mix for best browser support, fallback to filter: brightness in usage */
-    --pf-gold-dark: color-mix(in srgb, var(--pf-gold) 70%, black 30%);
-    --pf-gold-hover: color-mix(in srgb, var(--pf-gold) 80%, white 20%);
-    --pf-gold-hover-dark: color-mix(in srgb, var(--pf-gold) 60%, white 40%);
-    --pf-title-dark: color-mix(in srgb, var(--pf-title) 60%, white 40%);
-    --pf-source-dark: color-mix(in srgb, var(--pf-source) 60%, white 40%);
+    /* Derived colors - fixed values for better compatibility and performance */
+    --pf-gold-dark: #c96a36;
+    --pf-gold-hover: #ff9b66;
+    --pf-gold-hover-dark: #ffb185;
+    --pf-title-dark: #f4b942;
+    --pf-source-dark: #d1b2ff;
+    --pf-title-light: #7a3c00;
+    --pf-source-light: #4c2c91;
 
     /* Table head and border colors */
     --pf-table-head-light: #f8f9fa;
@@ -20,17 +22,6 @@
     --pf-table-head-border-dark: #343a40;
     --pf-table-head-color-light: #212529;
     --pf-table-head-color-dark: #f8f9fa;
-}
-
-/* Fallback for browsers that do not support color-mix */
-@supports not (color: color-mix(in srgb, red, blue)) {
-    :root {
-        --pf-gold-dark: #c96a36;
-        --pf-gold-hover: #ff9b66;
-        --pf-gold-hover-dark: #ffb185;
-        --pf-title-dark: #f4b942;
-        --pf-source-dark: #d1b2ff;
-    }
 }
 
 [data-bs-theme="light"] {
