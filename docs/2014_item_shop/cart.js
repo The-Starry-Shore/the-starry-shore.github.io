@@ -2,7 +2,7 @@ let cart = [];
 let cartIdCounter = 0;
 
 function addToCart(name) {
-    const row = allData.find(row => row[2] === name);
+    const row = getItemDataByName(name);
     let costField = row ? (row[6] || '') : '';
     let needsBase = costField.includes('+');
     cart.push({
