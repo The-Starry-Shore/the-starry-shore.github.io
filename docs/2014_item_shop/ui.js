@@ -53,11 +53,17 @@ function applyFilters() {
         const normRarity = normalizeRarity(rawRarity);
         const rarityMatch = rarities.length === 0 || (Array.isArray(normRarity) ? normRarity.some((r) => rarities.includes(r)) : rarities.includes(normRarity));
 
-        // --- Description filter logic ---
+        // --- Description filter logic (optimized) ---
         let descMatch = true;
         if (descQ) {
-            const item = Object.entries(item_data).find(([key]) => key.toLowerCase() === name.toLowerCase())?.[1];
-            descMatch = !!(item && Array.isArray(item.entries) && item.entries.some((e) => typeof e === "string" && tokenizeMatch(e, descQ)));
+            const item = getItemByName(name);
+            // Early exit if no item data found
+            if (!item || !Array.isArray(item.entries)) {
+                descMatch = false;
+            } else {
+                // Only check string entries for performance
+                descMatch = item.entries.some((e) => typeof e === "string" && tokenizeMatch(e, descQ));
+            }
         }
 
         return (
@@ -109,6 +115,7 @@ function applyFilters() {
     }
 
     renderTable(data);
+    setupTableEventDelegation(); // Set up event delegation after table rendering
 }
 
 function renderTable(data) {
@@ -183,48 +190,61 @@ function renderTable(data) {
         tbody.appendChild(tr);
     });
 
-    // --- ADD THIS: Attach row click event after rendering ---
-    tbody.querySelectorAll("tr").forEach((tr) => {
-        tr.addEventListener("click", (e) => {
-            // Prevent button clicks from triggering row click
-            if (e.target.closest("button, a")) return;
-            const rowData = JSON.parse(tr.dataset.row);
-            selectedRowName = rowData[2];
-            renderDetails(rowData, descQ);
-            
-            // Update row highlighting without re-rendering the entire table
-            tbody.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
-            tr.classList.add("selected-row");
-        });
-    });
-
-    // Add event listeners for the new buttons
-    tbody.querySelectorAll(".add-table-cart").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const name = decodeURIComponent(btn.getAttribute("data-name"));
-            addToCart(name);
-            // applyFilters(); // REMOVE THIS LINE
-        });
-    });
-
-    // Share button event listener
-    tbody.querySelectorAll(".table-share-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const name = decodeURIComponent(btn.getAttribute("data-name"));
-            const url = new URL(window.location.href);
-            url.search = `?v=${toBase64(name)}`;
-            url.hash = "";
-            navigator.clipboard.writeText(url.toString()).then(() => {
-                const rect = btn.getBoundingClientRect();
-                showCopyToast("Share URL copied!", rect.left + rect.width / 2, rect.top - 20 + window.scrollY);
-            });
-        });
-    });
-
     // Always re-sync sticky scrollbar after table changes
     if (typeof setupStickyScrollbar === "function") setupStickyScrollbar();
+}
+
+// Event delegation for table clicks - attach ONCE to tbody, handles all rows
+function setupTableEventDelegation() {
+    const tbody = $("#itemsTable tbody");
+    if (!tbody) return;
+    
+    // Remove any existing listeners first
+    tbody.removeEventListener("click", handleTableClick);
+    
+    // Add single delegated event listener
+    tbody.addEventListener("click", handleTableClick);
+}
+
+function handleTableClick(e) {
+    const tr = e.target.closest("tr");
+    if (!tr) return;
+    
+    // Handle different types of clicks
+    if (e.target.closest(".add-table-cart")) {
+        e.stopPropagation();
+        const btn = e.target.closest(".add-table-cart");
+        const name = decodeURIComponent(btn.getAttribute("data-name"));
+        addToCart(name);
+        return;
+    }
+    
+    if (e.target.closest(".table-share-btn")) {
+        e.stopPropagation();
+        const btn = e.target.closest(".table-share-btn");
+        const name = decodeURIComponent(btn.getAttribute("data-name"));
+        const url = new URL(window.location.href);
+        url.search = `?v=${toBase64(name)}`;
+        url.hash = "";
+        navigator.clipboard.writeText(url.toString()).then(() => {
+            const rect = btn.getBoundingClientRect();
+            showCopyToast("Share URL copied!", rect.left + rect.width / 2, rect.top - 20 + window.scrollY);
+        });
+        return;
+    }
+    
+    // Handle row click (but not if clicking buttons/links)
+    if (!e.target.closest("button, a")) {
+        const descQ = $("#filter-description") ? $("#filter-description").value.trim().toLowerCase() : "";
+        const rowData = JSON.parse(tr.dataset.row);
+        selectedRowName = rowData[2];
+        renderDetails(rowData, descQ);
+        
+        // Update row highlighting without re-rendering the entire table
+        const tbody = $("#itemsTable tbody");
+        tbody.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
+        tr.classList.add("selected-row");
+    }
 }
 
 function formatBatchedJsonTags(text, item, highlightText = "") {
@@ -304,7 +324,7 @@ function renderDetails(rowData, highlightText = "") {
 
     if (isAnyModalOpen()) return;
     const [tier, type, name, atnVal, sessVal, itemType, cost, rarity, book, notes, link] = rowData;
-    const item = Object.entries(item_data).find(([key]) => key.toLowerCase() === name.toLowerCase())?.[1];
+    const item = getItemByName(name);
 
     // Helper to wrap any value as copyable
     const copy = (v) => `<span class="copyable">${v ?? ""}</span>`;
@@ -617,7 +637,7 @@ function setupEvents() {
         // Check for missing base values
         let missingBaseOrName = false;
         filtered.forEach((item) => {
-            const row = allData.find((row) => row[2] === item.name);
+            const row = getItemDataByName(item.name);
             let costField = row ? row[6] || "" : "";
             if (costField.includes("+")) {
                 // Needs base and custom name
@@ -636,7 +656,7 @@ function setupEvents() {
         let total = 0;
         let lines = [];
         filtered.forEach((item) => {
-            const row = allData.find((row) => row[2] === item.name);
+            const row = getItemDataByName(item.name);
             let costField = row ? row[6] || "" : "";
             let showBase = costField.includes("+");
             let costDisplay = showBase ? costField.slice(0, costField.indexOf("+")).trim() : costField.trim();
@@ -843,11 +863,11 @@ function renderCart() {
         return;
     }
 
-    // --- Sort cart by per-item cost descending ---
+    // --- Sort cart by per-item cost descending (optimized) ---
     const sortedCart = [...cart].sort((a, b) => {
-        // Find item data for price and base
-        const rowA = allData.find((row) => row[2] === a.name);
-        const rowB = allData.find((row) => row[2] === b.name);
+        // Find item data for price and base using efficient lookup
+        const rowA = getItemDataByName(a.name);
+        const rowB = getItemDataByName(b.name);
         let costA = 0,
             baseA = a.base || 0,
             showBaseA = false;
@@ -887,7 +907,7 @@ function renderCart() {
         const originalIdx = cart.findIndex((c) => c.id === item.id);
 
         // Find item data for price and link
-        const row = allData.find((row) => row[2] === item.name);
+        const row = getItemDataByName(item.name);
         let cost = 0,
             baseCost = item.base || 0,
             showBase = false,
@@ -1028,6 +1048,9 @@ function renderCart() {
 async function initialLoad() {
     await setupMappingConfig();
     await loadData();
+    
+    // Reset lookup caches after data is loaded
+    resetLookupCaches();
 
     populateFilters();
     setupEvents();
@@ -1041,7 +1064,7 @@ async function initialLoad() {
     const vParam = params.get("v");
     if (vParam) {
         const decodedName = fromBase64(vParam);
-        const row = allData.find((r) => r[2] === decodedName);
+        const row = getItemDataByName(decodedName);
         if (row) {
             renderDetails(row);
         }
@@ -1070,6 +1093,49 @@ function setupStickyScrollbar() {
     tableWrapper.onscroll = () => {
         stickyScrollbar.scrollLeft = tableWrapper.scrollLeft;
     };
+}
+
+// Reset lookup caches when data changes
+function resetLookupCaches() {
+    itemLookupMap = null;
+    itemDataLookupMap = null;
+}
+
+// Efficient item data lookup by name for cart operations
+let itemDataLookupMap = null;
+
+function getItemDataLookupMap() {
+    if (!itemDataLookupMap) {
+        itemDataLookupMap = new Map();
+        allData.forEach((row) => {
+            const name = row[2]; // Name is in column 2
+            itemDataLookupMap.set(name, row);
+        });
+    }
+    return itemDataLookupMap;
+}
+
+function getItemDataByName(name) {
+    const lookupMap = getItemDataLookupMap();
+    return lookupMap.get(name);
+}
+
+// Efficient case-insensitive item lookup - created once to avoid repeated Object.entries() calls
+let itemLookupMap = null;
+
+function getItemLookupMap() {
+    if (!itemLookupMap) {
+        itemLookupMap = new Map();
+        Object.entries(item_data).forEach(([key, value]) => {
+            itemLookupMap.set(key.toLowerCase(), value);
+        });
+    }
+    return itemLookupMap;
+}
+
+function getItemByName(name) {
+    const lookupMap = getItemLookupMap();
+    return lookupMap.get(name.toLowerCase());
 }
 
 initialLoad();
