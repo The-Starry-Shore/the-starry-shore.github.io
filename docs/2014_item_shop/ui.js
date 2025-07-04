@@ -690,7 +690,8 @@ function setupEvents() {
         // Sort lines by itemTotal descending
         lines.sort((a, b) => b.itemTotal - a.itemTotal);
 
-        let output = `${characterName} buys:\n${lines.map((l) => `     (${l.qty}x) ${l.displayName} ${l.perItem.toLocaleString()} - ${l.itemTotal.toLocaleString()} GP`).join("\n")}\nTotal ${total.toLocaleString()} GP`;
+        // Use en dash (–) and fullwidth parentheses （） as steganographic markers
+        let output = `${characterName} buys:\n${lines.map((l) => `     （${l.qty}x） ${l.displayName} ${l.perItem.toLocaleString()} – ${l.itemTotal.toLocaleString()} GP`).join("\n")}\nTotal ${total.toLocaleString()} GP`;
 
         // Copy to clipboard
         const orderBtn = document.getElementById("order-btn");
