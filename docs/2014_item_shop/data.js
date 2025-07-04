@@ -198,7 +198,9 @@ async function loadMirrorDataInBackground(mappingObj, stripList, replaceList) {
         }
 
         // For each CSV row, add to item_data if not already present
-        let missingMirrorCount = 0;
+        let missingMirrorNames = [];
+        let missingMirrorAndDescNames = [];
+
         for (const row of allData) {
             const name = row[2]; // raw name from CSV
             if (!item_data[name]) {
@@ -227,26 +229,29 @@ async function loadMirrorDataInBackground(mappingObj, stripList, replaceList) {
                     const page = row[8] || "";
                     const skip = LOG_SKIP_BOOKS.some((code) => book.includes(code) || page.includes(code));
                     if (!skip) {
-                        missingMirrorCount++;
-                        // console.log(`No mirror data for: ${name} :: ${book}:${page} | lookup: ${lookupNorm}`);
+                        missingMirrorNames.push(name);
+                        // Use CSV description if present and not empty, otherwise fallback
+                        let hasDesc = row[11] && row[11].trim();
+                        if (!hasDesc) {
+                            missingMirrorAndDescNames.push(name);
+                        }
                     }
+                    let csvDescription = row[11] && row[11].trim() ? row[11].trim() : "No description available.";
                     itemCopy = {
                         name,
                         source: book,
                         page: page,
                         rarity: row[7] || "",
-                        entries: [row[9] || "No description available."],
-                        // Optionally add more fields from the row if needed
+                        entries: [csvDescription],
                     };
                 }
                 item_data[name] = itemCopy; // always store under raw name
             }
         }
 
-        // After the loop, log the total count
-        if (missingMirrorCount > 0) {
-            console.log(`Total missing mirrors: ${missingMirrorCount}`);
-        }
+        // After the loop, log the lists
+        window.missingMirrorNames = missingMirrorNames;
+        window.missingMirrorAndDescNames = missingMirrorAndDescNames;
 
         // 5. Free mirrorItems from memory
         mirrorItems = null;
