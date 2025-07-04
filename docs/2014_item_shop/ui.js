@@ -191,7 +191,10 @@ function renderTable(data) {
             const rowData = JSON.parse(tr.dataset.row);
             selectedRowName = rowData[2];
             renderDetails(rowData, descQ);
-            applyFilters();
+            
+            // Update row highlighting without re-rendering the entire table
+            tbody.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
+            tr.classList.add("selected-row");
         });
     });
 
