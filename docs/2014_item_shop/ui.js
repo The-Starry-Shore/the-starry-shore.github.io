@@ -51,7 +51,7 @@ function applyFilters() {
         const [tier, type, name, atnVal, sessVal, itemType, cost, rawRarity, book, notes] = row;
         const costVal = parseInt((cost || "").replace(/[^0-9]/g, "")) || 0;
         const normRarity = normalizeRarity(rawRarity);
-        const rarityMatch = Array.isArray(normRarity) ? normRarity.some((r) => rarities.includes(r)) : rarities.length === 0 || rarities.includes(normRarity);
+        const rarityMatch = rarities.length === 0 || (Array.isArray(normRarity) ? normRarity.some((r) => rarities.includes(r)) : rarities.includes(normRarity));
 
         // --- Description filter logic ---
         let descMatch = true;
@@ -254,7 +254,10 @@ function formatBatchedJsonTags(text, item, highlightText = "") {
 
 function formatEntry(entry, item, highlightText = "") {
     if (typeof entry === "string") {
-        return `<div class="mb-2">${formatBatchedJsonTags(entry, item, highlightText)}</div>`;
+        // Convert newlines to <br /> for proper line breaks
+        let formatted = formatBatchedJsonTags(entry, item, highlightText);
+        formatted = formatted.replace(/\n/g, '<br />');
+        return `<div class="mb-2">${formatted}</div>`;
     } else if (entry && typeof entry === "object") {
         let html = "";
         if (entry.name) {

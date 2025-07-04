@@ -127,6 +127,14 @@ async function loadData() {
         // 1. Load CSV
         const csvRows = await fetchCSV(CSV_URL);
         allData = csvRows.slice(1);
+        
+        // Normalize rarity column (column 7) to proper case
+        allData.forEach(row => {
+            if (row[7]) {
+                row[7] = normalizeRarityCase(row[7]);
+            }
+        });
+        
         allData.sort((a, b) => {
             const ta = parseInt(a[0], 10);
             const tb = parseInt(b[0], 10);
@@ -280,6 +288,22 @@ function uniqueSorted(arr) {
         if (!isNaN(na) && !isNaN(nb)) return na - nb;
         return String(a).localeCompare(String(b));
     });
+}
+
+function toTitleCase(str) {
+    if (typeof str !== "string") return str;
+    return str.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function normalizeRarityCase(rarity) {
+    if (!rarity || typeof rarity !== "string") return rarity;
+    
+    // Handle compound rarities like "Very Rare/Rare" or "very rare/rare"
+    if (rarity.includes("/")) {
+        return rarity.split("/").map(part => toTitleCase(part.trim())).join("/");
+    }
+    
+    return toTitleCase(rarity);
 }
 
 function normalizeRarity(val) {
