@@ -26,6 +26,11 @@
         <div class="container-fluid">
             <h1 class="navbar-brand mb-0 fw-bold ps-2">2014 Item Shop</h1>
             <span class="d-flex align-items-center gap-3">
+                <!-- Help Button -->
+                <button id="help-btn" class="btn btn-primary d-flex align-items-center cart-btn" type="button"
+                    aria-label="Help" title="How to use this site" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="fa-solid fa-question"></i>
+                </button>
                 <button id="cart-btn" class="btn btn-primary position-relative d-flex align-items-center cart-btn"
                     type="button" aria-label="View cart">
                     <i class="fa-solid fa-shopping-cart"></i>
@@ -210,6 +215,86 @@
                             Update
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">
+                        <i class="fa-solid fa-question-circle me-2"></i>How to Use the 2014 Item Shop
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-plus-circle text-success me-2"></i>Adding Items to Cart</h6>
+                        <p>To add an item to your cart:</p>
+                        <ol>
+                            <li>Browse the item table or use the filters to find items</li>
+                            <li>Click on any item row to view its details</li>
+                            <li>Click the <i class="fa-solid fa-cart-plus text-primary"></i> button next to the item name or in the item details popup</li>
+                            <li>The item will be added to your cart and the cart count will update</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-shopping-cart text-primary me-2"></i>Viewing Your Cart</h6>
+                        <p>To view your cart:</p>
+                        <ol>
+                            <li>Click the cart button <i class="fa-solid fa-shopping-cart"></i> in the top navigation</li>
+                            <li>Your cart will open showing all added items</li>
+                            <li>The red badge shows the total number of items in your cart</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-edit text-warning me-2"></i>Editing Cart Items</h6>
+                        <p>Once your cart is open, you can:</p>
+                        <ul>
+                            <li><strong>Change Quantity:</strong> Type directly in the quantity field to change how many you want</li>
+                            <li><strong>Set Base Item:</strong> For items with "+" in cost, enter the base item cost</li>
+                            <li><strong>Custom Names:</strong> For items that require specification, enter a custom name</li>
+                            <li><strong>Remove Items:</strong> Click the <i class="fa-solid fa-trash text-danger"></i> button to remove an item</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-receipt text-info me-2"></i>Placing Your Order</h6>
+                        <p>When you're ready to order:</p>
+                        <ol>
+                            <li>Review your cart to make sure everything is correct</li>
+                            <li>Click the <strong>"Order"</strong> button at the bottom of your cart</li>
+                            <li>The formatted order message will be automatically copied to your clipboard</li>
+                            <li><strong>Go to the <code>#the-starry-store-2nd-best-shop</code> Discord channel and paste</strong></li>
+                            <li>Wait for a shop keeper to process your order!</li>
+                        </ol>
+                        <div class="alert alert-info mt-2">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            <strong>Important:</strong> Make sure to paste your order in the correct Discord channel: <code>#the-starry-store-2nd-best-shop</code>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-lightbulb text-warning me-2"></i>Additional Tips</h6>
+                        <ul>
+                            <li>Use the filters at the top to narrow down items by tier, type, rarity, or name</li>
+                            <li>Click on any item name to view detailed descriptions and stats</li>
+                            <li>In item details, click on any underlined text to copy it to your clipboard</li>
+                            <li>Save a screenshot of any item by clicking the <i class="fa-solid fa-camera"></i> screenshot button in the item details</li>
+                            <li>Share an item's link with others by clicking the <i class="fa-solid fa-share-nodes"></i> share button in the item details</li>
+                            <li>You can export/import your cart using the <i class="fa-solid fa-file-code"></i> button for sharing or backup</li>
+                            <li>Items requiring attunement are marked in the "ATN" column</li>
+                            <li>Items requiring a session are marked in the "Session" column</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
                 </div>
             </div>
         </div>

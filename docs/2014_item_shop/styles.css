@@ -735,3 +735,76 @@ body {
 .pf-green-check {
     color: green !important;
 }
+
+/* --- Help Modal Styles --- */
+.help-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.help-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.help-section h6 {
+    color: var(--bs-primary);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.help-section p {
+    margin-bottom: 0.5rem;
+    color: var(--bs-body-color);
+}
+
+.help-section ol,
+.help-section ul {
+    margin-bottom: 0.5rem;
+    padding-left: 1.25rem;
+}
+
+.help-section li {
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+.help-section code {
+    background-color: var(--bs-secondary-bg);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    color: var(--bs-emphasis-color);
+}
+
+.help-section .alert {
+    font-size: 0.9rem;
+}
+
+#helpModal .modal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+#helpModal .modal-dialog {
+    max-height: 80vh;
+}
+
+#helpModal .modal-content {
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#helpModal .modal-title {
+    color: var(--bs-primary);
+}
+
+/* Prevent background scroll when help modal is open */
+body.modal-open {
+    overflow: hidden;
+}
