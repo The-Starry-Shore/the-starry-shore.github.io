@@ -1,75 +1,11 @@
 {
-    "strip": [
-        "(1 bead)",
-        "(10 charges)",
-        "(10 pinches)",
-        "(1st level)",
-        "(2 beads)",
-        "(2nd level)",
-        "(3 beads)",
-        "(3rd level)",
-        "(4 beads)",
-        "(4 pots)",
-        "(4th level)",
-        "(5 beads)",
-        "(50 charges)",
-        "(5th level spell or lower)",
-        "(5th level)",
-        "(6 beads)",
-        "(6 pots)",
-        "(6th level)",
-        "(7 ounces)",
-        "(7th level)",
-        "(8th level)",
-        "(9th level)",
-        "(any)",
-        "(bag of eight)",
-        "(can be all elements)",
-        "(ea)",
-        "(each)",
-        "(empty on purchase)",
-        "(five doses)",
-        "(flask)",
-        "(fully charged)",
-        "(good alignment only)",
-        "(limited charges)",
-        "(max rank)",
-        "(medium or heavy except hide)",
-        "(must specify color)",
-        "(must specify type)",
-        "(must specify version)",
-        "(must specify)",
-        "(per potion)",
-        "(stack of 10)",
-        "(stack of 20)",
-        "(stack of 9)",
-        "(vial)",
-        "(x20)",
-        "(x8 packets)",
-        "*",
-        "(Must specify color at purchase)"
-    ],
+    "strip": ["(1 bead)", "(10 charges)", "(10 pinches)", "(2 beads)", "(3 beads)", "(4 beads)", "(4 pots)", "(5 beads)", "(50 charges)", "(5th level spell or lower)", "(6 beads)", "(6 pots)", "(7 ounces)", "(any)", "(bag of eight)", "(can be all elements)", "(ea)", "(each)", "(empty on purchase)", "(five doses)", "(flask)", "(fully charged)", "(good alignment only)", "(limited charges)", "(max rank)", "(medium or heavy except hide)", "(must specify color)", "(must specify type)", "(must specify version)", "(must specify)", "(per potion)", "(stack of 10)", "(stack of 20)", "(stack of 9)", "(vial)", "(x20)", "(x8 packets)", "*", "(Must specify color at purchase)"],
     "replace": [
-        [
-            "’",
-            "'"
-        ],
-        [
-            "“",
-            "\""
-        ],
-        [
-            "”",
-            "\""
-        ],
-        [
-            "–",
-            "-"
-        ],
-        [
-            ":",
-            "'"
-        ]
+        ["’", "'"],
+        ["“", "\""],
+        ["”", "\""],
+        ["–", "-"],
+        [":", "'"]
     ],
     "remap": {
         "1st Level Spell Scroll": "Spell Scroll (1st Level)",
@@ -215,6 +151,6 @@
         "Spellwrought Tattoo, 3rd": "Spellwrought Tattoo (3rd Level)",
         "Spellwrought Tattoo, 4th": "Spellwrought Tattoo (4th Level)",
         "Spellwrought Tattoo, 5th": "Spellwrought Tattoo (5th Level)",
-        "Absorbing Tattoo (Must specify color at purchase)":"Absorbing Tattoo"
+        "Absorbing Tattoo (Must specify color at purchase)": "Absorbing Tattoo"
     }
 }
