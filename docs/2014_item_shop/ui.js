@@ -42,8 +42,7 @@ function applyFilters() {
     const session = $("#filter-session").value;
     const itemTypeQ = $("#filter-itemtype").value;
     const bookQ = $("#filter-book").value;
-    const notesQ = $("#filter-notes").value;
-    const descQ = $("#filter-description") ? $("#filter-description").value.trim().toLowerCase() : ""; // <-- Add this
+    const notesDescQ = $("#filter-notes").value; // Combined notes/description search
     const costMin = parseInt($("#filter-cost-min").value) || 0;
     const costMax = parseInt($("#filter-cost-max").value) || 20000000;
 
@@ -53,26 +52,17 @@ function applyFilters() {
         const normRarity = normalizeRarity(rawRarity);
         const rarityMatch = rarities.length === 0 || (Array.isArray(normRarity) ? normRarity.some((r) => rarities.includes(r)) : rarities.includes(normRarity));
 
-        // --- Description filter logic (optimized) ---
-        let descMatch = true;
-        if (descQ) {
-            const item = getItemByName(name);
-            // Early exit if no item data found
-            if (!item || !Array.isArray(item.entries)) {
-                descMatch = false;
-            } else {
-                // Only check string entries for performance
-                descMatch = item.entries.some((e) => typeof e === "string" && tokenizeMatch(e, descQ));
-            }
+        // --- Combined notes/description filter logic ---
+        let notesDescMatch = true;
+        if (notesDescQ) {
+            notesDescMatch = searchNotesAndDescription(name, notes, notesDescQ);
         }
 
-        return (
-            (tiers.length === 0 || tiers.includes(tier)) && (types.length === 0 || types.includes(type)) && tokenizeMatch(name, nameQ) && (atn === "" || (atn === "yes" && atnVal) || (atn === "no" && !atnVal)) && (session === "" || (session === "yes" && sessVal) || (session === "no" && !sessVal)) && tokenizeMatch(itemType, itemTypeQ) && costVal >= costMin && costVal <= costMax && rarityMatch && tokenizeMatch(book, bookQ) && tokenizeMatch(notes, notesQ) && descMatch // <-- Add this
-        );
+        return (tiers.length === 0 || tiers.includes(tier)) && (types.length === 0 || types.includes(type)) && smartMatch(name, nameQ) && (atn === "" || (atn === "yes" && atnVal) || (atn === "no" && !atnVal)) && (session === "" || (session === "yes" && sessVal) || (session === "no" && !sessVal)) && smartMatch(itemType, itemTypeQ) && costVal >= costMin && costVal <= costMax && rarityMatch && smartMatch(book, bookQ) && notesDescMatch;
     });
 
     // If no filters are selected and no search fields are filled, show all data
-    const noFilters = tiers.length === 0 && types.length === 0 && rarities.length === 0 && !nameQ && !atn && !session && !itemTypeQ && !bookQ && !notesQ && !descQ && costMin === 0 && costMax === 20000000;
+    const noFilters = tiers.length === 0 && types.length === 0 && rarities.length === 0 && !nameQ && !atn && !session && !itemTypeQ && !bookQ && !notesDescQ && costMin === 0 && costMax === 20000000;
 
     if (data.length === 0 && noFilters) {
         data = allData;
@@ -119,7 +109,7 @@ function applyFilters() {
 }
 
 function renderTable(data) {
-    const descQ = $("#filter-description") ? $("#filter-description").value.trim().toLowerCase() : "";
+    const notesDescQ = $("#filter-notes").value.trim().toLowerCase(); // Combined notes/description search
     const tbody = $("#itemsTable tbody");
     if (!tbody) return;
     tbody.innerHTML = "";
@@ -138,7 +128,7 @@ function renderTable(data) {
         const isDisabled = shouldDisableAddToCart(type, rarity, sessVal);
         const disabledClass = isDisabled ? " disabled" : "";
         const disabledAttr = isDisabled ? " disabled" : "";
-        
+
         let btnHtml = `
             <button class="btn btn-primary btn-sm add-table-cart${disabledClass}" data-name="${encodeURIComponent(name)}" data-base="${showBase ? 1 : 0}" title="Add to Cart"${disabledAttr}>
                 <i class="fa fa-cart-plus"></i>
@@ -202,10 +192,10 @@ function renderTable(data) {
 function setupTableEventDelegation() {
     const tbody = $("#itemsTable tbody");
     if (!tbody) return;
-    
+
     // Remove any existing listeners first
     tbody.removeEventListener("click", handleTableClick);
-    
+
     // Add single delegated event listener
     tbody.addEventListener("click", handleTableClick);
 }
@@ -213,22 +203,22 @@ function setupTableEventDelegation() {
 function handleTableClick(e) {
     const tr = e.target.closest("tr");
     if (!tr) return;
-    
+
     // Handle different types of clicks
     if (e.target.closest(".add-table-cart")) {
         e.stopPropagation();
         const btn = e.target.closest(".add-table-cart");
-        
+
         // Check if button is disabled
-        if (btn.disabled || btn.classList.contains('disabled')) {
+        if (btn.disabled || btn.classList.contains("disabled")) {
             return; // Don't add to cart if disabled
         }
-        
+
         const name = decodeURIComponent(btn.getAttribute("data-name"));
         addToCart(name);
         return;
     }
-    
+
     if (e.target.closest(".table-share-btn")) {
         e.stopPropagation();
         const btn = e.target.closest(".table-share-btn");
@@ -242,17 +232,17 @@ function handleTableClick(e) {
         });
         return;
     }
-    
+
     // Handle row click (but not if clicking buttons/links)
     if (!e.target.closest("button, a")) {
-        const descQ = $("#filter-description") ? $("#filter-description").value.trim().toLowerCase() : "";
+        const notesDescQ = $("#filter-notes").value.trim().toLowerCase(); // Combined notes/description search
         const rowData = JSON.parse(tr.dataset.row);
         selectedRowName = rowData[2];
-        renderDetails(rowData, descQ);
-        
+        renderDetails(rowData, notesDescQ);
+
         // Update row highlighting without re-rendering the entire table
         const tbody = $("#itemsTable tbody");
-        tbody.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
+        tbody.querySelectorAll("tr").forEach((row) => row.classList.remove("selected-row"));
         tr.classList.add("selected-row");
     }
 }
@@ -273,14 +263,9 @@ function formatBatchedJsonTags(text, item, highlightText = "") {
         const parsed = formatBatchedJsonTags(content.split("|")[0].trim(), item, highlightText);
         return `<span class="parsed-BatchedJson-tag">${parsed}</span>`;
     });
-    // Highlight matches
+    // Smart highlighting that respects quoted/unquoted syntax
     if (highlightText && highlightText.length > 1) {
-        const tokens = highlightText.split(/\s+/).filter(Boolean);
-        for (const token of tokens) {
-            if (token.length > 1) {
-                result = result.replace(new RegExp(`(${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"), `<mark>$1</mark>`);
-            }
-        }
+        result = smartHighlight(result, highlightText);
     }
     return result;
 }
@@ -289,7 +274,7 @@ function formatEntry(entry, item, highlightText = "") {
     if (typeof entry === "string") {
         // Convert newlines to <br /> for proper line breaks
         let formatted = formatBatchedJsonTags(entry, item, highlightText);
-        formatted = formatted.replace(/\n/g, '<br />');
+        formatted = formatted.replace(/\n/g, "<br />");
         return `<div class="mb-2">${formatted}</div>`;
     } else if (entry && typeof entry === "object") {
         let html = "";
@@ -397,26 +382,18 @@ function renderDetails(rowData, highlightText = "") {
 // Helper function to suppress CORS-related console errors
 function suppressCORSErrors(originalError, originalWarn) {
     const isCORSError = (message) => {
-        return message.includes('Failed to load resource') || 
-               message.includes('CORS') || 
-               message.includes('cross-origin') ||
-               message.includes('Access to fetch') ||
-               message.includes('No \'Access-Control-Allow-Origin\'') ||
-               message.includes('has been blocked by CORS policy') ||
-               message.includes('domtoimage: Error while reading CSS rules') ||
-               message.includes('SecurityError: Failed to read the \'cssRules\' property') ||
-               (message.includes('Error') && (message.includes('bootstrap') || message.includes('fontawesome') || message.includes('font-awesome')));
+        return message.includes("Failed to load resource") || message.includes("CORS") || message.includes("cross-origin") || message.includes("Access to fetch") || message.includes("No 'Access-Control-Allow-Origin'") || message.includes("has been blocked by CORS policy") || message.includes("domtoimage: Error while reading CSS rules") || message.includes("SecurityError: Failed to read the 'cssRules' property") || (message.includes("Error") && (message.includes("bootstrap") || message.includes("fontawesome") || message.includes("font-awesome")));
     };
 
-    console.error = function(...args) {
-        const message = args.join(' ');
+    console.error = function (...args) {
+        const message = args.join(" ");
         if (!isCORSError(message)) {
             originalError.apply(console, args);
         }
     };
-    
-    console.warn = function(...args) {
-        const message = args.join(' ');
+
+    console.warn = function (...args) {
+        const message = args.join(" ");
         if (!isCORSError(message)) {
             originalWarn.apply(console, args);
         }
@@ -438,15 +415,14 @@ async function takeItemScreenshot(name) {
     try {
         const dataUrl = await domtoimage.toPng(content, {
             quality: 0.95,
-            bgcolor: document.documentElement.getAttribute("data-bs-theme") === "dark" ? "#212529" : "#ffffff"
+            bgcolor: document.documentElement.getAttribute("data-bs-theme") === "dark" ? "#212529" : "#ffffff",
         });
-        
+
         const link = document.createElement("a");
         link.download = `${name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_details.png`;
         link.href = dataUrl;
         link.click();
         URL.revokeObjectURL(dataUrl);
-        
     } catch (error) {
         console.error("Screenshot failed:", error);
         alert("Screenshot failed. Please try again or use your browser's built-in screenshot tool.");
@@ -461,22 +437,22 @@ async function takeItemScreenshot(name) {
 function updateAddToCartBtnModal(name, rowData = null) {
     const btn = document.getElementById("add-to-cart-btn-modal");
     if (!btn) return;
-    
+
     let isDisabled = false;
     if (rowData) {
         const [tier, type, nameRow, atnVal, sessVal, itemType, cost, rarity, book, notes, link] = rowData;
         isDisabled = shouldDisableAddToCart(type, rarity, sessVal);
     }
-    
+
     const disabledClass = isDisabled ? " disabled" : "";
     const disabledAttr = isDisabled ? " disabled" : "";
-    
+
     btn.innerHTML = `
         <button class="btn btn-primary btn-sm${disabledClass}" title="Add to Cart"${disabledAttr}>
             <i class="fa-solid fa-cart-plus"></i>
         </button>
     `;
-    
+
     if (!isDisabled) {
         btn.querySelector("button").onclick = () => {
             addToCart(name);
@@ -534,13 +510,13 @@ function updateItemLinkBtnModal(name, link) {
             // Immediately disable button and show spinner
             screenshotBtn.disabled = true;
             screenshotBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
-            
+
             // Force immediate UI update
             screenshotBtn.offsetHeight; // Trigger reflow
-            
+
             try {
                 // Use setTimeout to ensure spinner shows before heavy work
-                await new Promise(resolve => setTimeout(resolve, 50));
+                await new Promise((resolve) => setTimeout(resolve, 50));
                 await takeItemScreenshot(name);
             } catch (e) {
                 console.error("Screenshot failed:", e);
@@ -1078,7 +1054,7 @@ function renderCart() {
 async function initialLoad() {
     await setupMappingConfig();
     await loadData();
-    
+
     // Reset lookup caches after data is loaded
     resetLookupCaches();
 
@@ -1171,15 +1147,12 @@ function getItemByName(name) {
 // Helper function to check if add to cart should be disabled
 function shouldDisableAddToCart(type, rarity, sessionRequired) {
     // Convert to lowercase for case-insensitive comparison
-    const lowerType = (type || '').toLowerCase();
-    const lowerRarity = (rarity || '').toLowerCase();
-    
+    const lowerType = (type || "").toLowerCase();
+    const lowerRarity = (rarity || "").toLowerCase();
+
     // Disable if type is "boons", rarity is "artifact", or session is required
     // Session required can be: true, 'true', 1, '✔', or any truthy value
-    return lowerType === 'boons' || 
-           lowerRarity === 'artifact' || 
-           sessionRequired === '✔' || 
-           (sessionRequired && sessionRequired.toString().trim() !== '');
+    return lowerType === "boons" || lowerRarity === "artifact" || sessionRequired === "✔" || (sessionRequired && sessionRequired.toString().trim() !== "");
 }
 
 initialLoad();

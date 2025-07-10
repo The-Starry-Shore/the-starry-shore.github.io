@@ -82,7 +82,7 @@
                         autocomplete="off" />
                     <label class="form-label small mb-1">Book/Page</label>
                     <input type="text" id="filter-book" class="form-control form-control-sm mb-1" autocomplete="off" />
-                    <label class="form-label small mb-1">Notes</label>
+                    <label class="form-label small mb-1">Notes/Description</label>
                     <input type="text" id="filter-notes" class="form-control form-control-sm" autocomplete="off" />
                 </div>
                 <div class="col-12 col-md-2">
@@ -98,9 +98,6 @@
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
-                    <label class="form-label small mb-1">Description</label>
-                    <input type="text" id="filter-description" class="form-control form-control-sm"
-                        autocomplete="off" />
                 </div>
                 <div class="col-12 col-md-2">
                     <label class="form-label small mb-1">Cost Min</label>
@@ -277,6 +274,22 @@
                         <div class="alert alert-info mt-2">
                             <i class="fa-solid fa-info-circle me-2"></i>
                             <strong>Important:</strong> Make sure to paste your order in the correct Discord channel: <code>#the-starry-store-2nd-best-shop</code>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-search text-success me-2"></i>Advanced Search Syntax</h6>
+                        <p>The Name, Item Type, Book/Page, and Notes/Description fields support advanced search syntax:</p>
+                        <ul>
+                            <li><strong>Basic search:</strong> <code>sword</code> - finds items containing "sword" anywhere (matches "Shortsword", "Longsword", "Sword of Flame")</li>
+                            <li><strong>Exact word:</strong> <code>=sword</code> - finds items with "sword" as a complete word only (matches "Sword of Flame" but NOT "Shortsword" or "Longsword")</li>
+                            <li><strong>Exclude terms:</strong> <code>!curse</code> - excludes items containing "curse" anywhere</li>
+                            <li><strong>Exclude exact word:</strong> <code>!=ac</code> - excludes items with "ac" as a complete word (removes "AC 15" but keeps "magical")</li>
+                            <li><strong>Combine terms:</strong> <code>magic !curse =sword</code> - finds items with "magic" and the exact word "sword" but excludes anything with "curse"</li>
+                        </ul>
+                        <div class="alert alert-info mt-2">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            <strong>Pro tip:</strong> Use <code>bonus =ac</code> in Notes/Description to filter for items that boost your AC!
                         </div>
                     </div>
 
