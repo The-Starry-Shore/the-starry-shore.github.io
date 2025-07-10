@@ -8,22 +8,6 @@ function fromBase64(str) {
         return "";
     }
 }
-function tokenizeMatch(text, query) {
-    if (!query.trim()) return true;
-    const tokens = query.toLowerCase().split(/\s+/);
-    const field = (text || "").toLowerCase();
-    return tokens.every((t) => field.includes(t));
-}
-function wordBoundaryMatch(text, query) {
-    if (!query.trim()) return true;
-    const tokens = query.toLowerCase().split(/\s+/);
-    const field = (text || "").toLowerCase();
-    return tokens.every((token) => {
-        // Use word boundary regex to match complete words only
-        const regex = new RegExp(`\\b${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
-        return regex.test(field);
-    });
-}
 function smartMatch(text, query) {
     if (!query.trim()) return true;
 
@@ -71,10 +55,6 @@ function displayTier(tier) {
     if (tier === "-1" || tier === -1) return "Mundane";
     if (!isNaN(tier)) return `Tier ${tier}`;
     return tier;
-}
-function normalizeItemName(name) {
-    if (typeof name !== "string") return "";
-    return name.trim().toLowerCase();
 }
 function isAnyModalOpen() {
     return document.querySelector(".modal.show") !== null;

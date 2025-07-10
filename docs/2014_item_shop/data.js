@@ -13,17 +13,6 @@ let sortAsc = true;
 let selectedRowName = null;
 let item_data = {}; // Key: normalized name, Value: item object
 
-function setCookie(name, value, hours) {
-    const d = new Date();
-    d.setTime(d.getTime() + hours * 60 * 60 * 1000);
-    document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Strict`;
-}
-
-function getCookie(name) {
-    const v = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
-    return v ? decodeURIComponent(v.pop()) : "";
-}
-
 function encryptCart(cartObj) {
     const json = JSON.stringify(cartObj);
     const encrypted = CryptoJS.AES.encrypt(json, CART_EXPORT_PASSWORD).toString();
@@ -127,14 +116,14 @@ async function loadData() {
         // 1. Load CSV
         const csvRows = await fetchCSV(CSV_URL);
         allData = csvRows.slice(1);
-        
+
         // Normalize rarity column (column 7) to proper case
-        allData.forEach(row => {
+        allData.forEach((row) => {
             if (row[7]) {
                 row[7] = normalizeRarityCase(row[7]);
             }
         });
-        
+
         allData.sort((a, b) => {
             const ta = parseInt(a[0], 10);
             const tb = parseInt(b[0], 10);
@@ -292,17 +281,23 @@ function uniqueSorted(arr) {
 
 function toTitleCase(str) {
     if (typeof str !== "string") return str;
-    return str.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+    return str
+        .trim()
+        .toLowerCase()
+        .replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 function normalizeRarityCase(rarity) {
     if (!rarity || typeof rarity !== "string") return rarity;
-    
+
     // Handle compound rarities like "Very Rare/Rare" or "very rare/rare"
     if (rarity.includes("/")) {
-        return rarity.split("/").map(part => toTitleCase(part.trim())).join("/");
+        return rarity
+            .split("/")
+            .map((part) => toTitleCase(part.trim()))
+            .join("/");
     }
-    
+
     return toTitleCase(rarity);
 }
 
@@ -310,14 +305,6 @@ function normalizeRarity(val) {
     if (val === "Very Rare (S)") return "Very Rare";
     if (val === "Very Rare/Rare") return ["Very Rare", "Rare"];
     return val;
-}
-
-function resolveTemplateVars(text, item) {
-    return text.replace(/\{=([a-zA-Z0-9_]+)\}/g, (match, varName) => {
-        if (item && varName in item) return item[varName];
-        if (item && item.inherits && varName in item.inherits) return item.inherits[varName];
-        return match;
-    });
 }
 
 function normalizeForMapping(name, stripList, replaceList) {
