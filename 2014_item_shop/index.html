@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Item Browser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link href="styles.css?v=20250104-1" rel="stylesheet">
+    <!-- Crypto 4 CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="utils.js?v=20250827-1"></script>
+    <script src="data.js?v=20250826-2"></script>
+    <script src="cart.js?v=20250104-1"></script>
+    <script src="ui.js?v=20250104-1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.6.0/dist/dom-to-image-more.min.js"></script>
+    <script src="https://cdn.counter.dev/script.js" data-id="bce443d5-24a2-45bc-8615-60bdc29cee4b" data-utcoffset="8"></script>
+</head>
+
+<body class="bg-body text-body">
+    <header class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-3 shadow-sm">
+        <div class="container-fluid">
+            <h1 class="navbar-brand mb-0 fw-bold ps-2">2014 Item Shop</h1>
+            <span class="d-flex align-items-center gap-3">
+                <!-- Help Button -->
+                <button id="help-btn" class="btn btn-primary d-flex align-items-center cart-btn" type="button"
+                    aria-label="Help" title="How to use this site" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="fa-solid fa-question"></i>
+                </button>
+                <button id="cart-btn" class="btn btn-primary position-relative d-flex align-items-center cart-btn"
+                    type="button" aria-label="View cart">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span id="cart-count"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                        0
+                    </span>
+                </button>
+                <!-- Import/Export Button -->
+                <button id="import-export-btn" class="btn btn-primary d-flex align-items-center cart-btn" type="button"
+                    aria-label="Import or Export Cart" title="Import or Export Cart">
+                    <i class="fa-solid fa-file-code"></i>
+                </button>
+                <!-- End Import/Export Button -->
+                <button class="btn btn-primary toggle-theme d-flex align-items-center theme-btn me-3" type="button"
+                    aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </span>
+        </div>
+    </header>
+
+    <!-- Only the filters are collapsible -->
+    <button class="btn btn-outline-secondary w-100 mb-2 d-lg-none" type="button" data-bs-toggle="collapse"
+        data-bs-target="#mobileFilters" aria-expanded="false" aria-controls="mobileFilters">
+        Show/Hide Filters
+    </button>
+    <div class="collapse show" id="mobileFilters">
+        <div class="filters">
+            <form class="row g-2 mb-3">
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Tier</label>
+                    <div id="filter-tier" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Type</label>
+                    <div id="filter-type" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Rarity</label>
+                    <div id="filter-rarity" class="checkbox-matrix"></div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Name</label>
+                    <input type="text" id="filter-name" class="form-control form-control-sm mb-1" autocomplete="off" />
+                    <label class="form-label small mb-1">Item Type</label>
+                    <input type="text" id="filter-itemtype" class="form-control form-control-sm mb-1"
+                        autocomplete="off" />
+                    <label class="form-label small mb-1">Book/Page</label>
+                    <input type="text" id="filter-book" class="form-control form-control-sm mb-1" autocomplete="off" />
+                    <label class="form-label small mb-1">Notes/Description</label>
+                    <input type="text" id="filter-notes" class="form-control form-control-sm" autocomplete="off" />
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Requires Attunement</label>
+                    <select id="filter-atn" class="form-select form-select-sm mb-1">
+                        <option value="">All</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <label class="form-label small mb-1">Session Required</label>
+                    <select id="filter-session" class="form-select form-select-sm">
+                        <option value="">All</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small mb-1">Cost Min</label>
+                    <input type="number" id="filter-cost-min" class="form-control form-control-sm mb-1" value="0"
+                        min="0" />
+                    <label class="form-label small mb-1">Cost Max</label>
+                    <input type="number" id="filter-cost-max" class="form-control form-control-sm" value="20000000"
+                        min="0" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table and rest of content OUTSIDE the collapse -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-3 order-2 order-lg-1" id="tableWrapper">
+            <div class="table-responsive-custom">
+                <table id="itemsTable" class="table table-hover table-bordered align-middle mb-4">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="action-col"></th>
+                            <th data-col="0">Tier</th>
+                            <th data-col="1">Type</th>
+                            <th data-col="2">Name</th>
+                            <th data-col="3">ATN</th>
+                            <th data-col="4">Session</th>
+                            <th data-col="5">Item Type</th>
+                            <th data-col="6">Cost</th>
+                            <th data-col="7">Rarity</th>
+                            <th data-col="8">Book/Page</th>
+                            <th data-col="9">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="sticky-table-scrollbar">
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="cart-contents"></div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div>
+                        <button id="clear-cart-btn" class="btn btn-outline-danger me-2" type="button">Clear</button>
+                        <button id="order-btn" class="btn btn-success" type="button">Order</button>
+                    </div>
+                    <div class="d-flex align-items-center" style="gap:0.5em;">
+                        <input id="character-name-input" class="form-control form-control-sm" style="width:180px;" placeholder="characterName">
+                    </div>
+                    <span id="cart-total" class="fw-bold"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div class="modal fade mt-3" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemDetailsModalLabel">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="itemDetailModalContent" class="card card-body border-0 p-0 bg-transparent"></div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <span id="add-to-cart-btn-modal"></span>
+                    <span id="item-link-btn-modal"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import/Export Modal -->
+    <div class="modal fade" id="importExportModal" tabindex="-1" aria-labelledby="importExportModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importExportModalLabel">Import / Export Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="importExportTextarea" class="form-control" rows="8"
+                        style="font-family:monospace;"></textarea>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div>
+                        <button id="copy-import-export-btn" class="btn btn-outline-primary me-2" type="button">
+                            <i class="fa-solid fa-copy me-1"></i>Copy
+                        </button>
+                    </div>
+                    <div>
+                        <button id="cancel-import-export-btn" class="btn btn-outline-danger me-2" type="button"
+                            data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="update-import-export-btn" class="btn btn-success" type="button">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">
+                        <i class="fa-solid fa-question-circle me-2"></i>How to Use the 2014 Item Shop
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-plus-circle text-success me-2"></i>Adding Items to Cart</h6>
+                        <p>To add an item to your cart:</p>
+                        <ol>
+                            <li>Browse the item table or use the filters to find items</li>
+                            <li>Click on any item row to view its details</li>
+                            <li>Click the <i class="fa-solid fa-cart-plus text-primary"></i> button next to the item name or in the item details popup</li>
+                            <li>The item will be added to your cart and the cart count will update</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-shopping-cart text-primary me-2"></i>Viewing Your Cart</h6>
+                        <p>To view your cart:</p>
+                        <ol>
+                            <li>Click the cart button <i class="fa-solid fa-shopping-cart"></i> in the top navigation</li>
+                            <li>Your cart will open showing all added items</li>
+                            <li>The red badge shows the total number of items in your cart</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-edit text-warning me-2"></i>Editing Cart Items</h6>
+                        <p>Once your cart is open, you can:</p>
+                        <ul>
+                            <li><strong>Change Quantity:</strong> Type directly in the quantity field to change how many you want</li>
+                            <li><strong>Set Base Item:</strong> For items with "+" in cost, enter the base item cost</li>
+                            <li><strong>Custom Names:</strong> For items that require specification, enter a custom name</li>
+                            <li><strong>Remove Items:</strong> Click the <i class="fa-solid fa-trash text-danger"></i> button to remove an item</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-receipt text-info me-2"></i>Placing Your Order</h6>
+                        <p>When you're ready to order:</p>
+                        <ol>
+                            <li>Review your cart to make sure everything is correct</li>
+                            <li>Click the <strong>"Order"</strong> button at the bottom of your cart</li>
+                            <li>The formatted order message will be automatically copied to your clipboard</li>
+                            <li><strong>Go to the <code>#the-starry-store-2nd-best-shop</code> Discord channel and paste</strong></li>
+                            <li>Wait for a shop keeper to process your order!</li>
+                        </ol>
+                        <div class="alert alert-info mt-2">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            <strong>Important:</strong> Make sure to paste your order in the correct Discord channel: <code>#the-starry-store-2nd-best-shop</code>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-search text-success me-2"></i>Advanced Search Syntax</h6>
+                        <p>The Name, Item Type, Book/Page, and Notes/Description fields support advanced search syntax:</p>
+                        <ul>
+                            <li><strong>Basic search:</strong> <code>sword</code> - finds items containing "sword" anywhere (matches "Shortsword", "Longsword", "Sword of Flame")</li>
+                            <li><strong>Exact word:</strong> <code>=sword</code> - finds items with "sword" as a complete word only (matches "Sword of Flame" but NOT "Shortsword" or "Longsword")</li>
+                            <li><strong>Exclude terms:</strong> <code>!curse</code> - excludes items containing "curse" anywhere</li>
+                            <li><strong>Exclude exact word:</strong> <code>!=ac</code> - excludes items with "ac" as a complete word (removes "AC 15" but keeps "magical")</li>
+                            <li><strong>Combine terms:</strong> <code>magic !curse =sword</code> - finds items with "magic" and the exact word "sword" but excludes anything with "curse"</li>
+                        </ul>
+                        <div class="alert alert-info mt-2">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            <strong>Pro tip:</strong> Use <code>bonus =ac</code> in Notes/Description to filter for items that boost your AC!
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h6><i class="fa-solid fa-lightbulb text-warning me-2"></i>Additional Tips</h6>
+                        <ul>
+                            <li>Use the filters at the top to narrow down items by tier, type, rarity, or name</li>
+                            <li>Click on any item name to view detailed descriptions and stats</li>
+                            <li>In item details, click on any underlined text to copy it to your clipboard</li>
+                            <li>Save a screenshot of any item by clicking the <i class="fa-solid fa-camera"></i> screenshot button in the item details</li>
+                            <li>Share an item's link with others by clicking the <i class="fa-solid fa-share-nodes"></i> share button in the item details</li>
+                            <li>You can export/import your cart using the <i class="fa-solid fa-file-code"></i> button for sharing or backup</li>
+                            <li>Items requiring attunement are marked in the "ATN" column</li>
+                            <li>Items requiring a session are marked in the "Session" column</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
