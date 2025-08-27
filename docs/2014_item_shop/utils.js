@@ -73,8 +73,10 @@ function searchNotesAndDescription(name, notes, query) {
     // If notes don't match, check description using smart matching
     if (typeof window.getItemByName === "function") {
         const item = window.getItemByName(name);
-        if (item && Array.isArray(item.entries)) {
-            return item.entries.some((e) => typeof e === "string" && smartMatch(e, query));
+        if (item && item.entries) {
+            // Convert the entries to a searchable string
+            const searchText = JSON.stringify(item.entries);
+            return smartMatch(searchText, query);
         }
     }
 
