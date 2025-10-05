@@ -28,11 +28,15 @@ jobs:
                   git -C docs checkout --detach origin/main
                   echo "Building vault @ $(git -C docs rev-parse --short HEAD)"
 
-            # 3) Sync the nested sub-modules
+            # 3) Sync the nested sub-modules (use PAT for private repos)
             - name: Sync nested submodules inside vault
+              env:
+                  PAT: ${{ secrets.VAULT_PAT }}
               run: |
+                  AUTH=$(printf "x-access-token:%s" "$PAT" | base64)
                   git -C docs submodule sync --recursive
-                  git -C docs submodule update --init --recursive --depth=1
+                  git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${AUTH}" \
+                      -C docs submodule update --init --recursive --depth=1
 
             # 4) Re-checkout to set GITHUB_TOKEN creds for pushing gh-pages
             - name: Re-checkout to set GITHUB_TOKEN creds (no clean)
