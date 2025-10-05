@@ -1,0 +1,62 @@
+name: Deploy MkDocs to GitHub Pages
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+permissions:
+    contents: write # allow pushing gh-pages
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            # 1) Checkout repo + submodule using PAT so we can read the private vault
+            - name: Checkout with PAT (includes submodules)
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.VAULT_PAT }} # fine-grained PAT scoped to the vault (Contents: Read)
+                  submodules: recursive
+                  fetch-depth: 0
+                  persist-credentials: true # keep PAT for the next step
+
+            # 1.5) Move submodule to latest origin/main (build latest vault without bumping pointer)
+            - name: Use latest vault/main
+              run: |
+                  git -C docs fetch origin main --depth=1
+                  git -C docs checkout --detach origin/main
+                  echo "Building vault @ $(git -C docs rev-parse --short HEAD)"
+
+            # 2) Re-checkout to set GITHUB_TOKEN creds for pushing gh-pages
+            - name: Re-checkout to set GITHUB_TOKEN creds (no clean)
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  submodules: false # already fetched above
+                  clean: false # keep working tree
+                  persist-credentials: true # set GITHUB_TOKEN for push
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.x"
+
+            - name: Install MkDocs and dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install \
+                    mkdocs-material \
+                    mkdocs-roamlinks-plugin \
+                    mkdocs-blog-plugin \
+                    mkdocs-rss-plugin \
+                    pymdown-extensions
+
+            - name: Deploy to GitHub Pages (gh-pages branch)
+              env:
+                  GIT_AUTHOR_NAME: github-actions
+                  GIT_AUTHOR_EMAIL: github-actions@github.com
+                  GIT_COMMITTER_NAME: github-actions
+                  GIT_COMMITTER_EMAIL: github-actions@github.com
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # push gh-pages
+              run: mkdocs gh-deploy --clean --force --strict
