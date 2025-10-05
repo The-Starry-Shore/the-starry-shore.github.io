@@ -1,0 +1,4 @@
+site/
+.venv/
+.obsidian/
+**/.DS_Store
