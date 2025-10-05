@@ -28,13 +28,17 @@ jobs:
                   git -C docs checkout --detach origin/main
                   echo "Building vault @ $(git -C docs rev-parse --short HEAD)"
 
-            # 3) Sync nested submodules inside vault (use PAT)
+            # 3) Sync nested submodules inside vault (auth with PAT)
             - name: Sync nested submodules inside vault
               env:
                   PAT: ${{ secrets.VAULT_PAT }}
               run: |
-                  # Use PAT for any https://github.com/* fetches (covers nested submodules)
+                  set -euo pipefail
+                  # Use PAT for any https://github.com/* fetches
                   git config --global url."https://x-access-token:${PAT}@github.com/".insteadOf "https://github.com/"
+
+                  # Belt & suspenders: force the nested submodule remote to the tokenized URL
+                  git -C docs config submodule.item_shop.url "https://x-access-token:${PAT}@github.com/The-Starry-Shore/2014_item_shop.git"
 
                   git -C docs submodule sync --recursive
                   git -C docs submodule update --init --recursive --depth=1
