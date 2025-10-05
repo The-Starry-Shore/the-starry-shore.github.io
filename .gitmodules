@@ -1,0 +1,4 @@
+[submodule "vault"]
+	path = docs
+	url = https://github.com/The-Starry-Shore/obsidian-vault.git
+	branch = main
