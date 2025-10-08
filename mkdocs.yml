@@ -92,4 +92,3 @@ extra_javascript:
     - assets/js/obsidian-style-callouts.js
     - assets/js/copy-inline-code.js
     - assets/js/copy-code.js
-    - assets/js/copy-image-url.js
