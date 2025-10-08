@@ -155,3 +155,15 @@ pre:hover .copy-button {
 .none {
     display: none;
 }
+
+/* Custom styles for page content */
+.md-container a {
+    text-decoration: underline;
+}
+
+.md-container a:active,
+.md-container a:focus,
+.md-container a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
