@@ -1052,8 +1052,7 @@
 
 
 <p>breaks
-collabsable for gsheet, beyond
-bababa</p>
+collabsable for gsheet, beyond</p>
 <h1 style="
   font-size: 4em; 
   display: flex; 
@@ -1062,49 +1061,34 @@ bababa</p>
   font-weight: 900;
 ">
   <img src="/assets/img/The%20Starry%20Shore%20Logo.png" style="height:110px; margin-right:15px;">
-  <strong class="sparkly-text">The Starry Shore</strong>
+  <strong style="
+    background: linear-gradient(
+      90deg,
+      #0a1e4f,
+      #1e3a8a,
+      #2563eb,
+      #38bdf8,
+      #93c5fd,
+      #38bdf8,
+      #2563eb,
+      #1e3a8a,
+      #0a1e4f
+    );
+    background-size: 400% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    animation: shine 3s linear infinite;
+    text-shadow: 0 0 8px rgba(96,165,250,0.5);
+  ">
+    The Starry Shore
+  </strong>
 </h1>
 
 <style>
-.sparkly-text {
-  position: relative;
-  background: linear-gradient(
-    90deg,
-    #0f172a,
-    #1e3a8a,
-    #3b82f6,
-    #60a5fa,
-    #3b82f6,
-    #1e3a8a,
-    #0f172a
-  );
-  background-size: 400% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 6s linear infinite;
-  text-shadow: 0 0 8px rgba(96,165,250,0.4), 0 0 20px rgba(59,130,246,0.3);
-}
-
-/* Sparkles */
-.sparkly-text::after {
-  content: '✨';
-  position: absolute;
-  top: -0.2em;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: sparkle 2.5s ease-in-out infinite;
-  font-size: 0.8em;
-  opacity: 0.8;
-}
-
 @keyframes shine {
   0% { background-position: 0% center; }
   100% { background-position: 400% center; }
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: translate(-50%, -20%) scale(0.5); }
-  50% { opacity: 1; transform: translate(-50%, -40%) scale(1.2); }
 }
 </style>
 
