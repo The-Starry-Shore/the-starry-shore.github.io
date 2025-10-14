@@ -79,6 +79,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#downtime-points-guide-dtp" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -786,6 +791,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1061,6 +1068,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -1076,9 +1085,201 @@
 
 
 
-  <h1>DownTime Points Guide (DTP)</h1>
-
-
+<h1 id="downtime-points-guide-dtp">DownTime Points Guide (DTP)<a class="headerlink" href="#downtime-points-guide-dtp" title="Permanent link">&para;</a></h1>
+<h1 id="the-starry-shore-downtime-points-guide-dtp">The Starry Shore DownTime Points Guide (DTP)<a class="headerlink" href="#the-starry-shore-downtime-points-guide-dtp" title="Permanent link">&para;</a></h1>
+<p>When the starry shorians are just chillin in The Starry Shore, they can spend their free time in a variety of activities such as:
+*   Change your name
+*   Copying spells
+*   Learning new tools or languages
+*   Working for gold
+*   Religious service to awaken/exalt an item
+*   Changing spells choices
+*   Crafting
+*   Learning dunamancy or contaminations spells
+*   Worshiping a god for their blessings
+*   Change your subclass
+*   Renting a 3rd artifact</p>
+<h2 id="how-to-gain-dtp">How to gain DTP?<a class="headerlink" href="#how-to-gain-dtp" title="Permanent link">&para;</a></h2>
+<p>DTP is gained by 3 ways currently:
+- 2 dtp added automatically every irl day to your sheet once you log your first session
+- hosting a session give you times 4 the hours hosted
+- exchanging Karma pts to DTP</p>
+<p><em>P.S. 1 dtp = 8h</em></p>
+<h2 id="dtp-uses">DTP Uses<a class="headerlink" href="#dtp-uses" title="Permanent link">&para;</a></h2>
+<h3 id="changing-your-name">Changing your Name<a class="headerlink" href="#changing-your-name" title="Permanent link">&para;</a></h3>
+<p>You can use 1 DTP to legally change the name of your character across the multiverse.</p>
+<h3 id="copying-spells-for-wizards">Copying spells for Wizards<a class="headerlink" href="#copying-spells-for-wizards" title="Permanent link">&para;</a></h3>
+<p><strong>Copying a Spell into the Book:</strong> When you find a wizard spell of 1st level or higher, you can add it to your spellbook if it is of a spell level you can prepare and if you can spare the time to decipher and copy it.
+For each level of the spell, the process takes 2 hours and costs 50 gp. (the gold and time you must spend to copy spells for some subclasses is halved.)</p>
+<p><strong>Copying from a Spell Scroll:</strong> A wizard spell on a spell scroll can be copied just as spells in spellbooks can be copied. When you copy a spell from a spell scroll, you must succeed on an Intelligence (Arcana) check with a DC equal to 10 + the spell's level. If the check succeeds, the spell is successfully copied. Whether the check succeeds or fails, the spell scroll is destroyed.</p>
+<p><strong>Copying from another Spellbook:</strong> same as Copying from a Spell Scroll but it doesn't require a roll.</p>
+<blockquote>
+<p><strong>Example:</strong>
+Character Name: random wizard name
+Downtime Activity: Copying Spells from someone else
+Cost: 350gp+2dtp
+Result: Copied 1st and 2nd level Wizard spells(detect magic, identify, comprehend languages, catapult, augury, detect thoughts, mind spike, locate object, see invisibility)</p>
+</blockquote>
+<h3 id="learning-a-new-language-or-a-tool-proficiency">Learning a new Language or a Tool Proficiency<a class="headerlink" href="#learning-a-new-language-or-a-tool-proficiency" title="Permanent link">&para;</a></h3>
+<p>Receiving training in a language or tool typically takes at least ten workweeks, but this time is reduced by a number of workweeks equal to the character's Intelligence modifier (an Intelligence penalty doesn't increase the time needed). Training costs 25 gp per workweek.</p>
+<p>To see how much it would cost for your character to learn run the following command:
+<code>!learning</code></p>
+<h3 id="working">Working<a class="headerlink" href="#working" title="Permanent link">&para;</a></h3>
+<p>When all else fails, an adventurer can turn to a Starry Shore worker to earn a living. This activity represents a character's attempt to find temporary work, the quality and wages of which are difficult to predict.
+Gaining Gold by using DTP depending on your character level and a roll of 3d10:
+*   T1 - 3d10 x 20
+*   T2 - 3d10 x 50
+*   T3 - 3d10 x 100
+*   T4 - 3d10 x 150
+*   T5 - 3d10 x 200</p>
+<p><code>!job &lt;DTP amount you want to use&gt;</code>
+for example: toby have 30 dtp to spare:
+<code>!job 30</code></p>
+<h3 id="religious-service">Religious Service<a class="headerlink" href="#religious-service" title="Permanent link">&para;</a></h3>
+<p>Character may perform religious service to gain favor with a god (DM discretion) or to awaken and exalt an item. The check (religion or persuasion) determines the benefits of service, as shown on the Religious Service table:
+*   DC 1-10: 0 Favor
+*   DC 11-20: 1 Favor
+*   DC 21+: 2 Favor</p>
+<p><em>P.S. this is not to worship the gods, that can be done in #⁠piety-log , this is for something like awaking and exalting items</em></p>
+<p><code>!service &lt;modifier&gt; &lt;# of Rolls(5 DTP per check)&gt;</code></p>
+<p>Modifier: religion or persuasion modifier (items are not applicable)
+Rolls: How many checks you wish to make in order to gain favor. This will determine the amount of DTP you use up. Each check costs 5 dtp.
+for example: toby wants to use 50 DTP to make 10 checks to gain favor and his religion mod is 3
+<code>!service 3 10</code></p>
+<h3 id="spell-change-for-known-casters">Spell Change for Known casters<a class="headerlink" href="#spell-change-for-known-casters" title="Permanent link">&para;</a></h3>
+<p>If your character is one of the classes that picks spells at level-up ( Bard, Eldritch Knight, Ranger, Arcane Trickster, Sorcerer, Warlock) and you regret your choices, you can spend that character's DTP and change your choices. The cost is based on the level of the spell you are learning, not the one you are losing.
+*   Cantrips: 25 DTP
+*   level 1 spells: 10 DTP
+*   level 2 spells: 20 DTP
+*   level 3 spells: 30 DTP
+*   level 4 spells: 40 DTP
+*   level 5 spells: 50 DTP
+*   level 6 spells: 65 DTP
+*   level 7 spells: 80 DTP
+*   level 8 spells: 95 DTP
+*   level 9 spells: 110 DTP</p>
+<p>Post in ⁠#downtime-log with your character name, spell(s) lost, spell(s) learned and DTP cost, and be sure to track it on your tracking sheet. This is limited to once a month per character and up to three spells at a time.</p>
+<h3 id="the-crafting-system">The Crafting System<a class="headerlink" href="#the-crafting-system" title="Permanent link">&para;</a></h3>
+<p>Please check out the <a href="https://the-starry-shore.github.io/1.%20Shopping%20guide/2.%20Crafting/"
+   style="display:inline-block; background-color:rgba(88,101,242,0.15); color:#7289DA; border-radius:6px; padding:0.35em 0.8em; text-decoration:none; font-weight:600;"
+   onmouseover="this.style.backgroundColor='rgba(88,101,242,0.3)'"
+   onmouseout="this.style.backgroundColor='rgba(88,101,242,0.15)'">
+  ⚒️ Crafting
+</a> page for more info</p>
+<h3 id="dunamancy-spells">Dunamancy Spells<a class="headerlink" href="#dunamancy-spells" title="Permanent link">&para;</a></h3>
+<p><strong>Who can access Dunamancy Spells?</strong>
+- Dunamancy spells are treated as wizard spells, but only Chronurgy and Graviturgy wizards can learn them through spellcasting/pact magic features without paying the DTP/GP cost.
+- Dunamancy learned through feats or class features other than spellcasting/pact magic do not have a DTP/GP cost.
+- Sorcerers, Bards, Warlocks, Rangers, Druids, Clerics, Artificers, Paladins, Arcane Trickster Rogues, Eldritch Knights, Profane Soul Blood hunters, and Heretic Jaeger can learn a Dunamancy spell instead or in place of another spell they would normally gain from their spellcasting/pact magic feature by following the rules below.</p>
+<p><strong>How to learn Dunamancy Spells?</strong>
+- Dunamancy spells can be learned by spending a number of weeks (1 week = 5 DTP) equal to the level of the spell (minimum of 1 week) and 50gp per week of research, and it must be logged in ⁠#downtime-log (unless you're Chronurgy or Graviturgy wizard)</p>
+<ul>
+<li>
+<p>The spell must be of a level that the character can prepare or learn in the class being used to learn the spell, and cannot be a cantrip.</p>
+</li>
+<li>
+<p>To learn a Dunamancy spell, the character makes an Intelligence check; The DC of the check equals 10 + the spell’s level.
+The character can add a +1 bonus per additional 100 GP spent, to a maximum of +6.</p>
+</li>
+</ul>
+<p><strong>How to add them:</strong>
+If the check succeeds the character learns the spell in a manner based on their class:
+*   Wizards: Wizards add the spell directly to their spellbook
+*   Known Casters: (sorcerers, warlocks, bards, rangers, arcane tricksters, eldritch knights, Profane Soul Blood hunters, and Heretic Jaeger) can change one of their known spells to the newly learned spell.
+*   Prepared Casters: (Artificers, Druids, Clerics, Paladins) add the spell to the list of spells they can prepare.
+*   Warlocks: Warlocks can replace a mystic arcanum for spells level 6, 7, 8 &amp; 9, with the newly learned spell.</p>
+<p><em>P.S. Anyone who has learned a Dunamancy spell can cast that spell from scrolls as normal</em></p>
+<h3 id="drakkenheim-spells">Drakkenheim Spells<a class="headerlink" href="#drakkenheim-spells" title="Permanent link">&para;</a></h3>
+<p>Spells from Drakkenheim are strictly guarded secrets, and not immediately available to just any caster. These spells cost 5 DTP and 250 GP per level of the spell to research, with some having prerequisites as well.</p>
+<p><strong>Who can access Drakkenheim Spells?</strong>
+*   Drakkenheim spells are class-specific, and only their listed classes may research them.
+*   Drakkenheim spells cannot be learned through feats or class features, and cannot be replicated by things like Wish or Mizzium Apparatus.
+*   The spell must be of a level that the character can prepare or learn in the class being used to learn the spell.
+*   Some Drakkenheim spells have additional prerequisites to learning them, listed below. These spells require a session to complete the research, and DMs should log these spells in #⁠persistent-effects-log when a player successfully learns them in-session. The player still logs the research in ⁠#downtime-log
+*   Once research is complete, the character may prepare the spell, add it to their spellbook, or replace a spell they already know with the new spell, as appropriate for the spellcasting features of their class.
+*   Due to their dependency on Delirium as a material component, scrolls and spellwrought tattoos cannot be made for Drakkenheim spells.</p>
+<p><strong>Drakkenheim spells by level:</strong>
+*   <strong>1st:</strong>
+    *   Delirium Orb [Sorcerer, Warlock, Wizard]
+*   <strong>2nd:</strong>
+    *   Warp Bolt [Sorcerer, Warlock, Wizard]
+*   <strong>3rd:</strong>
+    *   Purge Contamination [Bard, Cleric, Druid, Paladin, Ranger, Sorcerer, Warlock, Wizard]
+    *   Ride the Rifts [Bard, Sorcerer, Warlock, Wizard]
+*   <strong>4th:</strong>
+    *   Delirium Blast [Bard, Sorcerer, Warlock, Wizard]
+    *   Forced Evolution [Sorcerer, Warlock, Wizard]
+*   <strong>5th:</strong>
+    *   Conjure the Deep Haze [Druid, Sorcerer, Warlock, Wizard]
+    *   Neutralizing Field [(prerequisite: know Purge Contamination &amp; have created at least one dose of Aqua Expurgo) Bard, Cleric, Druid, Paladin, Ranger, Sorcerer, Warlock, Wizard]
+*   <strong>6th:</strong>
+    *   Ray of Contamination [Druid, Sorcerer, Warlock, Wizard]
+    *   Siphon Contamination [(prerequisite: know Forced Evolution &amp; Neutralizing Field and have seen a Monstrous Transformation occur) Sorcerer, Warlock, Wizard]
+*   <strong>7th:</strong>
+    *   Contamination Immunity [(prerequisite: know Neutralizing Field) Bard, Cleric, Druid, Sorcerer, Warlock, Wizard]
+    *   Octarine Spray [Bard, Sorcerer, Warlock, Wizard]
+*   <strong>8th:</strong>
+    *   Contaminated Power [(prerequisite: know every other contamination spell &amp; have cast each at least once)Sorcerer, Warlock, Wizard]
+*   <strong>9th:</strong>
+    *   Sacrament of the Falling Fire [session required, Bard, Cleric, Druid, Warlock]</p>
+<h3 id="gods-of-the-starry-shore">Gods of The Starry Shore!<a class="headerlink" href="#gods-of-the-starry-shore" title="Permanent link">&para;</a></h3>
+<p>The gods of Theros The Starry Shore are far more active than the deities of most D&amp;D worlds and can reach all multiverses. But that doesn't mean they are ordinary creatures, they aren't mere mortals, nor are they monsters that can be fought.</p>
+<p>The idea of the existence of gods, as it grew in popularity among the mortals of Theros, didn't bring the gods into being by itself. Mortal reverence and worship turned universal ideas into deities. It wasn't until mortals trusted the gods to act on their behalf, in response to sacrifices and prayers</p>
+<p><strong>Introducing:</strong>
+*   Athreos, god of passage <a href="https://5e.tools/deities.html#athreos_theros_mot">https://5e.tools/deities.html#athreos_theros_mot</a>
+*   Ephara, god of the polis <a href="https://5e.tools/deities.html#ephara_theros_mot">https://5e.tools/deities.html#ephara_theros_mot</a>
+*   Erebos, god of the dead <a href="https://5e.tools/deities.html#erebos_theros_mot">https://5e.tools/deities.html#erebos_theros_mot</a>
+*   Heliod, god of the sun <a href="https://5e.tools/deities.html#heliod_theros_mot">https://5e.tools/deities.html#heliod_theros_mot</a>
+*   Iroas, god of victory <a href="https://5e.tools/deities.html#iroas_theros_mot">https://5e.tools/deities.html#iroas_theros_mot</a>
+*   Karametra, god of harvests <a href="https://5e.tools/deities.html#karametra_theros_mot">https://5e.tools/deities.html#karametra_theros_mot</a>
+*   Keranos, god of storms <a href="https://5e.tools/deities.html#keranos_theros_mot">https://5e.tools/deities.html#keranos_theros_mot</a>
+*   Klothys, god of destiny <a href="https://5e.tools/deities.html#klothys_theros_mot">https://5e.tools/deities.html#klothys_theros_mot</a>
+*   Kruphix, god of horizons <a href="https://5e.tools/deities.html#kruphix_theros_mot">https://5e.tools/deities.html#kruphix_theros_mot</a>
+*   Mogis, god of slaughter <a href="https://5e.tools/deities.html#mogis_theros_mot">https://5e.tools/deities.html#mogis_theros_mot</a>
+*   Nylea, god of the hunt <a href="https://5e.tools/deities.html#nylea_theros_mot">https://5e.tools/deities.html#nylea_theros_mot</a>
+*   Pharika, god of affliction <a href="https://5e.tools/deities.html#pharika_theros_mot">https://5e.tools/deities.html#pharika_theros_mot</a>
+*   Phenax, god of deception <a href="https://5e.tools/deities.html#phenax_theros_mot">https://5e.tools/deities.html#phenax_theros_mot</a>
+*   Purphoros, god of the forge <a href="https://5e.tools/deities.html#purphoros_theros_mot">https://5e.tools/deities.html#purphoros_theros_mot</a>
+*   Thassa, god of the sea <a href="https://5e.tools/deities.html#thassa_theros_mot">https://5e.tools/deities.html#thassa_theros_mot</a>
+*   Xenagos, god of revels and fun <a href="https://mtg.fandom.com/wiki/Xenagos">https://mtg.fandom.com/wiki/Xenagos</a></p>
+<p><strong>What do I gain from worshiping one?!</strong>
+The gods do reward the devotion of their champions, though. The strength of your devotion to your god is measured by your piety score. As you increase that score, you gain blessings from your god.
+Check the end of the god page or the threads in ⁠#gods-info to find out what each god grants their Devotee (3+ Piety), Votary (10+ Piety), Disciple (25+ Piety), Champion (50+ Piety), check the next part to learn how to unlock them.</p>
+<p><strong>I have enough piety! How do I unlock their blessings?!</strong>
+Gods grant their blessing to their worshipers based on how many followers there are in their temple!
+So, if you're looking to become a devotee, votary, disciple or champion to get their blessings, you need to have the same number of members of the same piety level to gain their blessings</p>
+<p>For example: Matcha has 10 favors and wants to be a votary, she needs 9 more people who each have at least 10 favors to unlock the votary blessings for this temple. From that point on, all characters who have 10 favors will receive the devotee blessing once they gain 10 favors. No blessing is unlocked for you till a number of characters have enough piety to unlock that blessing.</p>
+<p>To get the 3 piety feature, you would need 3 characters with at least 3 favor to unlock it!</p>
+<p><strong>How do I join their temple and start worshiping one of them?! and how do I gain piety/favor?!</strong>
+Well that's simple, check the pinned msgs in #⁠piety-log.</p>
+<p><strong>Oh that's cool! Is there a place where I can text role play to invite more characters to worship my god?!</strong>
+Of course, there will be a shrine for each god, and a thread for trp!</p>
+<p><strong>Just a shrine!! I want a whole temple for my god!!</strong>
+good news, For our amazing subscribers, your VIP building can become the main building for one of the gods! making it the main place for trp
+and the shrine will be moved to the temple meaning the thread will be closed!</p>
+<p><strong>Can I worship a different god after I worship another one? and do I keep my favors?</strong>
+Yes, you can, same as before just post a new entry in ⁠#piety-log, sadly the piety wouldn't carry over, favors gained for a certain god stays for that god, but you don't lose them in case you want to come back to worship that god!! but there might be consequences if you keep switching.
+<strong>GODS ARE NOT A JOKE!!</strong></p>
+<p><strong>Diminishing your Deity's Influence</strong>
+The pantheon's power comes from peoples' collective belief in the values they represent. If you take actions in TRP or live sessions that diminish your diety's influence (as outlined for each deity), you may lose piety. Recommendations are -1 piety for minor infractions, -3 for major infractions, and -5 for severe infractions (DM discretion).
+Any piety losses should be logged in ⁠⁠#piety-log by the DM using the template pinned in that channel.</p>
+<p><strong>I respect these gods but none of them fits me! Can I worship a different god that's not from this list? And how do I get any blessing?</strong>
+Well, if you would like to worship Bahamut, God of Justice and Nobility for example, you need to get a temple and 25 characters to worship him and have 10 piety, and he will be added officially and the staff team will write up their blessing!</p>
+<h3 id="subclass-change">Subclass Change<a class="headerlink" href="#subclass-change" title="Permanent link">&para;</a></h3>
+<p><strong>Tasha's Training Time Subclass Change Guidelines:</strong>
+You have two options to retrain and switch subclasses.
+*   <strong>Option 1:</strong>
+    A player may use 100 DTP and spend 500 gp per character level to switch to a different subclass. As per Tasha's, if a player switches back to a previous subclass they may forgo the gold costs and the DTP cost is halved.
+*   <strong>Option 2:</strong>
+    The other option doesn’t require DTP, check out the pinned msg in #leveling-log for more details</p>
+<h3 id="renting-a-3rd-artifact">Renting a 3rd artifact<a class="headerlink" href="#renting-a-3rd-artifact" title="Permanent link">&para;</a></h3>
+<p>for prestige players who hit lvl 30 again for 6,999,999 .9 GP and 99 .9 DTP PER MONTH you get to be able to buy and use a 3rd artifact!! and the taxes needs to be logged in ⁠#artifact-and-boon-purchase-log
+P.S. this slot doesn't grant the artifact, you still need to buy one for it. and that artifact needs to be labeled as the third artifact, bcz it goes dormant if the taxes are not payed</p>
+<blockquote>
+<p><strong>Third artifact rental template:</strong>
+Character name: <insert character name here> paid 7 mil GP and 100 DTP</p>
+</blockquote>
+<h2 id="frequently-asked-questions">Frequently asked questions:<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h2>
 
 
 
