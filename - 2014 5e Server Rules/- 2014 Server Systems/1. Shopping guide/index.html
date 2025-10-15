@@ -1467,15 +1467,27 @@
   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.15)';">
   🛒 2014 Item Shop
 </span></p>
-<blockquote>
-<p>the list should look like this as an example:</p>
-<p><strong>Example:</strong> Shine Timentes buys:</p>
-<div class="codehilite"><pre><span></span><code> （1x） Cuddly Strixhaven Mascot 1,500 – 1,500 GP
- （1x） Talking Doll 100 – 100 GP
-Total 1,600 GP
-</code></pre></div>
+<div style="display:flex; align-items:flex-start; gap:1.5em; flex-wrap:wrap; margin:1em 0;">
 
-</blockquote>
+  <!-- Text Section -->
+  <div style="flex:1 1 400px; font-size:1em; line-height:1.6; color:inherit;">
+    <blockquote style="border-left:4px solid #81C784; background:rgba(129,199,132,0.08); padding:0.8em 1em; margin:0;">
+      <strong>The list should look like this as an example:</strong><br><br>
+      <strong>Example:</strong> Nyx buys:<br>
+      （1x） Cuddly Strixhaven Mascot 1,500 – 1,500 GP<br>
+      （1x） Talking Doll 100 – 100 GP<br>
+      <strong>Total:</strong> 1,600 GP
+    </blockquote>
+  </div>
+
+  <!-- Image Section -->
+  <div style="flex:0 0 auto; max-width:260px;">
+    <img src="Nyx.png" alt="Example list illustration"
+         style="width:100%; height:auto; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+  </div>
+
+</div>
+
 <div style="
   height: 10px;
   background:
