@@ -1330,20 +1330,20 @@
 
   <h1>Halo</h1>
 
+<p>```html</p>
 <!-- Floating ghost -->
 <p><img src="assets/img/ghost.png" class="floating-ghost" alt="Ghost"></p>
 <style>
 .floating-ghost {
-  position: absolute;      /* so it can move freely */
-  width: 60px;             /* size of ghost */
-  top: 30%;                /* starting vertical position */
-  left: -80px;             /* start offscreen */
-  pointer-events: none;    /* click-through */
+  position: absolute;
+  width: 60px;
+  top: 30%;
+  left: -80px;
+  pointer-events: none;
   opacity: 0.9;
   animation: floatGhost 12s linear infinite;
 }
 
-/* Float across screen with subtle up/down wavy motion */
 @keyframes floatGhost {
   0%   { transform: translate(0,0) rotate(0deg); }
   25%  { transform: translate(100px,-20px) rotate(10deg); }
