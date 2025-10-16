@@ -1334,29 +1334,38 @@
   position: absolute;
   top: 0;
   right: 0;
-  animation: ghostMove 6s infinite alternate;
-  opacity: 0.8;
+  animation: ghostZ 6s infinite alternate linear;
   pointer-events: none;
 ">
   <img src="/assets/img/ghost.png" alt="Ghost" style="width:80px;">
 </div>
 
 <style>
-@keyframes ghostMove {
+@keyframes ghostZ {
   0% {
     top: 0%;
     right: 0%;
-    opacity: 1;
+    transform: scaleX(1);
+  }
+  25% {
+    top: 33%;
+    left: 33%;
+    transform: scaleX(1);
   }
   50% {
-    top: 50%;
-    left: 0%;
-    opacity: 0;
+    top: 66%;
+    right: 66%;
+    transform: scaleX(-1);
+  }
+  75% {
+    top: 100%;
+    left: 33%;
+    transform: scaleX(-1);
   }
   100% {
     top: 100%;
     right: 0%;
-    opacity: 1;
+    transform: scaleX(1);
   }
 }
 </style>
