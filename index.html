@@ -1394,67 +1394,6 @@
 }
 </script>
 
-<!-- ✨ Starry Background Canvas -->
-<canvas id="stars"></canvas>
-
-<style>
-  #stars {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: transparent;  /* ✅ now transparent instead of black */
-    pointer-events: none;
-  }
-</style>
-
-<script>
-  const c = document.getElementById("stars");
-  const ctx = c.getContext("2d");
-
-  function resize() {
-    c.width = window.innerWidth;
-    c.height = window.innerHeight;
-  }
-  window.addEventListener("resize", resize);
-  resize();
-
-  // Check theme color (works for MkDocs Material or prefers-color-scheme)
-  function isDarkMode() {
-    return (
-      document.documentElement.getAttribute("data-md-color-scheme") === "slate" ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
-  }
-
-  const stars = Array.from({ length: 120 }, () => ({
-    x: Math.random() * c.width,
-    y: Math.random() * c.height,
-    r: Math.random() * 1.2 + 0.3,
-    o: Math.random() * 0.5 + 0.5,
-  }));
-
-  function draw() {
-    ctx.clearRect(0, 0, c.width, c.height);
-
-    // adapt star color
-    const baseColor = isDarkMode() ? 255 : 60;
-
-    stars.forEach((s) => {
-      s.o += (Math.random() - 0.5) * 0.05;
-      s.o = Math.max(0.2, Math.min(1, s.o));
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(${baseColor}, ${baseColor}, 255, ${s.o})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-</script>
-
 
 
 
