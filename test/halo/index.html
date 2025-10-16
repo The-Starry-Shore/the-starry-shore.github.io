@@ -77,11 +77,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#3-alternative-use-markdown-image-and-add-a-class" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1277,19 +1272,6 @@
       
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Halo
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1301,32 +1283,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#3-alternative-use-markdown-image-and-add-a-class" class="md-nav__link">
-    <span class="md-ellipsis">
-      3️⃣ Alternative: Use Markdown image and add a class
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -1358,23 +1314,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#3-alternative-use-markdown-image-and-add-a-class" class="md-nav__link">
-    <span class="md-ellipsis">
-      3️⃣ Alternative: Use Markdown image and add a class
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1391,29 +1330,26 @@
 
   <h1>Halo</h1>
 
-<h3 id="3-alternative-use-markdown-image-and-add-a-class"><strong>3️⃣ Alternative: Use Markdown image and add a class</strong><a class="headerlink" href="#3-alternative-use-markdown-image-and-add-a-class" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Markdown syntax:<br />
-<div class="highlight"><pre><span></span><code>![<span class="nt">Ghost</span>](<span class="na">assets/img/ghost.png</span>){.floating-ghost}
-</code></pre></div></li>
-</ul>
+<div class="ghost"></div>
+
 <style>
-.floating-ghost {
+.ghost {
   position: absolute;
-  width: 60px;
-  top: 30%;
-  left: -80px;
+  width: 50px;
+  height: 50px;
+  top: 40%;
+  left: -60px;
+  background: url('assets/img/ghost.png') no-repeat center/contain;
+  animation:floatGhost 12s linear infinite;
   pointer-events: none;
-  opacity: 0.9;
-  animation: floatGhost 12s linear infinite;
 }
 
 @keyframes floatGhost {
-  0%   { transform: translate(0,0) rotate(0deg); }
-  25%  { transform: translate(100px,-20px) rotate(10deg); }
-  50%  { transform: translate(200px,15px) rotate(-10deg); }
-  75%  { transform: translate(300px,-10px) rotate(5deg); }
-  100% { transform: translate(100vw,0) rotate(0deg); }
+  0% { left: -60px; transform: translateY(0) rotate(0deg); }
+  25% { left: 25%; transform: translateY(-20px) rotate(10deg); }
+  50% { left: 50%; transform: translateY(15px) rotate(-10deg); }
+  75% { left: 75%; transform: translateY(-10px) rotate(5deg); }
+  100% { left: 100%; transform: translateY(0) rotate(0deg); }
 }
 </style>
 
