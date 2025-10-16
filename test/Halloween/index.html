@@ -1307,26 +1307,148 @@
 
   <h1>Halloween</h1>
 
-<p><a href="https://the-starry-shore.github.io/-%202014%205e%20Server%20Rules/-%202014%20Server%20Systems/1.%20Shopping%20guide/#hall"
-   style="display:inline-block; background-color:rgba(88,101,242,0.15); color:#7289DA; border-radius:6px; padding:0.35em 0.8em; text-decoration:none; font-weight:600;"
-   onmouseover="this.style.backgroundColor='rgba(88,101,242,0.3)'"
-   onmouseout="this.style.backgroundColor='rgba(88,101,242,0.15)'">
- hall
-</a>
-<a href="https://the-starry-shore.github.io/-%202014%205e%20Server%20Rules/-%202014%20Server%20Systems/1.%20Shopping%20guide/#hall"
-   style="display:inline-block; 
-          background:linear-gradient(135deg, #4B1D06, #FF7B00);
-          color:#FFF3E0;
-          border-radius:8px;
-          padding:0.4em 1em;
-          text-decoration:none;
-          font-weight:700;
-          box-shadow:0 2px 6px rgba(0,0,0,0.25);
-          transition:transform 0.15s ease, box-shadow 0.15s ease;"
-   onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.35)';"
-   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.25)';">
-  🎃 Hall
-</a></p>
+<div class="starfield"></div>
+<style>
+.starfield {
+  position: fixed;
+  inset:0;
+  z-index:-1;
+  background: radial-gradient(ellipse at center, #0a0f28 0%, #1a0030 100%);
+}
+.starfield::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white"/></svg>') repeat;
+  opacity:0.2;
+  animation:twinkle 6s linear infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:0.2;}50%{opacity:0.5;} }
+</style>
+
+<h2 class="animated-gradient">Shimmering Header</h2>
+<style>
+.animated-gradient {
+  font-size:2em;
+  background: linear-gradient(270deg,#ff6eff,#6effff,#ff6eff);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation:gradientShift 6s ease infinite;
+}
+@keyframes gradientShift {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+</style>
+
+<div class="floating-shape">◼</div>
+<style>
+.floating-shape {
+  position:absolute;
+  top:30%;
+  left:10%;
+  font-size:3em;
+  opacity:0.1;
+  animation:floatShape 20s linear infinite alternate;
+}
+@keyframes floatShape { 0%{transform:translate(0,0);} 100%{transform:translate(200px,-100px) rotate(360deg);} }
+</style>
+
+<div class="glass-panel">Some info</div>
+<style>
+.glass-panel {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius:12px;
+  padding:1em;
+  border:1px solid rgba(255,255,255,0.2);
+}
+</style>
+
+<div class="spotlight">Hover me!</div>
+<style>
+.spotlight {
+  position:relative;
+  padding:2em;
+  background:#111;
+  color:#fff;
+  overflow:hidden;
+}
+.spotlight::before {
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  pointer-events:none;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2), transparent 50%);
+  transition:background-position 0.1s;
+}
+.spotlight:hover::before { background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 60%); }
+</style>
+
+<h2 class="parallax">Layered Depth</h2>
+<style>
+.parallax {
+  position:relative;
+  transform: translateY(0);
+  transition: transform 0.2s;
+}
+</style>
+<script>
+window.addEventListener('scroll',()=>{document.querySelector('.parallax').style.transform=`translateY(${window.scrollY*0.3}px)`;});
+</script>
+
+<div class="neon-line"></div>
+<style>
+.neon-line {
+  height:4px;
+  background: linear-gradient(90deg,#ff6eff,#6effff,#ff6eff);
+  background-size:200% 100%;
+  animation:flicker 2s linear infinite;
+}
+@keyframes flicker { 0%,100%{background-position:0 0;}50%{background-position:100% 0;} }
+</style>
+
+<div class="gradient-border">Content Box</div>
+<style>
+.gradient-border {
+  border:3px solid;
+  border-image: linear-gradient(45deg,#ff6eff,#6effff) 1;
+  padding:1em;
+  border-radius:10px;
+  animation:borderShift 5s linear infinite;
+}
+@keyframes borderShift { 0%{border-image-slice:1;} 50%{border-image-slice:0.8;} 100%{border-image-slice:1;} }
+</style>
+
+<h3 class="floating-text">Depth Effect</h3>
+<style>
+.floating-text {
+  color:#fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  animation:floatText 3s ease-in-out infinite alternate;
+}
+@keyframes floatText { 0%{text-shadow:0 2px 4px rgba(0,0,0,0.3);} 50%{text-shadow:0 6px 12px rgba(0,0,0,0.4);} 100%{text-shadow:0 2px 4px rgba(0,0,0,0.3);} }
+</style>
+
+<p><a href="#" class="glow-link">Hover me</a></p>
+<style>
+.glow-link {
+  color:#fff;
+  text-decoration:none;
+  position:relative;
+}
+.glow-link::after {
+  content:"";
+  position:absolute;
+  left:0; bottom:-2px; right:0; height:2px;
+  background: linear-gradient(90deg,#ff6eff,#6effff,#ff6eff);
+  opacity:0.5;
+  transition:opacity 0.3s;
+}
+.glow-link:hover::after { opacity:1; }
+</style>
 
 
 
