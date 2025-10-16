@@ -1392,10 +1392,73 @@
 }
 </script>
 
-<!-- ✨ Starry Background (Dark Mode Only) -->
+<!-- ✨ Starry Background Canvas -->
 <canvas id="stars"></canvas>
-<style> #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; background: transparent; pointer-events: none; display: none; } /* Show only in dark mode */ html[data-md-color-scheme="slate"] #stars, @media (prefers-color-scheme: dark) { #stars { display: block; } } </style>
-<script> const c = document.getElementById("stars"); const ctx = c.getContext("2d"); function resize() { c.width = window.innerWidth; c.height = window.innerHeight; } window.addEventListener("resize", resize); resize(); const stars = Array.from({ length: 150 }, () => ({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 1.5 + 0.5, o: Math.random() * 0.5 + 0.5, })); function draw() { ctx.clearRect(0, 0, c.width, c.height); stars.forEach((s) => { s.o += (Math.random() - 0.5) * 0.05; s.o = Math.max(0.2, Math.min(1, s.o)); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI); ctx.fillStyle = `rgba(255, 255, 255, ${s.o})`; ctx.fill(); }); requestAnimationFrame(draw); } draw(); </script>
+
+<style>
+  #stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    display: none; /* hidden by default */
+  }
+
+  /* Show only in dark mode (MkDocs "slate" or system dark mode) */
+  html[data-md-color-scheme="slate"] #stars,
+  @media (prefers-color-scheme: dark) {
+    #stars {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  const c = document.getElementById("stars");
+  const ctx = c.getContext("2d");
+
+  // Resize canvas to full window
+  function resize() {
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // Generate stars
+  const stars = Array.from({ length: 120 }, () => ({
+    x: Math.random() * c.width,
+    y: Math.random() * c.height,
+    r: Math.random() * 1.4 + 0.3,
+    o: Math.random() * 0.5 + 0.5,
+  }));
+
+  function draw() {
+    // Draw subtle gradient background (deep blue → purple)
+    const gradient = ctx.createLinearGradient(0, 0, 0, c.height);
+    gradient.addColorStop(0, "rgba(10, 15, 40, 0.85)");  // top deep blue
+    gradient.addColorStop(1, "rgba(40, 0, 60, 0.85)");   // bottom purple
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    // Draw twinkling stars
+    stars.forEach((s) => {
+      s.o += (Math.random() - 0.5) * 0.05;
+      s.o = Math.max(0.2, Math.min(1, s.o));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${s.o})`;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
 
 
 
