@@ -1394,6 +1394,24 @@
 }
 </script>
 
+<canvas id="stars"></canvas>
+<script>
+const c = document.getElementById("stars");
+const ctx = c.getContext("2d");
+c.width = window.innerWidth;
+c.height = window.innerHeight;
+const stars = Array.from({length:100},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5}));
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+  stars.forEach(s=>{
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+    ctx.fillStyle="rgba(255,255,255,0.8)";ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
 
 
 
