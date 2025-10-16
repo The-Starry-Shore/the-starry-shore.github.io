@@ -1331,41 +1331,22 @@
   <h1>Halo</h1>
 
 <div style="
-  position: absolute;
+  position: fixed;
   top: 0;
-  right: 0;
-  animation: ghostZ 6s infinite alternate linear;
+  right: 10px;
+  animation: floatUpDown 4s ease-in-out infinite alternate;
   pointer-events: none;
 ">
   <img src="/assets/img/ghost.png" alt="Ghost" style="width:80px;">
 </div>
 
 <style>
-@keyframes ghostZ {
+@keyframes floatUpDown {
   0% {
-    top: 0%;
-    right: 0%;
-    transform: scaleX(1);
-  }
-  25% {
-    top: 33%;
-    left: 33%;
-    transform: scaleX(1);
-  }
-  50% {
-    top: 66%;
-    right: 66%;
-    transform: scaleX(-1);
-  }
-  75% {
-    top: 100%;
-    left: 33%;
-    transform: scaleX(-1);
+    transform: translateY(0);
   }
   100% {
-    top: 100%;
-    right: 0%;
-    transform: scaleX(1);
+    transform: translateY(200px);
   }
 }
 </style>
