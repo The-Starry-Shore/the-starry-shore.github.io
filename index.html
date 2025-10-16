@@ -1392,16 +1392,16 @@
 }
 </script>
 
-<p><span class="float-emoji">✨</span></p>
+<p><span class="comet">✨</span></p>
 <style>
-.float-emoji {
-  display: inline-block;
-  animation: float 4s ease-in-out infinite;
+.comet {
+  display:inline-block;
+  animation: comet 3s linear infinite;
 }
 
-@keyframes float {
-  0%,100% { transform: translateY(0) }
-  50% { transform: translateY(-10px) }
+@keyframes comet {
+  0% { transform: translateX(0) translateY(0) }
+  100% { transform: translateX(50px) translateY(-50px) }
 }
 </style>
 
