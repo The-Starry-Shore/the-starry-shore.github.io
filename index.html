@@ -1398,6 +1398,29 @@
 }
 </script>
 
+<div style="
+  position: fixed;
+  top: 0;
+  right: 10px;
+  z-index: -1;
+  opacity: 0.7;
+  animation: floatUpDown 4s ease-in-out infinite alternate;
+  pointer-events: none;
+">
+  <img src="/assets/img/ghost.png" alt="Ghost" style="width:80px;">
+</div>
+
+<style>
+@keyframes floatUpDown {
+  0% {
+    transform: translateY(200px);
+  }
+  100% {
+    transform: translateY(500px);
+  }
+}
+</style>
+
 
 
 
