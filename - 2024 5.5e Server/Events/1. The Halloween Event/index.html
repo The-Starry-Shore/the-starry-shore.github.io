@@ -1314,7 +1314,7 @@
 <tr>
 <td style="text-align: center;">featuring your character in The Official Starry Shore Website</td>
 <td style="text-align: center;">your choice</td>
-<td style="text-align: center;">The more points you use on this, the higher placement your character will be in the website<br><br>Servers Supporters get extra points on this when they spend any amount of point on this (Noble: 25 points / Heir: 7 points / Steward: 4)<br>Check the example and points standing in the links below</td>
+<td style="text-align: center;">The more points you use on this, the higher placement your character will be in the website<br><br>Servers Supporters get extra points on this when they spend any amount of points on this (Noble: 25 points / Heir: 7 points / Steward: 4)<br>Check the example and points standing in the links below</td>
 </tr>
 <tr>
 <td style="text-align: center;">Special Halloween role with a Halloween icon too!</td>
@@ -1469,6 +1469,8 @@
   position: fixed;
   top: 0;
   right: 10px;
+  z-index: -1;
+  opacity: 0.7;
   animation: floatUpDown 4s ease-in-out infinite alternate;
   pointer-events: none;
 ">
@@ -1478,7 +1480,7 @@
 <style>
 @keyframes floatUpDown {
   0% {
-    transform: translateY(200);
+    transform: translateY(200px);
   }
   100% {
     transform: translateY(500px);
