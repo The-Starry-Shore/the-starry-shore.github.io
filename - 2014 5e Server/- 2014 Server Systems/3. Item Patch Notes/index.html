@@ -1605,8 +1605,8 @@
   <label><strong>Description:</strong></label>
   <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
 
-  <details style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;">
-    <summary style="cursor:pointer; color:white;">🕒 Open Hammertime Converter</summary>
+  <details style="margin-bottom:12px; border:1px solid #555; border-radius:8px; padding:6px; background:#3b4252; color:white;">
+    <summary style="cursor:pointer; color:white; font-weight:600; padding:6px;">🕒 Open Hammertime Converter</summary>
     <iframe src="https://hammertime.cyou/" style="width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;"></iframe>
   </details>
 
@@ -1642,15 +1642,21 @@
     </div>
   </div>
 
-  <label><strong>Session Focus:</strong></label>
+  <label><strong>Session Focus:</strong> <em>(please specify if NSFW is included or not)</em></label>
   <div style="margin:6px 0 12px;">
     <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
     <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
     <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
   </div>
 
+  <label><strong>House rules:</strong></label>
+  <textarea id="houseRules" placeholder="*Use your DM’s specific house rules here...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
   <label><strong>Player count:</strong></label>
   <input id="playerCount" type="number" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>To join:</strong></label>
+  <input id="toJoin" placeholder="Type how players can join..." style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
   <div style="display:flex; justify-content:center; gap:8px;">
     <button onclick="generateMarkdown()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
@@ -1680,6 +1686,8 @@ function generateMarkdown() {
   const dur = document.getElementById("duration").value;
   const difficulty = document.getElementById("difficulty").value;
   const permaDeath = document.getElementById("permaDeath").textContent;
+  const rules = document.getElementById("houseRules").value;
+  const join = document.getElementById("toJoin").value;
 
   const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
   const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
@@ -1697,9 +1705,13 @@ function generateMarkdown() {
 **Expected duration:** ${dur} hours  
 **Expected APL:** ${apl}  
 **Difficulty:** ${difficulty}, Perma Death: ${permaDeath}  
-**Session Focus:** ${focus}
+**Session Focus:** ${focus} *(please specify if NSFW is included or not)*
 
-**Player count:** ${players}
+**House rules:**  
+${rules}
+
+**Player count:** ${players}  
+**To join:** ${join}
 
 **Players:**  
 ${playerLines}`;
