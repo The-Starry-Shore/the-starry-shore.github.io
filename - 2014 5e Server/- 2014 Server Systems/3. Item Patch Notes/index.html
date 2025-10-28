@@ -1600,19 +1600,15 @@
   <h2 style="text-align:center;">🧭 Session Template Builder</h2>
 
   <label><strong>Session name:</strong></label>
-  <input id="sessionName" placeholder="The Shattered Isles" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+  <input id="sessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
   <label><strong>Description:</strong></label>
-  <textarea id="description" placeholder="A sea-bound adventure full of mystery and treasure..." style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+  <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
 
- <details style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;">
-  <summary style="cursor:pointer; color:white;">🕒 Open Hammertime Converter</summary>
-  <iframe 
-    src="https://hammertime.cyou/" 
-    style="width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;">
-  </iframe>
-</details>
-
+  <details style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;">
+    <summary style="cursor:pointer; color:white;">🕒 Open Hammertime Converter</summary>
+    <iframe src="https://hammertime.cyou/" style="width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;"></iframe>
+  </details>
 
   <label><strong>Start time:</strong></label>
   <input id="startTime" placeholder="Paste or describe start time..." style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
@@ -1623,36 +1619,34 @@
   <label><strong>Expected APL:</strong></label>
   <div style="margin:6px 0 12px;">
     <label><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
-    <label><input type="checkbox" class="apl" value="<@&1068045225253150850>" style="margin-left:12px;"> Tier 2</label>
-    <label><input type="checkbox" class="apl" value="<@&1068045384536039494>" style="margin-left:12px;"> Tier 3</label>
-    <label><input type="checkbox" class="apl" value="<@&1068045446938906624>" style="margin-left:12px;"> Tier 4</label>
-    <label><input type="checkbox" class="apl" value="<@&1068045526194475068>" style="margin-left:12px;"> Tier 5</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
   </div>
 
-  <label><strong>Difficulty:</strong></label>
-  <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px; margin-bottom:8px;">
-    <option>Trivial</option>
-    <option>Easy</option>
-    <option>Medium</option>
-    <option>Hard</option>
-  </select>
-
-  <div style="display:flex; gap:12px; margin-bottom:12px;">
-    <div>
-      <label><strong>☠️ Perma Death:</strong></label><br>
-      <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 12px; border-radius:6px; cursor:pointer;">Off</button>
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+    <div style="flex:1;">
+      <label><strong>Difficulty:</strong></label>
+      <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+        <option>Trivial</option>
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+      </select>
     </div>
-    <div>
-      <label><strong>💀 Item Loss:</strong></label><br>
-      <button id="itemLoss" style="background:#6b7280; border:none; color:white; padding:6px 12px; border-radius:6px; cursor:pointer;">Off</button>
+
+    <div style="flex:0 0 auto; text-align:center;">
+      <label><strong>☠️ Perma Death:</strong></label><br>
+      <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
     </div>
   </div>
 
   <label><strong>Session Focus:</strong></label>
   <div style="margin:6px 0 12px;">
     <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
-    <label><input type="checkbox" class="focus" value="Combat" style="margin-left:12px;"> Combat</label>
-    <label><input type="checkbox" class="focus" value="Roleplay" style="margin-left:12px;"> Roleplay</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
   </div>
 
   <label><strong>Player count:</strong></label>
@@ -1678,7 +1672,6 @@ function toggleButton(id) {
   }
 }
 document.getElementById("permaDeath").onclick = () => toggleButton("permaDeath");
-document.getElementById("itemLoss").onclick = () => toggleButton("itemLoss");
 
 function generateMarkdown() {
   const name = document.getElementById("sessionName").value;
@@ -1687,12 +1680,11 @@ function generateMarkdown() {
   const dur = document.getElementById("duration").value;
   const difficulty = document.getElementById("difficulty").value;
   const permaDeath = document.getElementById("permaDeath").textContent;
-  const itemLoss = document.getElementById("itemLoss").textContent;
 
   const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
   const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
-
   const players = parseInt(document.getElementById("playerCount").value) || 0;
+
   let playerLines = "";
   for (let i = 0; i < players; i++) playerLines += "- \n";
 
@@ -1704,7 +1696,7 @@ function generateMarkdown() {
 
 **Expected duration:** ${dur} hours  
 **Expected APL:** ${apl}  
-**Difficulty:** ${difficulty}, Perma Death: ${permaDeath}, Item Loss: ${itemLoss}  
+**Difficulty:** ${difficulty}, Perma Death: ${permaDeath}  
 **Session Focus:** ${focus}
 
 **Player count:** ${players}
