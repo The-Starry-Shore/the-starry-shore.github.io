@@ -1596,6 +1596,147 @@
 <li>The Potion of Invulnerability tier and price has been changed.</li>
 <li>Any item that has a recharge time longer than 10 Days is no longer rechargeable and is now considered a consumable.</li>
 </ul>
+<div class="session-form">
+
+  <h2>🧭 Session Post Generator</h2>
+
+  <label>Session name:</label>
+  <input type="text" id="sessionName" placeholder="e.g. The Lost Mines of Phandelver">
+
+  <label>Description:</label>
+  <textarea id="description" rows="3" placeholder="Brief summary of the adventure..."></textarea>
+
+  <label>Start time:</label>
+  <input type="text" id="startTime" placeholder="Use Hammertime below or paste link">
+
+  <!-- Collapsible Hammertime Embed -->
+  <details style="border: 2px solid rgba(88,101,242,0.2); border-radius:10px; padding:0.6em; background:rgba(0,0,0,0.02); margin-top: 6px;">
+    <summary style="cursor:pointer; font-weight:600; color:#1e3a8a;">
+      🕒 Click here to open Hammertime without leaving the page
+    </summary>
+    <div style="margin-top:10px; width:100%; height: 0; padding-bottom: 70%; position:relative;">
+      <iframe
+        src="https://hammertime.cyou/"
+        title="Hammertime Time Converter"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:8px;"
+        loading="lazy">
+      </iframe>
+    </div>
+  </details>
+
+  <label>Expected duration (hours):</label>
+  <input type="number" id="duration" min="1">
+
+  <label>Expected APL:</label>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0;">
+    <label><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
+    <label><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
+    <label><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
+    <label><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
+    <label><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
+  </div>
+
+  <label>Difficulty:</label>
+  <select id="difficulty">
+    <option>Trivial</option>
+    <option>Easy</option>
+    <option>Medium</option>
+    <option>Hard</option>
+  </select>
+
+  <label>Perma Death:</label>
+  <select id="permaDeath">
+    <option>Off</option>
+    <option>On</option>
+  </select>
+
+  <label>Perma Item Loss:</label>
+  <select id="permaItemLoss">
+    <option>Off</option>
+    <option>On</option>
+  </select>
+
+  <label>Session Focus:</label>
+  <select multiple id="focus">
+    <option>Exploration</option>
+    <option>Combat</option>
+    <option>Roleplay</option>
+    <option>Puzzle</option>
+    <option>Story</option>
+  </select>
+
+  <label>House Rules:</label>
+  <textarea id="houseRules" rows="2" placeholder="Any specific house rules..."></textarea>
+
+  <label>Player count:</label>
+  <input type="text" id="playerCount" placeholder="e.g. 4–6 players">
+
+  <label>To join:</label>
+  <input type="text" id="toJoin" placeholder="How players can sign up (e.g. react below)">
+
+  <label>Players:</label>
+  <textarea id="players" rows="2" placeholder="List current players..."></textarea>
+
+  <button onclick="generateMarkdown()">Generate Markdown</button>
+
+  <div id="outputContainer" style="display:none; margin-top:1em;">
+    <button onclick="copyMarkdown()" style="float:right;">📋 Copy</button>
+    <pre id="output" style="white-space:pre-wrap; padding:0.5em; border:1px solid var(--md-typeset-table-color-border, #ddd); border-radius:6px;"></pre>
+  </div>
+</div>
+
+<script>
+function generateMarkdown() {
+  const sessionName = document.getElementById("sessionName").value;
+  const description = document.getElementById("description").value;
+  const startTime = document.getElementById("startTime").value;
+  const duration = document.getElementById("duration").value;
+  const apls = Array.from(document.querySelectorAll(".apl:checked")).map(x => x.value).join(" ");
+  const difficulty = document.getElementById("difficulty").value;
+  const permaDeath = document.getElementById("permaDeath").value;
+  const permaItemLoss = document.getElementById("permaItemLoss").value;
+  const focus = Array.from(document.getElementById("focus").selectedOptions).map(o => o.value).join(", ");
+  const houseRules = document.getElementById("houseRules").value;
+  const playerCount = document.getElementById("playerCount").value;
+  const toJoin = document.getElementById("toJoin").value;
+  const players = document.getElementById("players").value;
+
+  const md = `**Session name:** ${sessionName}
+
+**Description:** ${description}
+
+**Start time:** ${startTime}
+
+**Expected duration:** ${duration} hours  
+**Expected APL:** ${apls}  
+**Difficulty:** ${difficulty}  
+**Perma Death:** ${permaDeath}  
+**Perma Item Loss:** ${permaItemLoss}  
+**Session Focus:** ${focus}
+
+**House rules:** ${houseRules}
+
+**Player count:** ${playerCount}  
+**To join:** ${toJoin}
+
+**Players:**  
+${players}`;
+
+  const out = document.getElementById("output");
+  const container = document.getElementById("outputContainer");
+  container.style.display = "block";
+  out.textContent = md;
+}
+
+function copyMarkdown() {
+  const text = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(text);
+  const btn = event.target;
+  const old = btn.textContent;
+  btn.textContent = "✅ Copied!";
+  setTimeout(() => btn.textContent = old, 1200);
+}
+</script>
 
 
 
