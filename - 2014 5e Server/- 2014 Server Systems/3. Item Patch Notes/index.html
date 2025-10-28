@@ -1605,7 +1605,7 @@
   <label><strong>Description:</strong></label>
   <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
 
-  <details style="margin-bottom:12px; border:2px solid #555; border-radius:8px; padding:0.6em; background:#3b3d47; color:white;">
+  <details style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;">
     <summary style="cursor:pointer; color:white;">🕒 Open Hammertime Converter</summary>
     <iframe src="https://hammertime.cyou/" style="width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;"></iframe>
   </details>
@@ -1687,14 +1687,18 @@ function generateMarkdown() {
   const difficulty = document.getElementById("difficulty").value;
   const permaDeath = document.getElementById("permaDeath").textContent;
   const houseRules = document.getElementById("houseRules").value;
-  const playerNames = document.getElementById("playerNames").value;
+  const playerNamesBox = document.getElementById("playerNames");
+  const existingNames = playerNamesBox.value.trim().split("\n").filter(l => l.trim() !== "");
+  const playerCount = parseInt(document.getElementById("playerCount").value) || 0;
+
+  // Auto-fill missing player lines
+  while (existingNames.length < playerCount) {
+    existingNames.push(`- Player ${existingNames.length + 1}`);
+  }
+  playerNamesBox.value = existingNames.join("\n");
 
   const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
   const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
-  const players = parseInt(document.getElementById("playerCount").value) || 0;
-
-  let playerLines = "";
-  for (let i = 0; i < players; i++) playerLines += "- \n";
 
   const markdown = `**Session name:** ${name}
 
@@ -1710,10 +1714,10 @@ function generateMarkdown() {
 **House rules:**  
 ${houseRules}
 
-**Player count:** ${players}
+**Player count:** ${playerCount}
 
 **Players:**  
-${playerLines}${playerNames ? `\n${playerNames}` : ""}`;
+${existingNames.join("\n")}`;
 
   document.getElementById("output").value = markdown;
 }
