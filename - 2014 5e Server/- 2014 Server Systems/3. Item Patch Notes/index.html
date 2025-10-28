@@ -1596,8 +1596,72 @@
 <li>The Potion of Invulnerability tier and price has been changed.</li>
 <li>Any item that has a recharge time longer than 10 Days is no longer rechargeable and is now considered a consumable.</li>
 </ul>
-<div class="session-form">
+<style>
+.session-form {
+  background: #1e2129;
+  color: #fff;
+  padding: 1.5em;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  font-family: inherit;
+}
+.session-form h2 {
+  text-align: center;
+  margin-bottom: 1em;
+  color: #a5b4fc;
+}
+.session-form label {
+  display: block;
+  margin-top: 0.8em;
+  font-weight: 600;
+}
+.session-form input,
+.session-form textarea,
+.session-form select {
+  width: 100%;
+  background: #2a2d36;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0.5em;
+  margin-top: 0.3em;
+}
+.session-form input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.4em;
+}
+.session-form button {
+  margin-top: 1em;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.session-form button:hover {
+  background: #2563eb;
+}
+#outputContainer pre {
+  background: #2a2d36;
+  color: #f1f5f9;
+}
+.details-box {
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 0.6em;
+  background: #1e2129;
+  margin-top: 8px;
+}
+.details-box summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #a5b4fc;
+}
+</style>
 
+<div class="session-form">
   <h2>🧭 Session Post Generator</h2>
 
   <label>Session name:</label>
@@ -1610,10 +1674,8 @@
   <input type="text" id="startTime" placeholder="Use Hammertime below or paste link">
 
   <!-- Collapsible Hammertime Embed -->
-  <details style="border: 2px solid rgba(88,101,242,0.2); border-radius:10px; padding:0.6em; background:rgba(0,0,0,0.02); margin-top: 6px;">
-    <summary style="cursor:pointer; font-weight:600; color:#1e3a8a;">
-      🕒 Click here to open Hammertime without leaving the page
-    </summary>
+  <details class="details-box">
+    <summary>🕒 Click here to open Hammertime without leaving the page</summary>
     <div style="margin-top:10px; width:100%; height: 0; padding-bottom: 70%; position:relative;">
       <iframe
         src="https://hammertime.cyou/"
@@ -1628,7 +1690,7 @@
   <input type="number" id="duration" min="1">
 
   <label>Expected APL:</label>
-  <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0;">
+  <div style="display:flex;flex-wrap:wrap;gap:12px;margin:6px 0;">
     <label><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
     <label><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
     <label><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
@@ -1657,15 +1719,15 @@
   </select>
 
   <label>Session Focus:</label>
-  <select multiple id="focus">
-    <option>Exploration</option>
-    <option>Combat</option>
-    <option>Roleplay</option>
-    <option>Puzzle</option>
-    <option>Story</option>
-  </select>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;margin:6px 0;">
+    <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
+    <label><input type="checkbox" class="focus" value="Combat"> Combat</label>
+    <label><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
+    <label><input type="checkbox" class="focus" value="Puzzle"> Puzzle</label>
+    <label><input type="checkbox" class="focus" value="Story"> Story</label>
+  </div>
 
-  <label>House Rules:</label>
+  <label>House rules:</label>
   <textarea id="houseRules" rows="2" placeholder="Any specific house rules..."></textarea>
 
   <label>Player count:</label>
@@ -1675,13 +1737,13 @@
   <input type="text" id="toJoin" placeholder="How players can sign up (e.g. react below)">
 
   <label>Players:</label>
-  <textarea id="players" rows="2" placeholder="List current players..."></textarea>
+  <textarea id="players" rows="3" placeholder="- Player 1\n- Player 2\n- Player 3"></textarea>
 
   <button onclick="generateMarkdown()">Generate Markdown</button>
 
   <div id="outputContainer" style="display:none; margin-top:1em;">
     <button onclick="copyMarkdown()" style="float:right;">📋 Copy</button>
-    <pre id="output" style="white-space:pre-wrap; padding:0.5em; border:1px solid var(--md-typeset-table-color-border, #ddd); border-radius:6px;"></pre>
+    <pre id="output" style="white-space:pre-wrap; padding:0.7em; border:1px solid #3b82f6; border-radius:6px;"></pre>
   </div>
 </div>
 
@@ -1695,11 +1757,11 @@ function generateMarkdown() {
   const difficulty = document.getElementById("difficulty").value;
   const permaDeath = document.getElementById("permaDeath").value;
   const permaItemLoss = document.getElementById("permaItemLoss").value;
-  const focus = Array.from(document.getElementById("focus").selectedOptions).map(o => o.value).join(", ");
+  const focuses = Array.from(document.querySelectorAll(".focus:checked")).map(x => x.value).join(", ");
   const houseRules = document.getElementById("houseRules").value;
   const playerCount = document.getElementById("playerCount").value;
   const toJoin = document.getElementById("toJoin").value;
-  const players = document.getElementById("players").value;
+  const players = document.getElementById("players").value.split("\n").map(p => p.startsWith("-") ? p : `- ${p}`).join("\n");
 
   const md = `**Session name:** ${sessionName}
 
@@ -1712,7 +1774,7 @@ function generateMarkdown() {
 **Difficulty:** ${difficulty}  
 **Perma Death:** ${permaDeath}  
 **Perma Item Loss:** ${permaItemLoss}  
-**Session Focus:** ${focus}
+**Session Focus:** ${focuses}
 
 **House rules:** ${houseRules}
 
