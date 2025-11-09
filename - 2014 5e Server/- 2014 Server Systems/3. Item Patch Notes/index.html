@@ -364,6 +364,8 @@
       
         
       
+        
+      
     
     
     
@@ -545,6 +547,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../7.%20DM%20Tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DM Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -578,10 +603,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="">
             
   
   
@@ -594,8 +619,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_8">
             <span class="md-nav__icon md-icon"></span>
               2014 Server Systems
           </label>
@@ -767,10 +792,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_8" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_9" >
         
           
-          <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_9" id="__nav_2_9_label" tabindex="">
             
   
   
@@ -783,8 +808,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_9">
             <span class="md-nav__icon md-icon"></span>
             Events
           </label>
@@ -1596,6 +1621,457 @@
 <li>The Potion of Invulnerability tier and price has been changed.</li>
 <li>Any item that has a recharge time longer than 10 Days is no longer rechargeable and is now considered a consumable.</li>
 </ul>
+<p>=============</p>
+<!--- --
+<div class="highlight"><pre><span></span><code>&lt;div style=&quot;font-family: sans-serif;&quot;&gt;
+  &lt;h2&gt;Mini Wordle&lt;/h2&gt;
+
+  &lt;div id=&quot;grid&quot; style=&quot;display: grid; grid-template-columns: repeat(5, 40px); gap: 5px; margin-bottom: 10px;&quot;&gt;&lt;/div&gt;
+
+  &lt;input id=&quot;guess&quot; maxlength=&quot;5&quot; style=&quot;text-transform: uppercase; width: 200px;&quot; placeholder=&quot;TYPE 5 LETTERS&quot;&gt;
+  &lt;button onclick=&quot;submitGuess()&quot;&gt;Guess&lt;/button&gt;
+
+  &lt;p id=&quot;message&quot;&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const answer = &quot;shore&quot;; // change this!
+let attempts = 0;
+
+function createGrid() {
+  const grid = document.getElementById(&quot;grid&quot;);
+  for (let i = 0; i &lt; 30; i++) {
+    const cell = document.createElement(&quot;div&quot;);
+    cell.style.width = &quot;40px&quot;;
+    cell.style.height = &quot;40px&quot;;
+    cell.style.border = &quot;1px solid #aaa&quot;;
+    cell.style.display = &quot;flex&quot;;
+    cell.style.alignItems = &quot;center&quot;;
+    cell.style.justifyContent = &quot;center&quot;;
+    cell.style.fontSize = &quot;20px&quot;;
+    cell.style.fontWeight = &quot;bold&quot;;
+    grid.appendChild(cell);
+  }
+}
+
+function submitGuess() {
+  const input = document.getElementById(&quot;guess&quot;);
+  let guess = input.value.toUpperCase();
+  const msg = document.getElementById(&quot;message&quot;);
+
+  if (guess.length !== 5) {
+    msg.textContent = &quot;Must be 5 letters!&quot;;
+    return;
+  }
+
+  const boxes = document.querySelectorAll(&quot;#grid &gt; div&quot;);
+  let rowStart = attempts * 5;
+
+  for (let i = 0; i &lt; 5; i++) {
+    boxes[rowStart + i].textContent = guess[i];
+
+    if (guess[i] === answer[i]) {
+      boxes[rowStart + i].style.background = &quot;#6aaa64&quot;; // green
+      boxes[rowStart + i].style.color = &quot;white&quot;;
+    } else if (answer.includes(guess[i])) {
+      boxes[rowStart + i].style.background = &quot;#c9b458&quot;; // yellow
+      boxes[rowStart + i].style.color = &quot;white&quot;;
+    } else {
+      boxes[rowStart + i].style.background = &quot;#787c7e&quot;; // gray
+      boxes[rowStart + i].style.color = &quot;white&quot;;
+    }
+  }
+
+  attempts++;
+
+  if (guess === answer) {
+    msg.textContent = &quot;🎉 Correct!&quot;;
+    input.disabled = true;
+  } else if (attempts &gt;= 6) {
+    msg.textContent = &quot;❌ Out of tries! Answer: &quot; + answer;
+    input.disabled = true;
+  }
+
+  input.value = &quot;&quot;;
+}
+
+createGrid();
+&lt;/script&gt;
+</code></pre></div>
+=================
+
+<div class="highlight"><pre><span></span><code>&lt;div style=&quot;width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif;&quot;&gt;
+  &lt;h2 style=&quot;text-align:center;&quot;&gt;Looking to Host Builder&lt;/h2&gt;
+
+  &lt;label&gt;&lt;strong&gt;Session name:&lt;/strong&gt;&lt;/label&gt;
+  &lt;input id=&quot;sessionName&quot; placeholder=&quot;*The Shattered Isles*&quot; style=&quot;width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;
+
+  &lt;label&gt;&lt;strong&gt;Description:&lt;/strong&gt;&lt;/label&gt;
+  &lt;textarea id=&quot;description&quot; placeholder=&quot;*A sea-bound adventure full of mystery and treasure...*&quot; style=&quot;width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;&lt;/textarea&gt;
+
+  &lt;details style=&quot;margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;&quot;&gt;
+    &lt;summary style=&quot;cursor:pointer; color:white;&quot;&gt;🕒 Open Hammertime Converter&lt;/summary&gt;
+    &lt;iframe src=&quot;https://hammertime.cyou/&quot; style=&quot;width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;&quot;&gt;&lt;/iframe&gt;
+  &lt;/details&gt;
+
+  &lt;label&gt;&lt;strong&gt;Start time:&lt;/strong&gt;&lt;/label&gt;
+  &lt;input id=&quot;startTime&quot; placeholder=&quot;Paste or describe start time...&quot; style=&quot;width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;
+
+  &lt;label&gt;&lt;strong&gt;Expected duration (hrs):&lt;/strong&gt;&lt;/label&gt;
+  &lt;input id=&quot;duration&quot; type=&quot;number&quot; placeholder=&quot;4&quot; style=&quot;width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;
+
+  &lt;label&gt;&lt;strong&gt;Expected APL:&lt;/strong&gt;&lt;/label&gt;
+  &lt;div style=&quot;margin:6px 0 12px;&quot;&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; class=&quot;apl&quot; value=&quot;&lt;@&amp;1068045032956891136&gt;&quot;&gt; Tier 1&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;apl&quot; value=&quot;&lt;@&amp;1068045225253150850&gt;&quot;&gt; Tier 2&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;apl&quot; value=&quot;&lt;@&amp;1068045384536039494&gt;&quot;&gt; Tier 3&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;apl&quot; value=&quot;&lt;@&amp;1068045446938906624&gt;&quot;&gt; Tier 4&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;apl&quot; value=&quot;&lt;@&amp;1068045526194475068&gt;&quot;&gt; Tier 5&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div style=&quot;display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;&quot;&gt;
+    &lt;div style=&quot;flex:1;&quot;&gt;
+      &lt;label&gt;&lt;strong&gt;Difficulty:&lt;/strong&gt;&lt;/label&gt;
+      &lt;select id=&quot;difficulty&quot; style=&quot;width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;
+        &lt;option&gt;Trivial&lt;/option&gt;
+        &lt;option&gt;Easy&lt;/option&gt;
+        &lt;option&gt;Medium&lt;/option&gt;
+        &lt;option&gt;Hard&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;div style=&quot;flex:0 0 auto; text-align:center;&quot;&gt;
+      &lt;label&gt;&lt;strong&gt;☠️ Perma Death:&lt;/strong&gt;&lt;/label&gt;&lt;br&gt;
+      &lt;button id=&quot;permaDeath&quot; style=&quot;background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;&quot;&gt;Off&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;label&gt;&lt;strong&gt;Session Focus:&lt;/strong&gt;&lt;/label&gt;
+  &lt;div style=&quot;margin:6px 0 12px;&quot;&gt;
+    &lt;label&gt;&lt;input type=&quot;checkbox&quot; class=&quot;focus&quot; value=&quot;Exploration&quot;&gt; Exploration&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;focus&quot; value=&quot;Combat&quot;&gt; Combat&lt;/label&gt;
+    &lt;label style=&quot;margin-left:12px;&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;focus&quot; value=&quot;Roleplay&quot;&gt; Roleplay&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;label&gt;&lt;strong&gt;House rules:&lt;/strong&gt;&lt;/label&gt;
+  &lt;textarea id=&quot;houseRules&quot; placeholder=&quot;*List any specific or homebrew rules for this session...*&quot; style=&quot;width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;&lt;/textarea&gt;
+
+  &lt;label&gt;&lt;strong&gt;Player count:&lt;/strong&gt;&lt;/label&gt;
+  &lt;input id=&quot;playerCount&quot; type=&quot;number&quot; placeholder=&quot;5&quot; style=&quot;width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;
+
+  &lt;label&gt;&lt;strong&gt;Players&#39; names:&lt;/strong&gt;&lt;/label&gt;
+  &lt;textarea id=&quot;playerNames&quot; placeholder=&quot;- Player 1
+- Player 2
+- Player 3&quot; style=&quot;width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;&quot;&gt;&lt;/textarea&gt;
+
+  &lt;div style=&quot;display:flex; justify-content:center; gap:8px;&quot;&gt;
+    &lt;button onclick=&quot;generateMarkdown()&quot; style=&quot;background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;&quot;&gt;Generate&lt;/button&gt;
+    &lt;button id=&quot;copyBtn&quot; style=&quot;background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;&quot;&gt;Copy&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;textarea id=&quot;output&quot; style=&quot;width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;&quot; placeholder=&quot;Your formatted markdown will appear here...&quot;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function toggleButton(id) {
+  const btn = document.getElementById(id);
+  if (btn.textContent === &quot;Off&quot;) {
+    btn.textContent = &quot;On&quot;;
+    btn.style.background = &quot;#43b581&quot;;
+  } else {
+    btn.textContent = &quot;Off&quot;;
+    btn.style.background = &quot;#6b7280&quot;;
+  }
+}
+document.getElementById(&quot;permaDeath&quot;).onclick = () =&gt; toggleButton(&quot;permaDeath&quot;);
+
+function generateMarkdown() {
+  const name = document.getElementById(&quot;sessionName&quot;).value;
+  const desc = document.getElementById(&quot;description&quot;).value;
+  const start = document.getElementById(&quot;startTime&quot;).value;
+  const dur = document.getElementById(&quot;duration&quot;).value;
+  const difficulty = document.getElementById(&quot;difficulty&quot;).value;
+  const permaDeath = document.getElementById(&quot;permaDeath&quot;).textContent;
+  const houseRules = document.getElementById(&quot;houseRules&quot;).value;
+  const playerNamesBox = document.getElementById(&quot;playerNames&quot;);
+  const existingNames = playerNamesBox.value.trim().split(&quot;\n&quot;).filter(l =&gt; l.trim() !== &quot;&quot;);
+  const playerCount = parseInt(document.getElementById(&quot;playerCount&quot;).value) || 0;
+
+  // Auto-fill missing player lines
+  while (existingNames.length &lt; playerCount) {
+    existingNames.push(`- Player ${existingNames.length + 1}`);
+  }
+  playerNamesBox.value = existingNames.join(&quot;\n&quot;);
+
+  const apl = [...document.querySelectorAll(&quot;.apl:checked&quot;)].map(c =&gt; c.value).join(&quot; &quot;);
+  const focus = [...document.querySelectorAll(&quot;.focus:checked&quot;)].map(c =&gt; c.value).join(&quot;, &quot;);
+
+  const markdown = `**Session name:** ${name}
+
+**Description:** ${desc}
+
+**Start time:** ${start}
+
+**Expected duration:** ${dur} hours  
+**Expected APL:** ${apl}  
+**Difficulty:** ${difficulty}, Perma Death: ${permaDeath}  
+**Session Focus:** ${focus}
+
+**House rules:**  
+${houseRules}
+
+**Player count:** ${playerCount}
+
+**Players:**  
+${existingNames.join(&quot;\n&quot;)}`;
+
+  document.getElementById(&quot;output&quot;).value = markdown;
+}
+
+document.getElementById(&quot;copyBtn&quot;).onclick = function() {
+  const text = document.getElementById(&quot;output&quot;);
+  text.select();
+  document.execCommand(&quot;copy&quot;);
+  this.textContent = &quot;Copied!&quot;;
+  setTimeout(() =&gt; this.textContent = &quot;Copy&quot;, 1500);
+};
+&lt;/script&gt;
+</code></pre></div>
+
+====================
+
+
+
+<div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif;">
+  <h2 style="text-align:center;">Looking to Host Builder</h2>
+
+  <label><strong>Session name:</strong></label>
+  <input id="sessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Description:</strong></label>
+  <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <details style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:6px; background:#3b3d47; color:white;">
+    <summary style="cursor:pointer; color:white;">🕒 Open Hammertime Converter</summary>
+    <iframe src="https://hammertime.cyou/" style="width:100%; height:500px; border:none; margin-top:8px; border-radius:8px; background:#fff;"></iframe>
+  </details>
+
+  <label><strong>Start time:</strong></label>
+  <input id="startTime" placeholder="Paste or describe start time..." style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Expected duration (hrs):</strong></label>
+  <input id="duration" type="number" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Expected APL:</strong></label>
+  <div style="margin:6px 0 12px;">
+    <label><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
+  </div>
+
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+    <div style="flex:1;">
+      <label><strong>Difficulty:</strong></label>
+      <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+        <option>Trivial</option>
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+      </select>
+    </div>
+
+    <div style="flex:0 0 auto; text-align:center;">
+      <label><strong>☠️ Perma Death:</strong></label><br>
+      <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
+    </div>
+  </div>
+
+  <label><strong>Session Focus:</strong></label>
+  <div style="margin:6px 0 12px;">
+    <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
+    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
+  </div>
+
+  <label><strong>House rules:</strong></label>
+  <textarea id="houseRules" placeholder="*List any specific or homebrew rules for this session...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <label><strong>Player count:</strong></label>
+  <input id="playerCount" type="number" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Players' names:</strong></label>
+  <textarea id="playerNames" placeholder="- Player 1
+- Player 2
+- Player 3" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <div style="display:flex; justify-content:center; gap:8px;">
+    <button onclick="generateMarkdown()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
+    <button id="copyBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
+  </div>
+
+  <textarea id="output" style="width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted markdown will appear here..."></textarea>
+</div>
+
+<div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif; margin-top:24px;">
+  <h2 style="text-align:center;">Session Log Builder</h2>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+    <button onclick="importSessionInfo()" style="background:#f59e0b; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Import From Host Builder</button>
+  </div>
+
+  <label><strong>Session Name:</strong></label>
+  <input id="logSessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Participants:</strong></label>
+  <textarea id="logParticipants" placeholder="- Player 1
+- Player 2" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <label><strong>Date:</strong></label>
+  <input id="logDate" placeholder="YYYY-MM-DD" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Number of hours played:</strong></label>
+  <input id="logHours" type="number" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>APL (Average Player Level):</strong></label>
+  <input id="logAPL" placeholder="Tier 2" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+  <label><strong>Player Loot:</strong></label>
+  <textarea id="logLoot" placeholder="Gold" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <label><strong>Synopsis: (optional)</strong></label>
+  <textarea id="logSynopsis" placeholder="*A brief overview of what happened...*" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+  <p style="margin-top:12px;"><strong>Anonymous Feedback (optional):</strong><br>
+  <a href="https://forms.gle/56NGvHQw7QDeG9fj8" target="_blank" style="color:#8ab4f8;">https://forms.gle/56NGvHQw7QDeG9fj8</a></p>
+
+  <div style="display:flex; justify-content:center; gap:8px;">
+    <button onclick="generateSessionLog()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
+    <button id="copyLogBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
+  </div>
+
+  <textarea id="logOutput" style="width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted session log will appear here..."></textarea>
+</div>
+
+<script>
+function toggleButton(id) {
+  const btn = document.getElementById(id);
+  if (btn.textContent === "Off") {
+    btn.textContent = "On";
+    btn.style.background = "#43b581";
+  } else {
+    btn.textContent = "Off";
+    btn.style.background = "#6b7280";
+  }
+}
+document.getElementById("permaDeath").onclick = () => toggleButton("permaDeath");
+
+function generateMarkdown() {
+  const name = document.getElementById("sessionName").value;
+  const desc = document.getElementById("description").value;
+  const start = document.getElementById("startTime").value;
+  const dur = document.getElementById("duration").value;
+  const difficulty = document.getElementById("difficulty").value;
+  const permaDeath = document.getElementById("permaDeath").textContent;
+  const houseRules = document.getElementById("houseRules").value;
+  const playerNamesBox = document.getElementById("playerNames");
+  const existingNames = playerNamesBox.value.trim().split("\n").filter(l => l.trim() !== "");
+  const playerCount = parseInt(document.getElementById("playerCount").value) || 0;
+
+  // Auto-fill missing player lines
+  while (existingNames.length < playerCount) {
+    existingNames.push(`- Player ${existingNames.length + 1}`);
+  }
+  playerNamesBox.value = existingNames.join("\n");
+
+  const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
+  const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
+
+  const markdown = `**Session name:** ${name}
+
+**Description:** ${desc}
+
+**Start time:** ${start}
+
+**Expected duration:** ${dur} hours  
+**Expected APL:** ${apl}  
+**Difficulty:** ${difficulty}, Perma Death: ${permaDeath}  
+**Session Focus:** ${focus}
+
+**House rules:**  
+${houseRules}
+
+**Player count:** ${playerCount}
+
+**Players:**  
+${existingNames.join("\n")}`;
+
+  document.getElementById("output").value = markdown;
+}
+
+document.getElementById("copyBtn").onclick = function() {
+  const text = document.getElementById("output");
+  text.select();
+  document.execCommand("copy");
+  this.textContent = "Copied!";
+  setTimeout(() => this.textContent = "Copy", 1500);
+};
+</script>
+
+<script>
+function importSessionInfo() {
+  document.getElementById("logSessionName").value = document.getElementById("sessionName").value;
+  document.getElementById("logHours").value = document.getElementById("duration").value;
+
+  // APL roles
+  const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
+  document.getElementById("logAPL").value = apl;
+
+  // Players
+  document.getElementById("logParticipants").value = document.getElementById("playerNames").value;
+}
+
+function generateSessionLog() {
+  const name = document.getElementById("logSessionName").value;
+  const participants = document.getElementById("logParticipants").value;
+  const date = document.getElementById("logDate").value;
+  const hours = document.getElementById("logHours").value;
+  const apl = document.getElementById("logAPL").value;
+  const loot = document.getElementById("logLoot").value;
+  const synopsis = document.getElementById("logSynopsis").value;
+
+  const markdown = `**__Session Log:__**
+
+**Session Name:** ${name}
+**Participants:**  
+${participants}
+
+**Date:** ${date}
+**Hours Played:** ${hours}
+**APL:** ${apl}
+
+**Player Loot:**  
+${loot}
+
+**Synopsis:**  
+${synopsis}
+
+**Anonymous Feedback Form:**  
+<https://forms.gle/56NGvHQw7QDeG9fj8>`;
+
+  document.getElementById("logOutput").value = markdown;
+}
+
+document.getElementById("copyLogBtn").onclick = function() {
+  const text = document.getElementById("logOutput");
+  text.select();
+  document.execCommand("copy");
+  this.textContent = "Copied!";
+  setTimeout(() => this.textContent = "Copy", 1500);
+};
+</script>
+-->
 
 
 
