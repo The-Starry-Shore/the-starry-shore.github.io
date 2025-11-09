@@ -1177,12 +1177,10 @@
   <textarea id="houseRules" placeholder="*List any specific or homebrew rules for this session...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
 
   <label><strong>Player count:</strong></label>
-  <input id="playerCount" type="number" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+  <input id="playerCount" type="number" placeholder="5" oninput="generatePlayerBoxes()" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
   <label><strong>Players' names:</strong></label>
-  <textarea id="playerNames" placeholder="- Player 1
-- Player 2
-- Player 3" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+  <div id="playerBoxes" style="margin-bottom:12px;"></div>
 
   <div style="display:flex; justify-content:center; gap:8px;">
     <button onclick="generateMarkdown()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
@@ -1245,6 +1243,21 @@ function toggleButton(id) {
 }
 document.getElementById("permaDeath").onclick = () => toggleButton("permaDeath");
 
+// ✅ Dynamic player input fields
+function generatePlayerBoxes() {
+  const count = parseInt(document.getElementById("playerCount").value) || 0;
+  const container = document.getElementById("playerBoxes");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    const input = document.createElement("input");
+    input.placeholder = `Player ${i}`;
+    input.className = "playerEntry";
+    input.style = "width:100%; margin:4px 0; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;";
+    container.appendChild(input);
+  }
+}
+
 function generateMarkdown() {
   const name = document.getElementById("sessionName").value;
   const desc = document.getElementById("description").value;
@@ -1253,15 +1266,10 @@ function generateMarkdown() {
   const difficulty = document.getElementById("difficulty").value;
   const permaDeath = document.getElementById("permaDeath").textContent;
   const houseRules = document.getElementById("houseRules").value;
-  const playerNamesBox = document.getElementById("playerNames");
-  const existingNames = playerNamesBox.value.trim().split("\n").filter(l => l.trim() !== "");
   const playerCount = parseInt(document.getElementById("playerCount").value) || 0;
 
-  // Auto-fill missing player lines
-  while (existingNames.length < playerCount) {
-    existingNames.push(`- Player ${existingNames.length + 1}`);
-  }
-  playerNamesBox.value = existingNames.join("\n");
+  const existingNames = [...document.querySelectorAll(".playerEntry")]
+    .map(p => "- " + (p.value || p.placeholder));
 
   const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
   const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
@@ -1302,12 +1310,13 @@ function importSessionInfo() {
   document.getElementById("logSessionName").value = document.getElementById("sessionName").value;
   document.getElementById("logHours").value = document.getElementById("duration").value;
 
-  // APL roles
-  const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
-  document.getElementById("logAPL").value = apl;
+  const players = [...document.querySelectorAll(".playerEntry")]
+    .map(p => "- " + (p.value || p.placeholder))
+    .join("\n");
 
-  // Players
-  document.getElementById("logParticipants").value = document.getElementById("playerNames").value;
+  document.getElementById("logParticipants").value = players;
+
+  // ✅ APL NOT imported anymore
 }
 
 function generateSessionLog() {
