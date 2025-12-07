@@ -1627,44 +1627,50 @@
   border-radius: 1px;">
 </div>
 <h2 id="the-prestige-shop-has-these-limits-per-character">The prestige shop has these limits per character:<a class="headerlink" href="#the-prestige-shop-has-these-limits-per-character" title="Permanent link">&para;</a></h2>
-<div style="display:flex; align-items:stretch; justify-content:center; gap:1.5em; flex-wrap:wrap; margin:1.5em auto; max-width:900px; text-align:left;">
+<div style="font-family: 'Segoe UI', sans-serif; color: #e0e0e0; background: linear-gradient(145deg, #1a1a1a, #2d2d2d); border: 1px solid #4a4a4a; border-left: 4px solid #c92a2a; border-radius: 12px; overflow: hidden; margin: 2em 0; display: flex; flex-wrap: wrap; box-shadow: 0 10px 20px rgba(0,0,0,0.5); align-items: stretch;">
 
-  <!-- Text Section -->
-  <div style="flex:1 1 400px; font-size:1em; line-height:1.6;">
-    <ul>
-      <li>3 ASI/Feat</li>
-      <li>1 stat maximum increase per stat per character</li>
-      <li>1 Blessing</li>
-      <li>3 Charms</li>
-      <li>1 Dark Bargains</li>
-      <li>1 Dark Gift</li>
-      <li>1 Draconic Gift</li>
-      <li>1 Cult</li>
-      <li>1 Demonic Boon</li>
-      <li>1 Fragment of Suffering</li>
-      <li>1 Origin</li>
-      <li>1 Planar Influences</li>
-      <li>
-        For Racial Features:
-        <ul>
-          <li>Either 1 special feature</li>
-          <li>Or 2 thematic features</li>
+  <!-- Text Section (Left Side) -->
+  <!-- Changed flex-basis to 300px so it fits side-by-side in MkDocs -->
+  <div style="flex: 2 1 300px; padding: 1.5em; display: flex; flex-direction: column; justify-content: center;">
+    <h3 style="margin-top: 0; color: #c92a2a; border-bottom: 1px solid #444; padding-bottom: 0.5em; text-transform: uppercase; font-size: 1.2em;">Prestige Restrictions</h3>
+
+    <!-- List -->
+    <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 0.95em;">
+      <!-- Using simple rows to save width space -->
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 3 ASI/Feat</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Stat Max Increase</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Blessing</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 3 Charms</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Dark Bargains</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Dark Gift</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Draconic Gift</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Cult</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Demonic Boon</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Frag. of Suffering</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Origin</li>
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px;">✦ 1 Planar Influences</li>
+
+      <!-- Racial Features Integrated -->
+      <li style="border-bottom: 1px solid #333; padding-bottom: 4px; padding-top: 5px;">
+        ✦ For Racial Features:
+        <ul style="margin: 4px 0 0 20px; padding: 0; font-size: 0.9em; color: #bbb;">
+           <li style="margin-bottom:2px;">Either 1 special feature</li>
+           <li>Or 2 thematic features</li>
         </ul>
       </li>
     </ul>
   </div>
 
-  <!-- Image + Caption Section -->
-  <!-- Added flex-direction:column so the image takes up remaining height above caption -->
-  <div style="flex:0 0 260px; display:flex; flex-direction:column; text-align:center;">
+  <!-- Image Section (Right Side) -->
+  <!-- Changed flex-basis to 240px to ensure it doesn't force a wrap -->
+  <div style="flex: 1 1 240px; min-height: 100%; position: relative; background: #000;">
+    <img src="/assets/img/velvet.png" alt="Velvet" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0.9; display: block;">
 
-    <!-- Image: height:100% fills the space, object-fit:cover prevents distortion -->
-    <img src="/assets/img/velvet.png" alt="Velvet character illustration"
-         style="width:100%; height:100%; object-fit:cover; object-position:top center; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15); display:block; margin-bottom:0.5em; flex-grow:1;">
-
-    <span style="font-size:0.9em;">
-      <strong>Velvet</strong>, played by a Starry Shorian
-    </span>
+    <!-- Name Overlay -->
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); text-align: right;">
+      <h2 style="margin: 0; color: #fff; font-size: 1.5em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 2px 4px black; line-height: 1.2;">Velvet</h2>
+      <p style="margin: 0; color: #c92a2a; font-size: 0.8em; font-weight: bold; letter-spacing: 1px;">Starry Shorian</p>
+    </div>
   </div>
 
 </div>
