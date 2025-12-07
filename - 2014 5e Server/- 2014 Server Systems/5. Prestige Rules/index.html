@@ -1627,7 +1627,7 @@
   border-radius: 1px;">
 </div>
 <h2 id="the-prestige-shop-has-these-limits-per-character">The prestige shop has these limits per character:<a class="headerlink" href="#the-prestige-shop-has-these-limits-per-character" title="Permanent link">&para;</a></h2>
-<div style="display:flex; align-items:flex-start; justify-content:center; gap:1.5em; flex-wrap:wrap; margin:1.5em auto; max-width:900px; text-align:left;">
+<div style="display:flex; align-items:stretch; justify-content:center; gap:1.5em; flex-wrap:wrap; margin:1.5em auto; max-width:900px; text-align:left;">
 
   <!-- Text Section -->
   <div style="flex:1 1 400px; font-size:1em; line-height:1.6;">
@@ -1655,9 +1655,13 @@
   </div>
 
   <!-- Image + Caption Section -->
-  <div style="flex:0 0 auto; max-width:260px; width:100%; text-align:center;">
+  <!-- Added flex-direction:column so the image takes up remaining height above caption -->
+  <div style="flex:0 0 260px; display:flex; flex-direction:column; text-align:center;">
+
+    <!-- Image: height:100% fills the space, object-fit:cover prevents distortion -->
     <img src="/assets/img/velvet.png" alt="Velvet character illustration"
-         style="width:100%; height:auto; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15); display:block; margin-bottom:0.5em;">
+         style="width:100%; height:100%; object-fit:cover; object-position:top center; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.15); display:block; margin-bottom:0.5em; flex-grow:1;">
+
     <span style="font-size:0.9em;">
       <strong>Velvet</strong>, played by a Starry Shorian
     </span>
