@@ -1657,6 +1657,10 @@
 </div>
 
 <script>
+function formatNumber(num) {
+  return Number.isInteger(num) ? num : num.toFixed(2);
+}
+
 function calculateCrafting() {
   const itemCost = Number(document.getElementById('itemCost').value);
 
@@ -1672,8 +1676,8 @@ function calculateCrafting() {
 
   document.getElementById('craftResults').innerHTML = `
     <strong>Crafting Costs</strong><br>
-    Gold Cost: ${goldCost.toFixed(2)} gp<br>
-    DTP Cost: ${dtpCost.toFixed(2)} DTP<br>
+    Gold Cost: ${formatNumber(goldCost)} gp<br>
+    DTP Cost: ${formatNumber(dtpCost)} DTP<br>
     Crafting DC: ${dc}
   `;
 }
