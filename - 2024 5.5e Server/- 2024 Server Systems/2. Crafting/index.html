@@ -1608,78 +1608,218 @@
 </ul>
 <p>You can use the following tool to see all of the above once you put the item cost and click the "Calculate Crafting Costs" button</p>
 <style>
-.craft-calculator {
-  max-width: 400px;
-  padding: 16px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
-}
-
-.craft-calculator input {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-.craft-calculator button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  background: #f59e0b;
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.craft-calculator button:hover {
-  background: #d97706;
-}
-
-.craft-results {
-  margin-top: 12px;
-  line-height: 1.6;
-}
-</style>
-
-<div class="craft-calculator">
-  <label>
-    Item Cost (gp):
-    <input type="number" id="itemCost" min="0" placeholder="Enter item cost">
-  </label>
-
-  <button onclick="calculateCrafting()">Calculate Crafting Costs</button>
-
-  <div class="craft-results" id="craftResults"></div>
-</div>
-
-<script>
-function calculateCrafting() {
-  const itemCost = Number(document.getElementById('itemCost').value);
-
-  if (!itemCost || itemCost <= 0) {
-    document.getElementById('craftResults').innerHTML =
-      "<strong>Please enter a valid item cost.</strong>";
-    return;
+  /* --- WRAPPER FOR THE WHOLE CARD --- */
+  .crafting-card {
+    display: flex;
+    max-width: 800px;
+    background: #1e293b; /* Dark Slate Background */
+    border: 2px solid #b45309; /* Bronze/Orange Border */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 20px;
   }
 
-  const goldCost = Math.floor(itemCost / 2);
-  const dtpCost = Math.floor(goldCost / 25);
-  const dc = Math.floor(10 + (itemCost / 450));
+  /* --- LEFT SIDE: THE CALCULATOR UI --- */
+  .crafting-ui-side {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #e2e8f0;
+  }
 
-  document.getElementById('craftResults').innerHTML = `
-    <strong>Crafting Costs</strong><br>
-    Gold Cost: ${goldCost} gp<br>
-    DTP Cost: ${dtpCost} DTP<br>
-    Crafting DC: ${dc}
-  `;
-}
-</script>
+  /* --- RIGHT SIDE: THE IMAGE --- */
+  .crafting-image-side {
+    flex: 1;
+    min-height: 250px;
+    background-image: url('/assets/img/crafting.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-left: 2px solid #b45309; 
+  }
 
-<p><br></p>
+  /* Dark overlay for the image */
+  .crafting-image-side::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+    pointer-events: none; /* Let clicks pass through if needed */
+  }
+
+  /* NEW: Caption styling */
+  .image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Dark background for readability */
+    color: #aaa;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 0.85em;
+    font-style: italic;
+    box-sizing: border-box;
+    z-index: 2; /* Ensures it sits above the overlay */
+  }
+
+  .crafting-title {
+    font-size: 1.5em;
+    color: #f59e0b; /* Gold */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #475569;
+    padding-bottom: 10px;
+  }
+
+  .craft-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #94a3b8;
+  }
+
+  .craft-input-group input {
+    width: 100%;
+    padding: 12px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; 
+  }
+
+  .craft-input-group input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+  }
+
+  .craft-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 16px;
+    background: linear-gradient(145deg, #d97706, #b45309);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    transition: transform 0.1s, box-shadow 0.2s;
+  }
+
+  .craft-btn:hover {
+    background: linear-gradient(145deg, #f59e0b, #d97706);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+  }
+
+  .craft-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* --- PERMANENT RESULTS BOX --- */
+  .craft-results {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #475569; /* Grey border initially */
+    transition: border-color 0.3s ease;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 1em;
+  }
+
+  .result-row:last-child {
+    margin-bottom: 0;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #475569;
+  }
+
+  .val-highlight {
+    color: #94a3b8; /* Dimmed initially */
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+
+  .error-msg {
+    color: #ef4444;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    display: none;
+    font-weight: bold;
+  }
+
+  /* --- MOBILE RESPONSIVE --- */
+  @media (max-width: 650px) {
+    .crafting-card {
+      flex-direction: column-reverse; 
+    }
+    .crafting-image-side {
+      min-height: 200px;
+      border-left: none;
+      border-bottom: 2px solid #b45309;
+    }
+  }
+</style>
+
+<!-- CALCULATOR CARD -->
+<div class="crafting-card">
+
+  <!-- LEFT UI -->
+  <div class="crafting-ui-side">
+    <div class="crafting-title">Items Crafting Costs Calculator</div>
+
+    <div class="craft-input-group">
+      <label for="itemCost">Base Item Cost (GP):</label>
+      <input type="number" id="itemCost" min="0" placeholder="e.g. 500">
+    </div>
+
+    <button class="craft-btn" onclick="calculateCrafting()">Crafting Costs & DC</button>
+
+    <!-- RESULTS BOX (Always Visible) -->
+    <div class="craft-results" id="resultsBox">
+      <div class="error-msg" id="errorMsg">Invalid item cost entered.</div>
+
+      <div class="result-row">
+        <span>Gold Cost:</span> 
+        <span><span id="val-gold" class="val-highlight">?</span> GP</span>
+      </div>
+
+      <div class="result-row">
+        <span>DTP Cost:</span> 
+        <span><span id="val-dtp" class="val-highlight">?</span> DTP</span>
+      </div>
+
+      <div class="result-row">
+        <span>Crafting DC:</span> 
+        <span id="val-dc" class="val-highlight" style="color: #475569;">?</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT IMAGE -->
+  <div class="crafting-image-side">
+    <!-- CAPTION ADDED HERE -->
+    <div class="image-caption"><strong>Varenn</strong>, Played by a Starry Shorian</div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
 <div style="
   height: 10px;
   background:
@@ -1705,6 +1845,60 @@ function calculateCrafting() {
   border: none;
   border-radius: 1px;">
 </div>
+
+<script>
+function calculateCrafting() {
+  const itemCost = Number(document.getElementById('itemCost').value);
+  const resultsBox = document.getElementById('resultsBox');
+  const errorMsg = document.getElementById('errorMsg');
+
+  // Element spans
+  const elGold = document.getElementById('val-gold');
+  const elDtp = document.getElementById('val-dtp');
+  const elDc = document.getElementById('val-dc');
+
+  // Logic: Check for valid input
+  if (!itemCost || itemCost <= 0) {
+    // Show error, reset values to ?
+    errorMsg.style.display = 'block';
+    resultsBox.style.borderLeftColor = '#ef4444'; // Red border
+
+    elGold.innerText = '?';
+    elDtp.innerText = '?';
+    elDc.innerText = '?';
+
+    // Dim the text again
+    elGold.style.color = '#94a3b8';
+    elDtp.style.color = '#94a3b8';
+    elDc.style.color = '#475569';
+    return;
+  }
+
+  // Hide error
+  errorMsg.style.display = 'none';
+
+  // Calculations
+  const goldCost = Math.floor(itemCost / 2);
+
+  // Calculate DTP (Min 1)
+  let dtpCost = Math.floor(goldCost / 25);
+  if (dtpCost < 1) { dtpCost = 1; }
+
+  const dc = Math.floor(10 + (itemCost / 450));
+
+  // Update DOM
+  resultsBox.style.borderLeftColor = '#f59e0b'; // Gold border
+
+  elGold.innerText = goldCost;
+  elDtp.innerText = dtpCost;
+  elDc.innerText = dc;
+
+  // Highlight colors to show active data
+  elGold.style.color = '#fff';
+  elDtp.style.color = '#fff';
+  elDc.style.color = '#38bdf8'; // Light blue for DC
+}
+</script>
 <h3 id="crafting-restrictions">Crafting Restrictions<a class="headerlink" href="#crafting-restrictions" title="Permanent link">&para;</a></h3>
 <p>There are some restrictions on what items can be crafted and how they can be crafted. These are:</p>
 <ol>
