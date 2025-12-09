@@ -1881,7 +1881,7 @@
   border-radius: 1px;">
 </div>
 <h2 id="character-trading">Character Trading<a class="headerlink" href="#character-trading" title="Permanent link">&para;</a></h2>
-<p>Characters can buy and sell to other characters as they wish. Characters can also gift items to other characters. It must be roleplayed in some fashion and logged in the <span style="display:inline-block;
+<!--- --Characters can buy and sell to other characters as they wish. Characters can also gift items to other characters. It must be roleplayed in some fashion and logged in the <span style="display:inline-block;
               background-color:#4b4d53;
               color:#ffffff;
               border-radius:6px;
@@ -1889,7 +1889,177 @@
               font-family:'gg sans','Segoe UI',sans-serif;
               font-size:0.9em;
               font-weight:500;
-              user-select:none;">#character-trade-log</span>.</p>
+              user-select:none;">#character-trade-log</span>. ---->
+<style>
+  /* --- CUTE TRADING CARD CONTAINER --- */
+  .trading-card {
+    /* Deep Pond Gradient */
+    background: radial-gradient(circle at center right, #155e75, #083344);
+    border: 3px solid #67e8f9; /* Bright Cyan Border */
+    border-radius: 24px;       
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 900px;
+    box-shadow: 0 10px 30px rgba(8, 145, 178, 0.5); /* Glow */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* --- LEFT SIDE: TEXT --- */
+  .trading-text-side {
+    flex: 1;
+    min-width: 300px;
+    z-index: 2;
+  }
+
+  .trading-body {
+    color: #ecfeff;
+    line-height: 1.8;
+    font-size: 1.1em;
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  /* --- CHANNEL TAG (Visual Only) --- */
+  .static-channel-tag {
+    display: inline-block;
+    background-color: #40444b;
+    color: #c9cdfb;
+    border-radius: 4px;
+    padding: 0px 6px;
+    font-family: 'gg sans', 'Segoe UI', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: default;
+    user-select: text;
+    vertical-align: middle;
+  }
+
+  /* --- RIGHT SIDE: IMAGE AREA --- */
+  .trading-img-wrapper {
+    flex: 0 0 auto;
+    position: relative;
+    width: 280px; /* Fixed width for stability */
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- THE DRAGON IMAGE --- */
+  .cute-dragon-img {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 5; /* Sits on top of ripples */
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); /* Shadow on the "water" */
+
+    /* Bobbing Animation */
+    animation: floatBob 3s ease-in-out infinite;
+  }
+
+  @keyframes floatBob {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); } /* Bobs up */
+    100% { transform: translateY(0px); }
+  }
+
+  /* --- WATER RIPPLES --- */
+  .ripple {
+    position: absolute;
+    bottom: 15px; /* Aligns with bottom of lilypad */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    border: 3px solid rgba(165, 243, 252, 0.6); /* Light Cyan Ring */
+    box-shadow: 0 0 10px rgba(165, 243, 252, 0.4);
+    opacity: 0;
+    z-index: 1; /* Under the dragon */
+    pointer-events: none;
+
+    /* Flatten height to look like perspective water */
+    height: 40px; 
+    width: 100px;
+
+    animation: rippleEffect 4s linear infinite;
+  }
+
+  .ripple:nth-child(1) { animation-delay: 0s; }
+  .ripple:nth-child(2) { animation-delay: 1.3s; }
+  .ripple:nth-child(3) { animation-delay: 2.6s; }
+
+  @keyframes rippleEffect {
+    0% {
+      width: 100px;
+      height: 40px;
+      opacity: 0.8;
+      border-width: 4px;
+    }
+    100% {
+      width: 640px; /* Expands wide */
+      height: 200px; /* Expands tall */
+      opacity: 0;
+      border-width: 0px;
+    }
+  }
+
+  /* --- FOOTER CAPTION --- */
+  .img-caption {
+    margin-top: 10px;
+    font-size: 0.85em;
+    color: #a5f3fc;
+    font-style: italic;
+    text-align: center;
+    z-index: 6;
+    position: absolute;
+    bottom: -30px; /* Pushes it below the ripples area */
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 700px) {
+    .trading-card {
+      flex-direction: column-reverse;
+      text-align: center;
+      padding-bottom: 60px; /* Extra space for footer */
+    }
+  }
+</style>
+
+<div class="trading-card">
+
+  <!-- LEFT SIDE: TEXT -->
+  <div class="trading-text-side">
+    <p class="trading-body">
+      Characters can buy and sell items to other characters as they wish. Characters can also gift items to other characters.
+      <br><br>
+      It must be roleplayed in some fashion and logged in the <span class="static-channel-tag">#character-trade-log</span>.
+    </p>
+  </div>
+
+  <!-- RIGHT SIDE: DRAGON ON POND -->
+  <div class="trading-img-wrapper">
+    <!-- Ripples underneath -->
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+
+    <!-- Image floating on top -->
+    <img src="/assets/img/loob.png" alt="Loob the Dragon" class="cute-dragon-img">
+
+    <!-- Caption -->
+    <div class="img-caption">L'oob, Played by a Starry Shorian</div>
+  </div>
+
+</div>
+
 <div style="
   height: 10px;
   background:
