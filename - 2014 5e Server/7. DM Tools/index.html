@@ -1530,21 +1530,29 @@
       </label>
     </div>
 
-    <!-- UPDATED: DIFFICULTY + PERMA DEATH -->
-    <div style="margin-bottom:12px;">
-      <label><strong>Difficulty:</strong></label>
-      <div class="pill-container">
-        <label class="pill-label"><input type="checkbox" class="difficulty" value="Trivial"><span class="pill-span">Trivial</span></label>
-        <label class="pill-label"><input type="checkbox" class="difficulty" value="Easy"><span class="pill-span">Easy</span></label>
-        <label class="pill-label"><input type="checkbox" class="difficulty" value="Medium"><span class="pill-span">Medium</span></label>
-        <label class="pill-label"><input type="checkbox" class="difficulty" value="Hard"><span class="pill-span">Hard</span></label>
-        <label class="pill-label"><input type="checkbox" class="difficulty" value="Deadly"><span class="pill-span">Deadly</span></label>
+    <!-- UPDATED: DIFFICULTY (LEFT) + PERMA DEATH (RIGHT) -->
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 12px;">
+
+      <!-- Difficulty Section -->
+      <div style="flex: 1; min-width: 200px;">
+        <label><strong>Difficulty:</strong></label>
+        <div class="pill-container">
+          <label class="pill-label"><input type="checkbox" class="difficulty" value="Trivial"><span class="pill-span">Trivial</span></label>
+          <label class="pill-label"><input type="checkbox" class="difficulty" value="Easy"><span class="pill-span">Easy</span></label>
+          <label class="pill-label"><input type="checkbox" class="difficulty" value="Medium"><span class="pill-span">Medium</span></label>
+          <label class="pill-label"><input type="checkbox" class="difficulty" value="Hard"><span class="pill-span">Hard</span></label>
+          <label class="pill-label"><input type="checkbox" class="difficulty" value="Deadly"><span class="pill-span">Deadly</span></label>
+        </div>
       </div>
 
-      <div style="margin-top:10px;">
-        <label style="display:inline-block; margin-right:10px;"><strong>☠️ Perma Death:</strong></label>
-        <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
+      <!-- Perma Death Section -->
+      <div style="flex: 0 0 auto;">
+        <label><strong>☠️ Perma Death:</strong></label>
+        <div style="margin-top: 6px;">
+          <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer;">Off</button>
+        </div>
       </div>
+
     </div>
 
     <label><strong>Session Focus:</strong></label>
