@@ -1598,75 +1598,80 @@
       </ul>
     </div>
 
-     <!-- RIGHT SIDE: IMAGE CARD (UPDATED WITH EFFECTS) -->
+     <!-- RIGHT SIDE: IMAGE CARD (UPDATED) -->
     <div style="flex: 0 0 auto; width: 100%; max-width: 260px; margin: 0 auto;">
 
+      <!-- INLINE CSS FOR EFFECTS -->
       <style>
-        /* Define the Hellfire Pulse Animation */
+        /* 1. HELLFIRE PULSE ANIMATION */
         @keyframes hellfirePulse {
           0% {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 
-                        0 0 5px rgba(255, 68, 68, 0.2);
-            border-color: #552222;
+            /* Subdued glow */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 
+                        0 0 5px rgba(180, 0, 0, 0.4);
+            border-color: #550000;
           }
           100% {
+            /* Bright Red pulsing glow */
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), 
-                        0 0 15px rgba(255, 68, 68, 0.6);
-            border-color: #ff4444;
+                        0 0 20px rgba(255, 50, 50, 0.8);
+            border-color: #ff0000;
           }
         }
 
-        /* The Card Container */
         .vox-card {
           position: relative;
-          border-radius: 12px;
-          overflow: hidden; /* Keeps the zoom inside the box */
+          border-radius: 8px;
+          overflow: hidden;
           background: #000;
-          border-bottom: 3px solid #552222; 
+          /* Base border color */
+          border-bottom: 3px solid #550000; 
+          /* Apply the animation here: 3 seconds, infinite loop */
           animation: hellfirePulse 3s infinite alternate ease-in-out;
-          transform: translateZ(0);
         }
 
-        /* The Image Itself */
         .vox-img {
           width: 100%;
           height: auto;
           display: block;
-          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: transform 0.8s ease; /* Smooth zoom */
         }
 
-        /* Zoom Effect on Hover */
+        /* ZOOM EFFECT ON HOVER */
         .vox-card:hover .vox-img {
-          transform: scale(1.1); /* Cinematic zoom */
+          transform: scale(1.1);
         }
 
-        /* The Cinematic Footer Overlay */
+        /* 2. GRADIENT FOOTER */
         .vox-footer {
           position: absolute;
           bottom: 0;
           left: 0;
           width: 100%;
-          /* Gradient fade */
-          background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0) 100%);
-          padding: 30px 10px 10px 10px;
-          color: #aaa;
-          font-size: 0.85em;
-          font-style: italic;
-          text-align: center;
-          pointer-events: none;
           box-sizing: border-box;
+          /* This creates the transparent-to-black fade */
+          background: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 100%);
+          padding: 40px 10px 10px 10px;
+          text-align: center;
+          color: #aaa;
+          font-size: 0.8em;
+          font-style: italic;
+          pointer-events: none; /* Allows clicks to pass through */
         }
       </style>
 
-      <!-- The Card HTML -->
+      <!-- The Card Container -->
       <div class="vox-card">
+
+        <!-- The Image -->
         <img src="/assets/img/oto.png" alt="Vox Character Art" class="vox-img">
 
+        <!-- The Footer Caption -->
         <div class="vox-footer">
-          <span style="color: #ff4444; font-weight: bold; text-shadow: 0 0 5px rgba(255,0,0,0.5);">Vox</span>, played by @katmando
+          <span style="color: #ff4444; font-weight: bold; text-shadow: 0 0 8px rgba(255,0,0,0.6);">Vox</span>, played by @katmando
         </div>
-      </div>
 
+      </div>
     </div>
 
   </div>
