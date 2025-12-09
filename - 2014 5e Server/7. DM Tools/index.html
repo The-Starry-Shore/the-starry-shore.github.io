@@ -1409,6 +1409,56 @@
 
 
 <h1 id="dm-tools">DM Tools<a class="headerlink" href="#dm-tools" title="Permanent link">&para;</a></h1>
+<style>
+  /* --- STYLES FOR THE PILL BUTTONS ONLY --- */
+  .pill-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Space between buttons */
+    margin: 6px 0 12px 0;
+  }
+
+  .pill-label {
+    cursor: pointer;
+    user-select: none;
+    margin: 0 !important; /* Overrides default label margin */
+  }
+
+  /* Hide the ugly default checkbox */
+  .pill-label input {
+    display: none; 
+  }
+
+  /* The visual button */
+  .pill-span {
+    display: block;
+    padding: 8px 14px;
+    background: #40424e; /* Matches your input background */
+    border: 1px solid #555;
+    border-radius: 20px; /* Round pill shape */
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    color: #ccc;
+    font-weight: 500;
+  }
+
+  /* Hover effect */
+  .pill-label:hover .pill-span {
+    border-color: #7289da;
+    color: white;
+  }
+
+  /* Selected (Checked) State */
+  .pill-label input:checked + .pill-span {
+    background: #5865f2; /* Blurple color */
+    border-color: #5865f2;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+  }
+</style>
+
 <!-- DM TOOLS CONTAINER -->
 <div id="dm-tools-wrapper">
 
@@ -1448,14 +1498,36 @@
     <input id="duration" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
     <label><strong>Expected APL:</strong></label>
-    <div style="margin:6px 0 12px;">
-      <label><input type="checkbox" class="apl" value="<@&1153129945216852050>"> Starling (New Player)</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1130253701223817226>"> TRP Player</label>
+    <!-- UPDATED: APL PILL BUTTONS -->
+    <div class="pill-container">
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1153129945216852050>">
+        <span class="pill-span">Starling (New Player)</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1068045032956891136>">
+        <span class="pill-span">Tier 1</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1068045225253150850>">
+        <span class="pill-span">Tier 2</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1068045384536039494>">
+        <span class="pill-span">Tier 3</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1068045446938906624>">
+        <span class="pill-span">Tier 4</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1068045526194475068>">
+        <span class="pill-span">Tier 5</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="apl" value="<@&1130253701223817226>">
+        <span class="pill-span">TRP Player</span>
+      </label>
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
@@ -1477,10 +1549,20 @@
     </div>
 
     <label><strong>Session Focus:</strong></label>
-    <div style="margin:6px 0 12px;">
-      <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
-      <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
+    <!-- UPDATED: SESSION FOCUS PILL BUTTONS -->
+    <div class="pill-container">
+      <label class="pill-label">
+        <input type="checkbox" class="focus" value="Exploration">
+        <span class="pill-span">Exploration</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="focus" value="Combat">
+        <span class="pill-span">Combat</span>
+      </label>
+      <label class="pill-label">
+        <input type="checkbox" class="focus" value="Roleplay">
+        <span class="pill-span">Roleplay</span>
+      </label>
     </div>
 
     <label><strong>House rules:</strong></label>
