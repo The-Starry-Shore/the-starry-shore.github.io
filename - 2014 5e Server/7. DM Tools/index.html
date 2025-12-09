@@ -1498,7 +1498,7 @@
     <input id="duration" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
     <label><strong>Expected APL:</strong></label>
-    <!-- UPDATED: APL PILL BUTTONS -->
+    <!-- APL PILL BUTTONS -->
     <div class="pill-container">
       <label class="pill-label">
         <input type="checkbox" class="apl" value="<@&1153129945216852050>">
@@ -1530,26 +1530,25 @@
       </label>
     </div>
 
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-      <div style="flex:1;">
-        <label><strong>Difficulty:</strong></label>
-        <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-          <option>Trivial</option>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-          <option>Deadly</option>
-        </select>
+    <!-- UPDATED: DIFFICULTY + PERMA DEATH -->
+    <div style="margin-bottom:12px;">
+      <label><strong>Difficulty:</strong></label>
+      <div class="pill-container">
+        <label class="pill-label"><input type="checkbox" class="difficulty" value="Trivial"><span class="pill-span">Trivial</span></label>
+        <label class="pill-label"><input type="checkbox" class="difficulty" value="Easy"><span class="pill-span">Easy</span></label>
+        <label class="pill-label"><input type="checkbox" class="difficulty" value="Medium"><span class="pill-span">Medium</span></label>
+        <label class="pill-label"><input type="checkbox" class="difficulty" value="Hard"><span class="pill-span">Hard</span></label>
+        <label class="pill-label"><input type="checkbox" class="difficulty" value="Deadly"><span class="pill-span">Deadly</span></label>
       </div>
 
-      <div style="flex:0 0 auto; text-align:center;">
-        <label><strong>☠️ Perma Death:</strong></label><br>
+      <div style="margin-top:10px;">
+        <label style="display:inline-block; margin-right:10px;"><strong>☠️ Perma Death:</strong></label>
         <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
       </div>
     </div>
 
     <label><strong>Session Focus:</strong></label>
-    <!-- UPDATED: SESSION FOCUS PILL BUTTONS -->
+    <!-- SESSION FOCUS PILL BUTTONS -->
     <div class="pill-container">
       <label class="pill-label">
         <input type="checkbox" class="focus" value="Exploration">
@@ -1695,11 +1694,13 @@ function generateMarkdown() {
   const name = document.getElementById("sessionName").value || '';
   const desc = document.getElementById("description").value || '';
   const dur = document.getElementById("duration").value || '';
-  const difficulty = document.getElementById("difficulty").value || '';
+
+  // UPDATED: COLLECT MULTIPLE DIFFICULTIES
+  const difficulty = [...document.querySelectorAll(".difficulty:checked")].map(c => c.value).join(", ");
+
   const permaDeath = document.getElementById("permaDeath").textContent;
   const houseRules = document.getElementById("houseRules").value || '';
 
-  // NEW: Get values for To Join and Player Count
   const toJoin = document.getElementById("toJoin").value || '';
   const playerCount = document.getElementById("hostPlayerCount").value || '';
 
@@ -1708,10 +1709,6 @@ function generateMarkdown() {
 
   const discordTs = window.__dmtools_timestamp || '';
 
-  // NEW: Updated Template
-  // - "To join:" section
-  // - "Player count:" with the number
-  // - "Players:" at the end with NOTHING after it
   const markdown = `**Session name:** ${name}
 
 **Description:** ${desc}
