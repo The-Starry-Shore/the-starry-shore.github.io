@@ -25,7 +25,7 @@
     
     
       
-        <title>DM Tools - The Starry Shore</title>
+        <title>7. DM Tools - The Starry Shore</title>
       
     
     
@@ -81,11 +81,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#dm-tools" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -117,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DM Tools
+              7. DM Tools
             
           </span>
         </div>
@@ -592,8 +587,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -602,7 +595,7 @@
   <span class="md-ellipsis">
     
   
-    DM Tools
+    7. DM Tools
   
 
     
@@ -1390,8 +1383,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -1408,138 +1399,147 @@
 
 
 
-<h1 id="dm-tools">DM Tools<a class="headerlink" href="#dm-tools" title="Permanent link">&para;</a></h1>
-<div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif;">
-  <h2 style="text-align:center;">Looking to Host Builder</h2>
+  <h1>7. DM Tools</h1>
 
-  <label><strong>Session name:</strong></label>
-  <input id="sessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+<!-- DM TOOLS CONTAINER -->
+<div id="dm-tools-wrapper">
 
-  <label><strong>Description:</strong></label>
-  <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+  <!-- HOST BUILDER SECTION -->
+  <div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif;">
+    <h2 style="text-align:center;">Looking to Host Builder</h2>
 
-  <!-- Timestamp widget (replaces Hammertime iframe) -->
-  <div style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:8px; background:#3b3d47; color:white;">
-    <summary style="cursor:default; color:white; font-weight:600;">🕒 Start Timestamp (auto)</summary>
+    <label><strong>Session name:</strong></label>
+    <input id="sessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
-    <div class="container" style="margin-top:8px;">
-      <label><strong>Start Date (yyyy-mm-dd):</strong></label>
-      <input type="date" id="ts_date" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+    <label><strong>Description:</strong></label>
+    <textarea id="description" placeholder="*A sea-bound adventure full of mystery and treasure...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
 
-      <label><strong>Start Time (HH:MM):</strong></label>
-      <input type="time" id="ts_time" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+    <!-- Timestamp widget -->
+    <div style="margin-bottom:12px; border:1px solid #555; border-radius:6px; padding:8px; background:#3b3d47; color:white;">
+      <summary style="cursor:default; color:white; font-weight:600;">🕒 Start Timestamp (auto)</summary>
 
-      <!-- Hidden select kept for compatibility with original code structure -->
-      <select id="ts_type" style="display:none;">
-        <option value="f">long date with short time</option>
-      </select>
+      <div class="container" style="margin-top:8px;">
+        <label><strong>Start Date (yyyy-mm-dd):</strong></label>
+        <input type="date" id="ts_date" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
-      <!-- hidden preview & code fields (used by script) -->
-      <div style="display:none;">
-        <span id="ts_preview"></span>
-        <input type="text" readonly id="ts_code" title="Press Ctrl/Cmd+C to copy">
+        <label><strong>Start Time (HH:MM):</strong></label>
+        <input type="time" id="ts_time" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+        <select id="ts_type" style="display:none;">
+          <option value="f">long date with short time</option>
+        </select>
+
+        <div style="display:none;">
+          <span id="ts_preview"></span>
+          <input type="text" readonly id="ts_code" title="Press Ctrl/Cmd+C to copy">
+        </div>
       </div>
     </div>
-  </div>
 
+    <label><strong>Expected duration (hrs):</strong></label>
+    <input id="duration" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
 
-  <label><strong>Expected duration (hrs):</strong></label>
-  <input id="duration" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-
-  <label><strong>Expected APL:</strong></label>
-  <div style="margin:6px 0 12px;">
-    <!-- Starling checkbox added -->
-    <label><input type="checkbox" class="apl" value="<@&1153129945216852050>"> Starling (New Player)</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1130253701223817226>"> TRP Player</label>
-  </div>
-
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-    <div style="flex:1;">
-      <label><strong>Difficulty:</strong></label>
-      <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-        <option>Trivial</option>
-        <option>Easy</option>
-        <option>Medium</option>
-        <option>Hard</option>
-        <option>Deadly</option>
-      </select>
+    <label><strong>Expected APL:</strong></label>
+    <div style="margin:6px 0 12px;">
+      <label><input type="checkbox" class="apl" value="<@&1153129945216852050>"> Starling (New Player)</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045032956891136>"> Tier 1</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045225253150850>"> Tier 2</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045384536039494>"> Tier 3</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045446938906624>"> Tier 4</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1068045526194475068>"> Tier 5</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="apl" value="<@&1130253701223817226>"> TRP Player</label>
     </div>
 
-    <div style="flex:0 0 auto; text-align:center;">
-      <label><strong>☠️ Perma Death:</strong></label><br>
-      <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <div style="flex:1;">
+        <label><strong>Difficulty:</strong></label>
+        <select id="difficulty" style="width:100%; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+          <option>Trivial</option>
+          <option>Easy</option>
+          <option>Medium</option>
+          <option>Hard</option>
+          <option>Deadly</option>
+        </select>
+      </div>
+
+      <div style="flex:0 0 auto; text-align:center;">
+        <label><strong>☠️ Perma Death:</strong></label><br>
+        <button id="permaDeath" style="background:#6b7280; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Off</button>
+      </div>
     </div>
+
+    <label><strong>Session Focus:</strong></label>
+    <div style="margin:6px 0 12px;">
+      <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
+      <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
+    </div>
+
+    <label><strong>House rules:</strong></label>
+    <textarea id="houseRules" placeholder="*List any specific or homebrew rules for this session...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+    <!-- NEW FIELD: To Join -->
+    <label><strong>To join:</strong></label>
+    <textarea id="toJoin" placeholder="*React with...*" style="width:100%; height:40px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+    <!-- NEW FIELD: Player Count -->
+    <label><strong>Player count:</strong></label>
+    <input id="hostPlayerCount" type="text" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+    <div style="display:flex; justify-content:center; gap:8px;">
+      <button onclick="generateMarkdown()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
+      <button id="copyBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
+    </div>
+
+    <textarea id="output" style="width:100%; height:280px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted markdown will appear here..."></textarea>
   </div>
 
-  <label><strong>Session Focus:</strong></label>
-  <div style="margin:6px 0 12px;">
-    <label><input type="checkbox" class="focus" value="Exploration"> Exploration</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Combat"> Combat</label>
-    <label style="margin-left:12px;"><input type="checkbox" class="focus" value="Roleplay"> Roleplay</label>
+  <!-- SESSION LOG BUILDER SECTION -->
+  <div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif; margin-top:24px;">
+    <h2 style="text-align:center;">Session Log Builder</h2>
+
+    <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+      <button onclick="importSessionInfo()" style="background:#f59e0b; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Import From Host Builder</button>
+    </div>
+
+    <label><strong>Session Name:</strong></label>
+    <input id="logSessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+    <label><strong>Player count (text):</strong></label>
+    <input id="logPlayerCount" type="text" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;" oninput="generateLogPlayerBoxes()">
+
+    <label><strong>Players' names:</strong></label>
+    <div id="logPlayerBoxes" style="margin-bottom:12px;"></div>
+
+    <label><strong>Participants (alternative - paste names here):</strong></label>
+    <textarea id="logParticipants" placeholder="- Player 1\n- Player 2" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+    <label><strong>Date:</strong></label>
+    <input id="logDate" placeholder="YYYY-MM-DD" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+    <label><strong>Number of hours played:</strong></label>
+    <input id="logHours" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+    <label><strong>APL (Average Player Level):</strong></label>
+    <input id="logAPL" placeholder="Tier 2" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
+
+    <label><strong>Player Loot:</strong></label>
+    <textarea id="logLoot" placeholder="Gold" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+    <label><strong>Synopsis: (optional)</strong></label>
+    <textarea id="logSynopsis" placeholder="*A brief overview of what happened...*" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
+
+    <p style="margin-top:12px;"><strong>Anonymous Feedback (optional):</strong><br>
+    <a href="https://forms.gle/56NGvHQw7QDeG9fj8" target="_blank" style="color:#8ab4f8;">https://forms.gle/56NGvHQw7QDeG9fj8</a></p>
+
+    <div style="display:flex; justify-content:center; gap:8px;">
+      <button onclick="generateSessionLog()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
+      <button id="copyLogBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
+    </div>
+
+    <textarea id="logOutput" style="width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted session log will appear here..."></textarea>
   </div>
 
-  <label><strong>House rules:</strong></label>
-  <textarea id="houseRules" placeholder="*List any specific or homebrew rules for this session...*" style="width:100%; height:80px; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
-
-  <!-- player count removed from Host Builder -->
-
-  <div style="display:flex; justify-content:center; gap:8px;">
-    <button onclick="generateMarkdown()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
-    <button id="copyBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
-  </div>
-
-  <textarea id="output" style="width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted markdown will appear here..."></textarea>
-</div>
-
-<!-- Session Log Builder (player count & dynamic fields moved here) -->
-<div style="width:100%; box-sizing:border-box; background-color:#323339; color:white; padding:1.5em; border-radius:10px; font-family:Inter, sans-serif; margin-top:24px;">
-  <h2 style="text-align:center;">Session Log Builder</h2>
-
-  <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
-    <button onclick="importSessionInfo()" style="background:#f59e0b; border:none; color:white; padding:6px 14px; border-radius:6px; cursor:pointer;">Import From Host Builder</button>
-  </div>
-
-  <label><strong>Session Name:</strong></label>
-  <input id="logSessionName" placeholder="*The Shattered Isles*" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-
-  <label><strong>Player count (text):</strong></label>
-  <input id="logPlayerCount" type="text" placeholder="5" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;" oninput="generateLogPlayerBoxes()">
-
-  <label><strong>Players' names:</strong></label>
-  <div id="logPlayerBoxes" style="margin-bottom:12px;"></div>
-
-  <label><strong>Participants (alternative - paste names here):</strong></label>
-  <textarea id="logParticipants" placeholder="- Player 1\n- Player 2" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
-
-  <label><strong>Date:</strong></label>
-  <input id="logDate" placeholder="YYYY-MM-DD" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-
-  <label><strong>Number of hours played:</strong></label>
-  <input id="logHours" type="text" placeholder="4" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-
-  <label><strong>APL (Average Player Level):</strong></label>
-  <input id="logAPL" placeholder="Tier 2" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;">
-
-  <label><strong>Player Loot:</strong></label>
-  <textarea id="logLoot" placeholder="Gold" style="width:100%; margin:4px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
-
-  <label><strong>Synopsis: (optional)</strong></label>
-  <textarea id="logSynopsis" placeholder="*A brief overview of what happened...*" style="width:100%; height:80px; margin:8px 0 12px; background:#40424e; color:white; border:none; border-radius:6px; padding:6px;"></textarea>
-
-  <p style="margin-top:12px;"><strong>Anonymous Feedback (optional):</strong><br>
-  <a href="https://forms.gle/56NGvHQw7QDeG9fj8" target="_blank" style="color:#8ab4f8;">https://forms.gle/56NGvHQw7QDeG9fj8</a></p>
-
-  <div style="display:flex; justify-content:center; gap:8px;">
-    <button onclick="generateSessionLog()" style="background:#5865f2; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Generate</button>
-    <button id="copyLogBtn" style="background:#43b581; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Copy</button>
-  </div>
-
-  <textarea id="logOutput" style="width:100%; height:260px; margin-top:14px; background:#40424e; color:white; border:none; border-radius:8px; padding:10px;" placeholder="Your formatted session log will appear here..."></textarea>
 </div>
 
 <!-- SCRIPTS -->
@@ -1609,10 +1609,19 @@ function generateMarkdown() {
   const permaDeath = document.getElementById("permaDeath").textContent;
   const houseRules = document.getElementById("houseRules").value || '';
 
+  // NEW: Get values for To Join and Player Count
+  const toJoin = document.getElementById("toJoin").value || '';
+  const playerCount = document.getElementById("hostPlayerCount").value || '';
+
   const apl = [...document.querySelectorAll(".apl:checked")].map(c => c.value).join(" ");
   const focus = [...document.querySelectorAll(".focus:checked")].map(c => c.value).join(", ");
 
   const discordTs = window.__dmtools_timestamp || '';
+
+  // NEW: Updated Template
+  // - "To join:" section
+  // - "Player count:" with the number
+  // - "Players:" at the end with NOTHING after it
   const markdown = `**Session name:** ${name}
 
 **Description:** ${desc}
@@ -1625,7 +1634,14 @@ function generateMarkdown() {
 **Session Focus:** ${focus}
 
 **House rules:**  
-${houseRules}`;
+${houseRules}
+
+**To join:**  
+${toJoin}
+
+**Player count:** ${playerCount}
+
+**Players:**`;
 
   document.getElementById("output").value = markdown;
 }
@@ -1670,6 +1686,9 @@ function importSessionInfo() {
   document.getElementById("logSessionName").value = document.getElementById("sessionName").value || '';
   document.getElementById("logHours").value = document.getElementById("duration").value || '';
 
+  // Also import the player count if available
+  document.getElementById("logPlayerCount").value = document.getElementById("hostPlayerCount").value || '';
+
   // Import date in MM/DD/YYYY format
   const tsDate = document.getElementById("ts_date").value;
   if (tsDate) {
@@ -1678,6 +1697,9 @@ function importSessionInfo() {
   } else {
     document.getElementById("logDate").value = '';
   }
+
+  // Trigger the box generation if player count was imported
+  generateLogPlayerBoxes();
 }
 
 /* ---------- Generate Session Log markdown ---------- */
