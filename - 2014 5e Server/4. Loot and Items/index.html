@@ -1893,8 +1893,8 @@
 <style>
   /* --- CUTE TRADING CARD CONTAINER --- */
   .trading-card {
-    /* Deep Pond Gradient */
-    background: radial-gradient(circle at center right, #155e75, #083344);
+    /* CHANGED: Gradient highlight moved to 'center left' to sit behind the image */
+    background: radial-gradient(circle at center left, #155e75, #083344);
     border: 3px solid #67e8f9; /* Bright Cyan Border */
     border-radius: 24px;       
     padding: 40px;
@@ -2026,7 +2026,8 @@
   /* Mobile Layout */
   @media (max-width: 700px) {
     .trading-card {
-      flex-direction: column-reverse;
+      /* CHANGED: 'column' ensures the image (which is now first) stays on top */
+      flex-direction: column; 
       text-align: center;
       padding-bottom: 60px; /* Extra space for footer */
     }
@@ -2035,16 +2036,7 @@
 
 <div class="trading-card">
 
-  <!-- LEFT SIDE: TEXT -->
-  <div class="trading-text-side">
-    <p class="trading-body">
-      Characters can buy and sell items to other characters as they wish. Characters can also gift items to other characters.
-      <br><br>
-      It must be roleplayed in some fashion and logged in the <span class="static-channel-tag">#character-trade-log</span>.
-    </p>
-  </div>
-
-  <!-- RIGHT SIDE: DRAGON ON POND -->
+  <!-- LEFT SIDE (Was Right): DRAGON ON POND -->
   <div class="trading-img-wrapper">
     <!-- Ripples underneath -->
     <div class="ripple"></div>
@@ -2056,6 +2048,15 @@
 
     <!-- Caption -->
     <div class="img-caption">L'oob, Played by a Starry Shorian</div>
+  </div>
+
+  <!-- RIGHT SIDE (Was Left): TEXT -->
+  <div class="trading-text-side">
+    <p class="trading-body">
+      Characters can buy and sell items to other characters as they wish. Characters can also gift items to other characters.
+      <br><br>
+      It must be roleplayed in some fashion and logged in the <span class="static-channel-tag">#character-trade-log</span>.
+    </p>
   </div>
 
 </div>
