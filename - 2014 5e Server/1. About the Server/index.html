@@ -1628,9 +1628,154 @@
   </a>
 </p>
 <p><br></p>
-<div style="border-left: 4px solid #00bcd4; background: #e0f7fa; padding: 1em; color: black;">
-  <strong style="font-size: 2em; display: block; margin-bottom: 0.5em;">Welcome to The Starry Shore</strong>
-  <em>Discover an endless number of worlds to explore at The Starry Shore! A place of respite adrift in the Astral Sea, the Starry Shore's magical barriers keep the typical dangers at bay, providing a sanctuary for any and all travelers who seek it. Adventure through new and exciting worlds via mysterious portals, or kick back with some friends and enjoy the Shore's amenities. We welcome travelers of all shapes and sizes and from all walks of life, so come let your imagination soar at The Starry Shore!</em>
+<style>
+  /* --- CARD CONTAINER --- */
+  .jade-card {
+    /* Deep Starry Night Gradient */
+    background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+    border: 2px solid #fbbf24; /* Golden Violin Color */
+    border-radius: 16px;
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 900px;
+    box-shadow: 0 10px 30px rgba(30, 27, 75, 0.6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* --- LEFT SIDE: TEXT --- */
+  .jade-text-side {
+    flex: 1;
+    min-width: 300px;
+    z-index: 2;
+  }
+
+  .jade-header {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2em;
+
+    /* CHANGED: Electric Blue Gradient */
+    background: linear-gradient(to right, #22d3ee, #60a5fa, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-bottom: 0.5em;
+    display: block;
+    font-weight: 900;
+    /* Added a faint glow filter so it stands out on dark background */
+    filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.5));
+  }
+
+  .jade-body {
+    color: #e0e7ff; /* Soft Blue-White */
+    line-height: 1.8;
+    font-size: 1.1em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  /* --- RIGHT SIDE: IMAGE WRAPPER --- */
+  .jade-img-wrapper {
+    flex: 0 0 auto;
+    position: relative;
+    width: 280px;
+    margin: 0 auto;
+  }
+
+  .jade-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- MUSICAL NOTES ANIMATION --- */
+  .music-note {
+    position: absolute;
+    bottom: 10px;
+    color: #fbbf24; /* Gold notes to match violin */
+    font-size: 24px;
+    opacity: 0;
+    z-index: 5; /* In front of image */
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: floatUp 3s linear infinite;
+  }
+
+  /* Create variations so they don't look robotic */
+  .note-1 { left: 10%; animation-delay: 0s; font-size: 20px; }
+  .note-2 { left: 80%; animation-delay: 1.2s; font-size: 28px; }
+  .note-3 { left: 40%; animation-delay: 0.5s; font-size: 18px; }
+  .note-4 { left: 60%; animation-delay: 2.0s; font-size: 24px; }
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) rotate(0deg) translateX(0);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      /* Moves up, rotates, and drifts sideways */
+      transform: translateY(-150px) rotate(20deg) translateX(20px);
+      opacity: 0;
+    }
+  }
+
+  /* --- FOOTER --- */
+  .jade-footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.85em;
+    font-style: italic;
+    color: #94a3b8;
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 700px) {
+    .jade-card {
+      flex-direction: column-reverse;
+      text-align: center;
+    }
+  }
+</style>
+
+<div class="jade-card">
+
+  <!-- LEFT SIDE: Text -->
+  <div class="jade-text-side">
+    <strong class="jade-header">Welcome to The Starry Shore</strong>
+    <div class="jade-body">
+      Discover an endless number of worlds to explore at The Starry Shore! A place of respite adrift in the Astral Sea, the Starry Shore's magical barriers keep the typical dangers at bay, providing a sanctuary for any and all travelers who seek it. 
+      <br><br>
+      Adventure through new and exciting worlds via mysterious portals, or kick back with some friends and enjoy the Shore's amenities. We welcome travelers of all shapes and sizes and from all walks of life, so come let your imagination soar at The Starry Shore!
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE: Image + Music Effects -->
+  <div class="jade-img-wrapper">
+    <!-- Musical Notes -->
+    <div class="music-note note-1">♪</div>
+    <div class="music-note note-2">♫</div>
+    <div class="music-note note-3">♩</div>
+    <div class="music-note note-4">𝅘𝅥𝅯</div>
+
+    <img src="/assets/img/jade.jpg" alt="Jade playing violin" class="jade-img">
+
+    <div class="jade-footer">
+      <span style="color: #fbbf24; font-weight:bold;">Jade</span>, played by @myth_ren
+    </div>
+  </div>
+
 </div>
 
 <h2 id="how-things-work-here">How Things Work here?<a class="headerlink" href="#how-things-work-here" title="Permanent link">&para;</a></h2>
