@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1528,23 +1528,23 @@
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
-    pointer-events: none; /* Let clicks pass through if needed */
+    pointer-events: none;
   }
 
-  /* NEW: Caption styling */
+  /* Caption styling */
   .image-caption {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Dark background for readability */
+    background: rgba(0, 0, 0, 0.8);
     color: #aaa;
     padding: 8px 10px;
     text-align: center;
     font-size: 0.85em;
     font-style: italic;
     box-sizing: border-box;
-    z-index: 2; /* Ensures it sits above the overlay */
+    z-index: 2;
   }
 
   .crafting-title {
@@ -1605,13 +1605,36 @@
     transform: scale(0.98);
   }
 
+  /* --- SECONDARY BUTTONS (Copy/Gen) --- */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-blue {
+    background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+  }
+  .btn-blue:hover {
+    background: linear-gradient(145deg, #60a5fa, #2563eb);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  }
+
+  .btn-green {
+    background: linear-gradient(145deg, #22c55e, #15803d);
+  }
+  .btn-green:hover {
+    background: linear-gradient(145deg, #4ade80, #16a34a);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+  }
+
   /* --- PERMANENT RESULTS BOX --- */
   .craft-results {
     margin-top: 20px;
     background: rgba(0, 0, 0, 0.3);
     padding: 15px;
     border-radius: 6px;
-    border-left: 4px solid #475569; /* Grey border initially */
+    border-left: 4px solid #475569;
     transition: border-color 0.3s ease;
   }
 
@@ -1622,15 +1645,8 @@
     font-size: 1em;
   }
 
-  .result-row:last-child {
-    margin-bottom: 0;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #475569;
-  }
-
   .val-highlight {
-    color: #94a3b8; /* Dimmed initially */
+    color: #94a3b8;
     font-weight: bold;
     transition: color 0.3s ease;
   }
@@ -1643,6 +1659,46 @@
     font-weight: bold;
   }
 
+  /* --- OUTPUT TEXTAREA --- */
+  .log-output {
+    width: 100%;
+    height: 140px;
+    margin-top: 20px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    color: #cbd5e1;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.9em;
+    box-sizing: border-box;
+  }
+  .log-output:focus {
+    outline: none;
+    border-color: #f59e0b;
+  }
+
+  /* --- LOGGING BOX STYLES --- */
+  .log-card {
+    max-width: 800px;
+    background: #1e293b;
+    border: 2px solid #475569;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-family: 'Segoe UI', sans-serif;
+    color: #e2e8f0;
+    margin-bottom: 20px;
+  }
+
+  /* --- NEW GRID LAYOUT FOR LOG INPUTS --- */
+  .log-input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
   /* --- MOBILE RESPONSIVE --- */
   @media (max-width: 650px) {
     .crafting-card {
@@ -1653,10 +1709,18 @@
       border-left: none;
       border-bottom: 2px solid #b45309;
     }
+    .btn-row {
+      flex-direction: column;
+    }
+    .log-input-grid {
+      grid-template-columns: 1fr; /* Stack inputs on mobile */
+    }
   }
 </style>
 
-<!-- CALCULATOR CARD -->
+<!-- ========================================== -->
+<!-- 1. CALCULATOR CARD (Original)              -->
+<!-- ========================================== -->
 <div class="crafting-card">
 
   <!-- LEFT UI -->
@@ -1670,7 +1734,7 @@
 
     <button class="craft-btn" onclick="calculateCrafting()">Calculate Crafting Costs & DC</button>
 
-    <!-- RESULTS BOX (Always Visible) -->
+    <!-- RESULTS BOX -->
     <div class="craft-results" id="resultsBox">
       <div class="error-msg" id="errorMsg">Invalid item cost entered.</div>
 
@@ -1694,9 +1758,50 @@
 
   <!-- RIGHT IMAGE -->
   <div class="crafting-image-side">
-    <!-- CAPTION ADDED HERE -->
     <div class="image-caption"><strong>Varenn</strong>, Played by a Starry Shorian</div>
   </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. DOWNTIME LOG CARD (Grid Layout)         -->
+<!-- ========================================== -->
+<div class="log-card">
+  <div class="crafting-title" style="border-bottom-color: #475569; font-size: 1.2em;">
+    Downtime Log Generator
+  </div>
+
+  <div class="log-input-grid">
+    <!-- Row 1 Left -->
+    <div class="craft-input-group">
+      <label>Character Name:</label>
+      <input type="text" id="charName" placeholder="Name">
+    </div>
+
+    <!-- Row 1 Right -->
+    <div class="craft-input-group">
+      <label>Item Name:</label>
+      <input type="text" id="itemName" placeholder="What are you crafting?">
+    </div>
+
+    <!-- Row 2 Left -->
+    <div class="craft-input-group">
+      <label>Crafting Roll:</label>
+      <input type="text" id="craftRoll" placeholder="e.g. 18">
+    </div>
+
+    <!-- Row 2 Right (NEW FIELD) -->
+    <div class="craft-input-group">
+      <label>Result:</label>
+      <input type="text" id="craftResult" placeholder="Success / Failure">
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="craft-btn btn-blue" onclick="generateLog()" style="margin-top:0;">Generate Log</button>
+    <button class="craft-btn btn-green" id="copyBtn" onclick="copyLog()" style="margin-top:0;">Copy</button>
+  </div>
+
+  <textarea id="logOutput" class="log-output" placeholder="Log will appear here..."></textarea>
 </div>
 
 <!-- DIVIDER -->
@@ -1727,6 +1832,12 @@
 </div>
 
 <script>
+// --- Global variables to store the calculation results ---
+let savedGold = 0;
+let savedDtp = 0;
+let savedDc = 0;
+let hasCalculated = false;
+
 function calculateCrafting() {
   const itemCost = Number(document.getElementById('itemCost').value);
   const resultsBox = document.getElementById('resultsBox');
@@ -1751,6 +1862,8 @@ function calculateCrafting() {
     elGold.style.color = '#94a3b8';
     elDtp.style.color = '#94a3b8';
     elDc.style.color = '#475569';
+
+    hasCalculated = false;
     return;
   }
 
@@ -1759,12 +1872,15 @@ function calculateCrafting() {
 
   // Calculations
   const goldCost = Math.floor(itemCost / 2);
-
-  // Calculate DTP (Min 1)
   let dtpCost = Math.floor(goldCost / 25);
   if (dtpCost < 1) { dtpCost = 1; }
-
   const dc = Math.floor(10 + (itemCost / 450));
+
+  // --- SAVE VALUES FOR LOG GENERATOR ---
+  savedGold = goldCost;
+  savedDtp = dtpCost;
+  savedDc = dc;
+  hasCalculated = true;
 
   // Update DOM
   resultsBox.style.borderLeftColor = '#f59e0b'; // Gold border
@@ -1777,6 +1893,45 @@ function calculateCrafting() {
   elGold.style.color = '#fff';
   elDtp.style.color = '#fff';
   elDc.style.color = '#38bdf8'; // Light blue for DC
+}
+
+function generateLog() {
+  const charName = document.getElementById('charName').value || "(Character Name)";
+  const itemName = document.getElementById('itemName').value || "(Item Name)";
+  const craftRoll = document.getElementById('craftRoll').value || "(Roll)";
+  const craftResult = document.getElementById('craftResult').value || "(Result)";
+
+  // Check if calc has run, otherwise use placeholders
+  let costString = "Run calculator above first";
+  let dcString = "Run calculator above first";
+
+  if (hasCalculated) {
+    costString = `${savedGold} gp and ${savedDtp} DTP`;
+    dcString = `${savedDc}`;
+  }
+
+  const markdown = `**Character Name:** ${charName}
+**Downtime Activity:** Crafting ${itemName}
+**Cost:** ${costString}
+**DC:** ${dcString}
+**Roll:** ${craftRoll}
+**Result:** ${craftResult}`;
+
+  document.getElementById('logOutput').value = markdown;
+}
+
+function copyLog() {
+  const text = document.getElementById('logOutput').value;
+  const btn = document.getElementById('copyBtn');
+
+  if (!text) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = "Copied!";
+    setTimeout(() => { btn.textContent = "Copy"; }, 1500);
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+  });
 }
 </script>
 <h3 id="crafting-restrictions">Crafting Restrictions<a class="headerlink" href="#crafting-restrictions" title="Permanent link">&para;</a></h3>
@@ -2060,10 +2215,10 @@ function calculateCrafting() {
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.instant", "navigation.tabs.sticky", "navigation.indexes", "toc.follow", "header.autohide"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.instant", "navigation.tabs.sticky", "navigation.indexes", "toc.follow", "header.autohide"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
       
