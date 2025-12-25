@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://the-starry-shore.github.io/-%202024%205.5e%20Server/test/">
+        <link rel="canonical" href="https://the-starry-shore.github.io/-%202024%205.5e%20Server/3.%20Creation%20Log%20Maker/">
       
       
         <link rel="prev" href="../2.%20Character%20Creation%20Steps/">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Test - The Starry Shore</title>
+        <title>Creation Log Maker - The Starry Shore</title>
       
     
     
@@ -81,6 +81,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#creation-log-maker" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -112,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Test
+              Creation Log Maker
             
           </span>
         </div>
@@ -1052,6 +1057,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1060,7 +1067,7 @@
   <span class="md-ellipsis">
     
   
-    Test
+    Creation Log Maker
   
 
     
@@ -1293,6 +1300,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -1309,6 +1318,7 @@
 
 
 
+<h1 id="creation-log-maker">Creation Log Maker<a class="headerlink" href="#creation-log-maker" title="Permanent link">&para;</a></h1>
 <style>
     /* --- WRAPPER --- */
     .ss-card {
@@ -1422,20 +1432,20 @@
 </style>
 
 <div class="ss-card">
-    <h1 class="ss-title">The Starry Shore</h1>
-    <p class="ss-subtitle">Character Log & Sheet Parser</p>
+    <h1 class="ss-title">Creation Log Maker</h1>
+    <p class="ss-subtitle">The Starry Shore</p>
 
     <!-- MAIN GRID CONTAINER -->
     <div class="ss-layout-container">
 
         <!-- LEFT COLUMN: INPUTS -->
         <div class="ss-input-panel">
-            <div class="ss-section-header">1. Import</div>
+            <div class="ss-section-header">1. Import from beyond (Optional)</div>
             <div class="ss-import-row">
                 <input type="text" id="charUrl" class="ss-input" placeholder="D&D Beyond URL...">
                 <button class="ss-btn ss-btn-blue" onclick="fetchCharacter()">Fetch</button>
             </div>
-            <p class="ss-import-info">Import from D&D Beyond. Double check Skills/BG bonuses.</p>
+            <p class="ss-import-info">Import data from your Beyond sheet. <strong>Please double check</strong>, especially the Skills section and missing Background bonuses! </p>
             <div id="statusMsg" class="ss-status-msg"></div>
 
             <div class="ss-section-header" style="margin-top:20px;">2. Details</div>
