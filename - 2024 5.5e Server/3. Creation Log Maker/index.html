@@ -1554,6 +1554,7 @@
 <div id="toast" class="ss-toast">Copied to Clipboard!</div>
 
 <script>
+(function() {
     // --- DATA LISTS ---
     const classData = {
         "Artificer": ["Alchemist", "Armorer", "Artillerist", "Battle Smith", "Cartographer"],
@@ -1626,7 +1627,8 @@
 
     const pointBuyCosts = { 8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9 };
 
-    window.addEventListener('load', function() {
+    // --- MAIN INITIALIZATION FUNCTION ---
+    function init() {
         try {
             populateSelect('charSpecies', speciesList, true);
             populateSelect('charBackground', bgList, true);
@@ -1638,8 +1640,9 @@
         } catch (e) {
             console.error("Initialization Error:", e);
         }
-    });
+    }
 
+    // --- HELPERS ---
     function cleanSubclassName(name) {
         if (!name) return "";
         let clean = name.toLowerCase();
@@ -1650,6 +1653,7 @@
 
     function populateSelect(id, options, hasOther) {
         const select = document.getElementById(id);
+        if(!select) return; 
         select.innerHTML = '<option value="">Select...</option>';
         options.sort().forEach(opt => {
             const el = document.createElement('option'); el.value = opt; el.innerText = opt; select.appendChild(el);
@@ -1663,16 +1667,17 @@
             const otherInput = wrapper.querySelector('.other-input');
             if (this.value === "Other") { wrapper.classList.add('show-other'); otherInput.focus(); } 
             else { wrapper.classList.remove('show-other'); otherInput.value = ""; }
-            generateOutput();
+            window.generateOutput();
         });
         const otherInput = select.parentElement.querySelector('.other-input');
-        if(otherInput) otherInput.addEventListener('input', generateOutput);
+        if(otherInput) otherInput.addEventListener('input', window.generateOutput);
     }
 
     function populateStats() {
         const stats = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'];
         stats.forEach(s => {
             const select = document.getElementById('stat' + s);
+            if(!select) return;
             select.innerHTML = '';
             for (let i = 8; i <= 15; i++) {
                 const opt = document.createElement('option'); opt.value = i; opt.innerText = i; select.appendChild(opt);
@@ -1683,6 +1688,7 @@
 
     function populateCheckGrid(gridId, prefix) {
         const grid = document.getElementById(gridId);
+        if(!grid) return;
         grid.innerHTML = '';
         skillsList.forEach(skill => {
             const item = document.createElement('div');
@@ -1692,7 +1698,7 @@
             checkbox.type = 'checkbox';
             checkbox.value = skill;
             checkbox.id = prefix + skill.replace(/[^a-zA-Z0-9]/g, '');
-            checkbox.addEventListener('change', generateOutput);
+            checkbox.addEventListener('change', window.generateOutput);
 
             const label = document.createElement('label');
             label.htmlFor = checkbox.id;
@@ -1703,7 +1709,8 @@
         });
     }
 
-    function addClassRow(defaultClass = "", defaultSub = "", defaultLvl = 1) {
+    // EXPOSE GLOBAL FUNCTIONS (Required for HTML onclick events)
+    window.addClassRow = function(defaultClass = "", defaultSub = "", defaultLvl = 1) {
         const container = document.getElementById('classesContainer');
         const row = document.createElement('div');
         row.className = 'ss-class-row';
@@ -1753,9 +1760,9 @@
                 }
             }
         }
-    }
+    };
 
-    function removeClassRow(btn) {
+    window.removeClassRow = function(btn) {
         const container = document.getElementById('classesContainer');
         if (container.children.length > 1) {
             btn.closest('.ss-class-row').remove(); generateOutput();
@@ -1768,9 +1775,9 @@
             row.querySelector('.ss-other-inputs-row').classList.remove('ss-show');
             generateOutput();
         }
-    }
+    };
 
-    function handleClassChange(selectElement) {
+    window.handleClassChange = function(selectElement) {
         const row = selectElement.closest('.ss-class-row');
         const subSelect = row.querySelector('.sub-select');
         const otherRow = row.querySelector('.ss-other-inputs-row');
@@ -1797,9 +1804,9 @@
             generateOutput();
         };
         generateOutput();
-    }
+    };
 
-    function updateBgBonusInputs() {
+    window.updateBgBonusInputs = function() {
         const type = document.getElementById('bgBonusType').value;
         const container = document.getElementById('bgBonusInputs');
         container.innerHTML = '';
@@ -1814,7 +1821,7 @@
             createBonusSelect(container, abilities, "+1"); createBonusSelect(container, abilities, "+1"); createBonusSelect(container, abilities, "+1");
         }
         generateOutput();
-    }
+    };
 
     function createBonusSelect(container, options, labelText) {
         const wrapper = document.createElement('div');
@@ -1830,20 +1837,24 @@
         wrapper.appendChild(label); wrapper.appendChild(select); container.appendChild(wrapper);
     }
 
-    function calculatePoints() {
+    window.calculatePoints = function() {
         const stats = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'];
         let total = 0;
         stats.forEach(s => {
-            const val = parseInt(document.getElementById('stat' + s).value); total += pointBuyCosts[val];
+            const el = document.getElementById('stat' + s);
+            if(el) {
+                const val = parseInt(el.value); 
+                total += pointBuyCosts[val] || 0;
+            }
         });
         const display = document.getElementById('pointsDisplay');
         display.innerText = `Points Used: ${total} / 27`;
         if (total > 27) { display.classList.remove('ss-valid'); display.classList.add('ss-invalid'); } 
         else { display.classList.remove('ss-invalid'); display.classList.add('ss-valid'); }
         generateOutput();
-    }
+    };
 
-    async function fetchCharacter() {
+    window.fetchCharacter = async function() {
         const urlInput = document.getElementById('charUrl').value.trim();
         const status = document.getElementById('statusMsg');
         if (!urlInput) { status.innerText = "Please enter a URL."; return; }
@@ -1865,7 +1876,7 @@
         } catch (err) {
             console.error(err); status.innerText = "Error: Could not fetch. Public?"; status.style.color = "#ef4444";
         } finally { setTimeout(() => status.innerText = "", 5000); }
-    }
+    };
 
     function populateForm(data, url) {
         document.getElementById('charName').value = data.name || "";
@@ -1960,8 +1971,8 @@
         return results;
     }
 
-    function generateOutput() {
-        const getVal = (id) => document.getElementById(id).value;
+    window.generateOutput = function() {
+        const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
         const getCombo = (selId, inpId) => { const sel = document.getElementById(selId); return (sel.value === "Other" || sel.value === "") ? document.getElementById(inpId).value : sel.value; };
 
         const num = getVal('charNum') || '##';
@@ -2012,20 +2023,24 @@
 
         document.getElementById('output').value = md;
         const btn = document.getElementById('btnUpdate');
-        const originalText = btn.innerHTML;
-        if(document.activeElement === btn) {
+        if(btn && document.activeElement === btn) {
+            const originalText = btn.innerHTML;
             btn.innerHTML = "✓ Updated!"; setTimeout(() => { btn.innerHTML = originalText; }, 2000);
         }
-    }
+    };
 
-    function copyToClipboard() {
+    window.copyToClipboard = function() {
         const output = document.getElementById("output");
         output.select();
         navigator.clipboard.writeText(output.value);
         const toast = document.getElementById("toast");
         toast.className = "ss-toast show";
         setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
-    }
+    };
+
+    // RUN INITIALIZATION IMMEDIATELY
+    init();
+})();
 </script>
 
 
