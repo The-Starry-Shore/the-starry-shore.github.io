@@ -1644,40 +1644,82 @@ If you still can't find your folder, make sure to check that:</p>
 </div>
 <h3 id="creation-tips">Creation Tips<a class="headerlink" href="#creation-tips" title="Permanent link">&para;</a></h3>
 <style>
-  /* --- 1. GLOW ANIMATION --- */
+  /* =========================================
+     1. ANIMATIONS & MAGIC
+     ========================================= */
   @keyframes simplePulse {
     0% { transform: scale(0.8); opacity: 0.6; }
     50% { transform: scale(2.3); opacity: 2; }
     100% { transform: scale(0.8); opacity: 0.6; }
   }
 
-  /* --- 2. THREAD ANIMATION --- */
   @keyframes shootThread {
     0% { width: 0; opacity: 0; }
     10% { opacity: 1; }
     70% { opacity: 0.4; }
-    100% { width: 70vh; opacity: 0; } /* Long reach */
+    100% { width: 70vh; opacity: 0; } 
   }
 
-  /* --- 3. MOTE (PARTICLE) ANIMATION --- */
   @keyframes floatMote {
     0% { transform: translate(0, 0) scale(0); opacity: 0; }
     20% { opacity: 1; transform: translate(calc(var(--tx) * 0.2), calc(var(--ty) * 0.2)) scale(1.2); }
     100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
   }
 
-  /* --- EMITTER CONTAINER --- */
+  /* =========================================
+     2. LAYOUT CLASSES (Required for Mobile)
+     ========================================= */
+
+  /* The Main Card Container */
+  .chrono-card {
+    font-family: 'Segoe UI', sans-serif; 
+    color: #e0e0e0; 
+    background: linear-gradient(145deg, #1a1a1a, #2d2d2d); 
+    border: 1px solid #4a4a4a; 
+    border-left: 4px solid #d4af37; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    margin: 2em 0; 
+    display: flex; 
+    flex-wrap: wrap; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+    align-items: stretch;
+  }
+
+  /* The Text Side (Left) */
+  .chrono-text-side {
+    flex: 2 1 300px; 
+    padding: 1.5em; 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    z-index: 1;
+  }
+
+  /* The Image Side (Right) */
+  .chrono-img-side {
+    flex: 1 1 240px; 
+    min-height: 100%; 
+    position: relative; 
+    background: #000; 
+    /* Important: visible overflow allows threads to fly over text */
+    overflow: visible; 
+  }
+
+  /* =========================================
+     3. MAGIC ELEMENT CONFIGURATION
+     ========================================= */
+
   .magic-emitter {
     position: absolute;
-    /* Adjust these to move the center of the magic */
+    /* YOUR ADJUSTMENTS */
     bottom: 20.5%; 
     left: 59.3%; 
     width: 0; height: 0;
-    z-index: 20; /* Sits on top of the image */
-    pointer-events: none; /* Click-through allowed */
+    z-index: 20; 
+    pointer-events: none; 
   }
 
-  /* --- GLOW ELEMENT --- */
   .watch-glow {
     position: absolute;
     top: 50%; left: 50%;
@@ -1690,18 +1732,16 @@ If you still can't find your folder, make sure to check that:</p>
     animation: simplePulse 3s ease-in-out infinite;
   }
 
-  /* --- THREAD ELEMENTS --- */
   .magic-thread {
     position: absolute;
     top: 50%; left: 50%;
     height: 1.5px;
-    /* Gradient: White -> Gold -> Transparent */
     background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(212,175,55,1) 15%, transparent 100%);
     transform-origin: left center;
     opacity: 0;
   }
 
-  /* Full 360 Degree Coverage */
+  /* Thread Directions */
   .th-1  { transform: rotate(0deg);   animation: shootThread 5.0s ease-out infinite; animation-delay: 0.0s; }
   .th-2  { transform: rotate(30deg);  animation: shootThread 4.5s ease-out infinite; animation-delay: 1.2s; }
   .th-3  { transform: rotate(60deg);  animation: shootThread 5.5s ease-out infinite; animation-delay: 0.5s; }
@@ -1715,7 +1755,6 @@ If you still can't find your folder, make sure to check that:</p>
   .th-11 { transform: rotate(300deg); animation: shootThread 5.1s ease-out infinite; animation-delay: 2.5s; }
   .th-12 { transform: rotate(330deg); animation: shootThread 4.6s ease-out infinite; animation-delay: 0.6s; }
 
-  /* --- MOTE ELEMENTS --- */
   .magic-mote {
     position: absolute;
     top: 50%; left: 50%;
@@ -1727,7 +1766,6 @@ If you still can't find your folder, make sure to check that:</p>
     animation: floatMote linear infinite;
   }
 
-  /* Mote Directions (X, Y) */
   .mt-1 { --tx: -100px; --ty: -100px; animation-duration: 3.5s; animation-delay: 0.0s; }
   .mt-2 { --tx: 100px;  --ty: -80px;  animation-duration: 4.2s; animation-delay: 1.5s; }
   .mt-3 { --tx: -50px;  --ty: 120px;  animation-duration: 3.0s; animation-delay: 0.5s; }
@@ -1737,12 +1775,45 @@ If you still can't find your folder, make sure to check that:</p>
   .mt-7 { --tx: 140px;  --ty: 10px;   animation-duration: 5.5s; animation-delay: 0.2s; }
   .mt-8 { --tx: -80px;  --ty: -140px; animation-duration: 4.0s; animation-delay: 1.8s; }
 
+  /* =========================================
+     4. MOBILE FRIENDLY SECTION
+     ========================================= */
+  @media (max-width: 768px) {
+    /* Stack the card vertically */
+    .chrono-card {
+      flex-direction: column;
+    }
+
+    /* Move image to the top and give it a fixed height */
+    .chrono-img-side {
+      order: -1; /* Puts image above text */
+      height: 350px; /* Fixed height for mobile */
+      min-height: 350px;
+      overflow: hidden; /* Cut off anything leaving the box on mobile */
+    }
+
+    /* Adjust the emitter position slightly for mobile if needed 
+       (Depends on how 'cover' crops the image) */
+    .magic-emitter {
+      /* You might need to tweak this for the mobile crop of the image */
+      bottom: 20.5%; 
+      left: 59.3%; 
+    }
+
+    /* HIDE THREADS ON MOBILE 
+       Long threads look messy on small screens and cause scrolling issues.
+       We keep the glow and motes, but hide the lines. */
+    .magic-thread {
+      display: none !important;
+    }
+  }
 </style>
 
-<div style="font-family: 'Segoe UI', sans-serif; color: #e0e0e0; background: linear-gradient(145deg, #1a1a1a, #2d2d2d); border: 1px solid #4a4a4a; border-left: 4px solid #d4af37; border-radius: 12px; overflow: hidden; margin: 2em 0; display: flex; flex-wrap: wrap; box-shadow: 0 10px 20px rgba(0,0,0,0.5); align-items: stretch;">
+<!-- Note: I replaced the inline styles of the main divs with classes (chrono-card, etc) -->
+<div class="chrono-card">
 
   <!-- Text Section (Left Side) -->
-  <div style="flex: 2 1 300px; padding: 1.5em; display: flex; flex-direction: column; position: relative; z-index: 1;">
+  <div class="chrono-text-side">
     <h3 style="margin-top: 0; color: #d4af37; border-bottom: 1px solid #444; padding-bottom: 0.5em; text-transform: uppercase; font-size: 1.2em;">Creation Tips</h3>
 
     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.95em; line-height: 1.6;">
@@ -1773,8 +1844,7 @@ If you still can't find your folder, make sure to check that:</p>
   </div>
 
   <!-- Image Section (Right Side) -->
-  <!-- Note: overflow is visible so effects can spill onto the text side -->
-  <div style="flex: 1 1 240px; min-height: 100%; position: relative; background: #000; overflow: visible;">
+  <div class="chrono-img-side">
     <img src="/assets/img/players/charlie.jpg" alt="Stitches" style="width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0.9; display: block;">
 
     <!-- MAGIC EMITTER -->
@@ -1782,7 +1852,7 @@ If you still can't find your folder, make sure to check that:</p>
       <!-- Glow -->
       <div class="watch-glow"></div>
 
-      <!-- Threads (All directions) -->
+      <!-- Threads -->
       <div class="magic-thread th-1"></div>
       <div class="magic-thread th-2"></div>
       <div class="magic-thread th-3"></div>
@@ -1796,7 +1866,7 @@ If you still can't find your folder, make sure to check that:</p>
       <div class="magic-thread th-11"></div>
       <div class="magic-thread th-12"></div>
 
-      <!-- Motes (Particles) -->
+      <!-- Motes -->
       <div class="magic-mote mt-1"></div>
       <div class="magic-mote mt-2"></div>
       <div class="magic-mote mt-3"></div>
