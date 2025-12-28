@@ -1657,7 +1657,7 @@ If you still can't find your folder, make sure to check that:</p>
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     display: flex;
     flex-wrap: wrap;
-    align-items: stretch; /* Both sides equal height */
+    align-items: stretch;
     font-family: 'Segoe UI', system-ui, sans-serif;
     color: #e0e0e0;
   }
@@ -1670,18 +1670,17 @@ If you still can't find your folder, make sure to check that:</p>
     display: flex;
     flex-direction: column;
     z-index: 2; 
-    background: #15151a; /* Ensure text background is solid */
+    background: #15151a; 
   }
 
   /* --- RIGHT SIDE: VISUALS --- */
   .chrono-visual-side {
     position: relative;
     flex: 1 1 300px; 
-    min-height: 300px; /* Minimum height for mobile */
-    overflow: visible; /* Clips the threads at card edge */
+    min-height: 300px; 
+    overflow: visible; /* Allows threads to fly out */
   }
 
-  /* FIXED IMAGE: Forces image to fill the container */
   .chrono-img {
     position: absolute;
     top: 0; left: 0;
@@ -1696,7 +1695,6 @@ If you still can't find your folder, make sure to check that:</p>
   /* --- THE MAGIC EMITTER --- */
   .clock-emitter {
     position: absolute;
-    /* Aligned to the watch in the image */
     bottom: 20.5%; 
     left: 59.3%;   
     width: 0;
@@ -1705,25 +1703,27 @@ If you still can't find your folder, make sure to check that:</p>
     pointer-events: none;
   }
 
-  /* 1. THE DIFFUSED GLOW */
+  /* 1. THE DIFFUSED GLOW (Fixed: No Blend Mode, No Shadow) */
   .clock-glow {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 350px; 
-    height: 350px;
+    width: 300px; 
+    height: 300px;
+    /* Pure gradient = No Box Artifacts */
     background: radial-gradient(circle, 
-      rgba(255, 230, 150, 0.9) 0%,   
-      rgba(212, 175, 55, 0.4) 30%,   
-      transparent 70%                
+      rgba(255, 255, 255, 0.9) 0%,   /* Hot Core */
+      rgba(212, 175, 55, 0.5) 25%,   /* Gold Halo */
+      rgba(212, 175, 55, 0) 70%      /* Fade to transparent */
     );
-    animation: pulseClock 4s ease-in-out infinite;
+    border-radius: 50%;
+    animation: pulseClock 3s ease-in-out infinite;
   }
 
   @keyframes pulseClock {
-    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
     50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
   }
 
   /* 2. THE GOLDEN THREADS */
@@ -1731,7 +1731,8 @@ If you still can't find your folder, make sure to check that:</p>
     position: absolute;
     top: 50%; left: 50%;
     height: 1.5px;
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(212,175,55,1) 10%, transparent 100%);
+    /* Gradient fades to transparent so it doesn't block text */
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(212,175,55,1) 15%, transparent 100%);
     transform-origin: left center;
     border-radius: 100%;
     opacity: 0;
@@ -1739,15 +1740,15 @@ If you still can't find your folder, make sure to check that:</p>
   }
 
   /* Fan Directions */
-  .thread-1 { transform: rotate(175deg); animation: shootThread 4s ease-out infinite; animation-delay: 0s; }
-  .thread-2 { transform: rotate(190deg); animation: shootThread 5s ease-out infinite; animation-delay: 1.2s; }
-  .thread-3 { transform: rotate(150deg); animation: shootThread 6s ease-out infinite; animation-delay: 0.5s; }
-  .thread-4 { transform: rotate(210deg); animation: shootThread 4.5s ease-out infinite; animation-delay: 2s; }
-  .thread-5 { transform: rotate(260deg); animation: shootThread 5.5s ease-out infinite; animation-delay: 0.2s; }
-  .thread-6 { transform: rotate(290deg); animation: shootThread 7s ease-out infinite; animation-delay: 1.5s; }
-  .thread-7 { transform: rotate(350deg); animation: shootThread 4.8s ease-out infinite; animation-delay: 0.8s; }
-  .thread-8 { transform: rotate(10deg);  animation: shootThread 6.2s ease-out infinite; animation-delay: 2.2s; }
-  .thread-9 { transform: rotate(80deg);  animation: shootThread 5.2s ease-out infinite; animation-delay: 1s; }
+  .thread-1  { transform: rotate(175deg); animation: shootThread 4s ease-out infinite; animation-delay: 0s; }
+  .thread-2  { transform: rotate(190deg); animation: shootThread 5s ease-out infinite; animation-delay: 1.2s; }
+  .thread-3  { transform: rotate(150deg); animation: shootThread 6s ease-out infinite; animation-delay: 0.5s; }
+  .thread-4  { transform: rotate(210deg); animation: shootThread 4.5s ease-out infinite; animation-delay: 2s; }
+  .thread-5  { transform: rotate(260deg); animation: shootThread 5.5s ease-out infinite; animation-delay: 0.2s; }
+  .thread-6  { transform: rotate(290deg); animation: shootThread 7s ease-out infinite; animation-delay: 1.5s; }
+  .thread-7  { transform: rotate(350deg); animation: shootThread 4.8s ease-out infinite; animation-delay: 0.8s; }
+  .thread-8  { transform: rotate(10deg);  animation: shootThread 6.2s ease-out infinite; animation-delay: 2.2s; }
+  .thread-9  { transform: rotate(80deg);  animation: shootThread 5.2s ease-out infinite; animation-delay: 1s; }
   .thread-10 { transform: rotate(110deg); animation: shootThread 4.2s ease-out infinite; animation-delay: 0.3s; }
 
   @keyframes shootThread {
@@ -1762,7 +1763,7 @@ If you still can't find your folder, make sure to check that:</p>
     position: absolute;
     background: #fff; 
     border-radius: 50%;
-    box-shadow: 0 0 6px 1px #d4af37;
+    box-shadow: 0 0 4px #d4af37; /* Small, contained glow */
     opacity: 0;
     z-index: 25; 
     animation: sparkleFloat linear infinite;
@@ -1853,7 +1854,7 @@ If you still can't find your folder, make sure to check that:</p>
 
   <!-- RIGHT SIDE -->
   <div class="chrono-visual-side">
-    <img src="/assets/img/charlie.jpg" alt="Stitches" class="chrono-img">
+    <img src="/assets/img/players/charlie.jpg" alt="Stitches" class="chrono-img">
 
     <!-- THE CLOCK MAGIC EMITTER -->
     <div class="clock-emitter">
