@@ -1655,106 +1655,126 @@ If you still can't find your folder, make sure to check that:</p>
 Note that all new characters begin with a special Sending Stone, as specified below under the Magic Items section of the rules.
 --->
 <style>
-  /* --- DESKTOP CONTAINER --- */
-  .royal-banner {
+  /* --- CONTAINER: The Holy Reliquary --- */
+  .holy-card {
     position: relative;
-    background-color: #0c1220; 
+    /* Deep Warm Black Background */
+    background-color: #1a120b; 
     border-radius: 12px;
     overflow: hidden;
     margin: 40px auto;
     max-width: 950px;
-    border-top: 3px solid #f59e0b;
-    border-bottom: 3px solid #f59e0b;
-    box-shadow: 0 0 35px rgba(245, 158, 11, 0.25);
+    /* Outer Golden Border */
+    border: 2px solid #fcd34d;
+    /* Radiant Outer Glow */
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
     display: flex;
     flex-direction: row;
     min-height: 450px;
     font-family: 'Cinzel', 'Georgia', serif; 
   }
 
-  /* --- ANIMATED SHEEN --- */
-  .solar-sheen {
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(251, 191, 36, 0.08) 50%, 
-      transparent 100%
-    );
-    transform: skewX(-20deg);
-    animation: sheenPass 4s ease-in-out infinite;
+  /* --- LEFT SIDE: TEXT CONTENT --- */
+  .text-side {
+    position: relative;
+    flex: 1; /* Takes remaining space */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #e2e8f0;
     z-index: 2;
+    /* Separate from image with a fancy double border */
+    border-right: 4px double #fcd34d;
+    box-shadow: 10px 0 20px rgba(0,0,0,0.5); /* Shadow falling onto the text side for depth */
+  }
+
+  /* --- ANIMATED BACKGROUND EFFECTS (Text Side) --- */
+  .sunbeam-bg {
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      rgba(251, 191, 36, 0.03) 15%, 
+      transparent 30%
+    );
+    animation: sunRotate 25s linear infinite;
+    z-index: 0;
     pointer-events: none;
   }
-  @keyframes sheenPass {
-    0% { left: -100%; opacity: 0; }
-    50% { opacity: 1; }
-    100% { left: 200%; opacity: 0; }
-  }
+  @keyframes sunRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  /* --- FIRE EFFECTS --- */
-  .fire-particle {
+  .light-mote {
     position: absolute;
-    bottom: -20px;
-    background: #fbbf24; 
-    border-radius: 50% 50% 20% 20%; 
+    background: #fff;
+    border-radius: 50%;
     opacity: 0;
-    z-index: 6;
-    filter: blur(2px); 
-    animation: fireRise linear infinite;
+    z-index: 1;
+    box-shadow: 0 0 8px #fcd34d;
+    animation: floatUp ease-in infinite;
   }
-  .fire-particle:nth-child(1) { left: 15%; width: 6px; height: 10px; animation-duration: 2.5s; animation-delay: 0s; }
-  .fire-particle:nth-child(2) { left: 35%; width: 4px; height: 8px; animation-duration: 3s; animation-delay: 1s; }
-  .fire-particle:nth-child(3) { left: 55%; width: 8px; height: 14px; animation-duration: 2.8s; animation-delay: 0.5s; }
-  .fire-particle:nth-child(4) { left: 25%; width: 5px; height: 9px; animation-duration: 3.5s; animation-delay: 2s; }
+  .light-mote:nth-child(1) { left: 10%; width: 3px; height: 3px; animation-duration: 4s; animation-delay: 0s; }
+  .light-mote:nth-child(2) { left: 30%; width: 4px; height: 4px; animation-duration: 6s; animation-delay: 1.5s; background: #fbbf24; }
+  .light-mote:nth-child(3) { left: 70%; width: 2px; height: 2px; animation-duration: 5s; animation-delay: 2.5s; }
+  .light-mote:nth-child(4) { left: 90%; width: 3px; height: 3px; animation-duration: 7s; animation-delay: 0.5s; background: #fcd34d; }
 
-  @keyframes fireRise {
-    0% { transform: translateY(0) scale(1); opacity: 0; background: #fbbf24; }
+  @keyframes floatUp {
+    0% { transform: translateY(50px); opacity: 0; }
     20% { opacity: 0.8; }
-    60% { background: #ef4444; }
-    100% { transform: translateY(-150px) scale(0); opacity: 0; background: #7f1d1d; }
+    100% { transform: translateY(-300px); opacity: 0; }
   }
 
   /* --- RIGHT SIDE: IMAGE --- */
-  .banner-visual {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 50%; 
-    z-index: 1;
-    overflow: hidden; 
+  .image-side {
+    position: relative;
+    width: 450px; /* Fixed width for the image area */
+    flex-shrink: 0; /* Prevents squishing */
+    background: #000;
+    overflow: hidden; /* Needed to contain the flare */
   }
 
-  .banner-img {
+  .char-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center 20%; 
-    /* Desktop: Shove right */
-    transform: translateX(15%);
-    mask-image: linear-gradient(to right, transparent 5%, black 20%);
-    -webkit-mask-image: linear-gradient(to right, transparent 1%, black 20%);
+    display: block;
   }
 
-  /* --- LEFT SIDE: TEXT --- */
-  .banner-content {
-    position: relative;
-    z-index: 5; 
-    width: 55%; 
-    padding: 40px;
-    background: linear-gradient(to right, #0c1220 70%, transparent 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: #cbd5e1;
+  /* --- THE GOLDEN FLARE (New Effect) --- */
+  .holy-flare {
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    /* Bright white core, fading to gold edges */
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.6) 45%, 
+      rgba(251, 191, 36, 0.4) 50%, 
+      transparent 70%
+    );
+    transform: skewX(-25deg);
+    animation: flarePass 5s infinite ease-in-out;
+    z-index: 5;
+    pointer-events: none;
+    /* Overlay mode makes the underlying image colors POP (gold gets brighter) */
+    mix-blend-mode: overlay; 
+  }
+
+  @keyframes flarePass {
+    0%, 30% { left: -100%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 200%; opacity: 0; }
   }
 
   /* --- TYPOGRAPHY --- */
   .decree-list {
+    position: relative;
+    z-index: 2; /* Sit above sunbeam */
     list-style: none;
     padding: 0;
     margin: 0;
@@ -1764,14 +1784,14 @@ Note that all new characters begin with a special Sending Stone, as specified be
   }
   .decree-list li {
     margin-bottom: 12px;
-    padding-left: 20px;
+    padding-left: 24px;
     position: relative;
   }
   .decree-list > li::before {
     content: "❖";
     position: absolute;
     left: 0;
-    color: #fbbf24;
+    color: #fcd34d; 
     font-size: 0.8em;
     top: 4px;
   }
@@ -1779,92 +1799,71 @@ Note that all new characters begin with a special Sending Stone, as specified be
     list-style: none;
     padding-left: 10px;
     margin-top: 5px;
-    color: #94a3b8;
+    color: #cbd5e1;
     font-size: 0.9em;
   }
   .decree-list ul li { margin-bottom: 4px; }
-  .decree-list ul li::before { content: "-"; color: #ef4444; margin-right: 6px; }
+  .decree-list ul li::before { content: "—"; color: #fbbf24; margin-right: 6px; font-weight: bold; }
 
   .banner-note {
+    position: relative;
+    z-index: 2;
     margin-top: 25px;
-    background: rgba(251, 191, 36, 0.1); 
+    background: rgba(251, 191, 36, 0.05); 
     border: 1px solid rgba(251, 191, 36, 0.3);
     padding: 12px;
     border-radius: 4px;
     font-size: 0.9em;
     color: #fcd34d;
     font-family: 'Inter', system-ui, sans-serif;
-    display: flex;
-    gap: 10px;
-    align-items: center;
   }
 
   /* --- FOOTER TAG --- */
   .banner-tag {
     position: absolute;
     bottom: 15px;
-    right: 20px;
+    right: 15px;
     z-index: 10;
-    background: black;
-    color: #fbbf24;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fcd34d;
     font-size: 0.75em;
-    padding: 4px 10px;
+    padding: 6px 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 1px solid #fbbf24;
+    border: 1px solid #fcd34d;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
   }
 
   /* --- MOBILE FIXES --- */
-  @media (max-width: 768px) {
-    .royal-banner { flex-direction: column; min-height: auto; }
+  @media (max-width: 850px) {
+    .holy-card { flex-direction: column; min-height: auto; }
 
-    .banner-visual { 
-      position: relative; 
+    .image-side { 
       width: 100%; 
-      height: 300px; /* Taller height for mobile visibility */
+      height: 350px; 
       order: -1; 
-      overflow: hidden;
+      border-bottom: 4px double #fcd34d;
     }
 
-    .banner-img { 
-      /* RESET the shove-right for mobile so she is centered */
-      transform: none; 
-      object-position: center 20%;
-      /* Vertical Fade for mobile stacking */
-      mask-image: linear-gradient(to bottom, black 60%, transparent 100%); 
-      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%); 
+    .text-side { 
+      border-right: none; 
+      padding: 30px 20px;
     }
 
-    .banner-content { 
-      width: 100%; 
-      background: #0c1220; 
-      /* Overlap slightly to blend */
-      margin-top: -50px; 
-      padding: 40px 20px 30px 20px;
-      /* Gradient to blend the overlap */
-      background: linear-gradient(to bottom, transparent 0%, #0c1220 20%);
-    }
-
-    /* FIX: Move tag to BOTTOM RIGHT of image so it doesn't block face */
-    .banner-tag { 
-      top: auto; 
-      bottom: 10px; 
-      right: 10px; 
-    }
+    .banner-tag { bottom: 10px; right: 10px; }
   }
 </style>
 
-<div class="royal-banner">
+<div class="holy-card">
 
-  <!-- Effects -->
-  <div class="solar-sheen"></div>
-  <div class="fire-particle"></div>
-  <div class="fire-particle"></div>
-  <div class="fire-particle"></div>
-  <div class="fire-particle"></div>
-
-  <!-- Text Content -->
-  <div class="banner-content">
+  <!-- LEFT: Text & Effects -->
+  <div class="text-side">
+    <div class="sunbeam-bg"></div>
+    <div class="light-mote"></div>
+    <div class="light-mote"></div>
+    <div class="light-mote"></div>
+    <div class="light-mote"></div>
 
     <ul class="decree-list">
       <li>Use one of two base equipment options:
@@ -1884,14 +1883,17 @@ Note that all new characters begin with a special Sending Stone, as specified be
     </div>
   </div>
 
-  <!-- Image -->
-  <div class="banner-visual">
-    <img src="https://media.discordapp.net/attachments/1377811878448726207/1448341461103022272/36_e44780ed.jpg?ex=6951fad9&is=6950a959&hm=a902a6c7b284e0cf444b0a40fd0a16044b1a0f5ad645ffa70293c956efd629b8&=&format=webp&width=595&height=842" alt="Elizabeth" class="banner-img">
+  <!-- RIGHT: Image & Flare -->
+  <div class="image-side">
+    <!-- The Golden Flare Overlay -->
+    <div class="holy-flare"></div>
+
+    <img src="\assets\img\players\elizabeth.png" alt="Elizabeth" class="char-img">
+
     <div class="banner-tag">Elizabeth, played by @emperorkitkat</div>
   </div>
 
 </div>
-
 <p><br></p>
 <div style="
   height: 10px;
