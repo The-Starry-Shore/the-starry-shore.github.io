@@ -1651,11 +1651,6 @@ If you still can't find your folder, make sure to check that:</p>
     border: 1px solid #4a4a4a;
     border-left: 4px solid #d4af37;
     border-radius: 12px;
-    /* We need visible overflow or hidden? 
-       Hidden keeps the threads inside the card bounds, 
-       but visible allows them to bleed slightly if needed. 
-       Hidden is safer for layout. */
-    overflow: hidden; 
     margin: 40px auto;
     max-width: 900px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -1664,6 +1659,8 @@ If you still can't find your folder, make sure to check that:</p>
     align-items: stretch;
     font-family: 'Segoe UI', system-ui, sans-serif;
     color: #e0e0e0;
+    /* FIX: Ensure the card itself establishes a stacking context */
+    isolation: isolate; 
   }
 
   /* --- LEFT SIDE: TEXT --- */
@@ -1673,9 +1670,7 @@ If you still can't find your folder, make sure to check that:</p>
     padding: 2em;
     display: flex;
     flex-direction: column;
-    /* FIX 1: Lower Z-Index than visual side */
     z-index: 5; 
-    /* FIX 2: Slight transparency allows better blending */
     background: rgba(21, 21, 26, 0.95); 
   }
 
@@ -1684,10 +1679,14 @@ If you still can't find your folder, make sure to check that:</p>
     position: relative;
     flex: 1 1 300px; 
     min-height: 300px; 
-    /* FIX 3: Allow threads to fly out over the text side */
+    /* Allows threads to bleed out */
     overflow: visible; 
-    /* FIX 4: Higher Z-Index brings the magic threads to the front */
     z-index: 10;
+
+    /* --- THE CRITICAL FIX --- */
+    /* This creates a 3D space so z-index behaves strictly */
+    transform-style: preserve-3d; 
+    perspective: 1000px; 
   }
 
   .chrono-img {
@@ -1699,22 +1698,27 @@ If you still can't find your folder, make sure to check that:</p>
     object-position: top center; 
     opacity: 0.9; 
     z-index: 1;
-    /* Optional: Mask allows smooth transition to text side */
     mask-image: linear-gradient(to right, transparent 0%, black 10%, black 10%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 10%);
+
+    /* FIX: Keep image at base depth */
+    transform: translateZ(0);
   }
 
   /* --- THE MAGIC EMITTER --- */
   .clock-emitter {
     position: absolute;
-    /* Adjust these to move the center of the magic */
     bottom: 20.5%; 
     left: 59%;   
     width: 0;
     height: 0;
-    z-index: 20; 
-    /* Important: allows you to select text UNDER the magic beams */
+    z-index: 100; /* High Z-Index */
     pointer-events: none;
+
+    /* --- THE CRITICAL FIX --- */
+    /* Forces the magic to render 20px closer to the screen */
+    /* This breaks it free from the image mask layer */
+    transform: translateZ(20px); 
   }
 
   /* 1. THE GLOW */
@@ -1741,7 +1745,6 @@ If you still can't find your folder, make sure to check that:</p>
     position: absolute;
     top: 50%; left: 50%;
     height: 1.5px;
-    /* Gradient: White -> Gold -> Transparent */
     background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(212,175,55,1) 15%, transparent 80%);
     transform-origin: left center;
     border-radius: 100%;
@@ -1813,8 +1816,13 @@ If you still can't find your folder, make sure to check that:</p>
   .chrono-sublist { margin: 5px 0 5px 20px; color: #bbb; list-style-type: disc; padding-left: 1em; }
   .chrono-note { margin-top: auto; padding-top: 1em; color: #aaa; font-style: italic; font-size: 0.9em; position: relative; z-index: 5; }
 
+  /* Footer uses TranslateZ to also sit above the image */
   .chrono-footer {
-    position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); text-align: right; z-index: 20;
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; 
+    background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); 
+    text-align: right; 
+    z-index: 20;
+    transform: translateZ(5px);
   }
 
   /* Mobile */
@@ -1822,7 +1830,6 @@ If you still can't find your folder, make sure to check that:</p>
     .chrono-card { flex-direction: column; }
     .chrono-visual-side { height: 300px; order: -1; }
     .clock-emitter { bottom: 50%; left: 50%; }
-    /* Hide the long threads on mobile to prevent messiness */
     .magic-thread { display: none; }
   }
 </style>
