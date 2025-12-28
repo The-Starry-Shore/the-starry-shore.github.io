@@ -1882,11 +1882,238 @@ onmouseout="this.style.backgroundColor='rgba(88,101,242,0.15)'">
 <li>Players must track their characters (level, gold, items, etc) and keep this information updated in the player folder provided, as well as the relevant log channels.</li>
 <li>In a rules dispute between a DM and Player, the DM’s word goes until the session is over and the staff can mediate.</li>
 </ul>
-<blockquote>
-<p>[!question] Unsure of something? 
-Ask away! Our community is welcoming, knowledgeable, and happy to help.
-<br></p>
-</blockquote>
+<style>
+  /* --- THE CHAOS CONTAINER --- */
+  .void-chaos-card {
+    position: relative;
+    background-color: #020617; 
+    border: 1px solid #7c3aed; 
+    border-radius: 16px;       
+    margin: 40px auto;
+    max-width: 900px;
+    min-height: 320px; 
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.4); 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow: hidden;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* --- BACKGROUND MAGIC LAYERS --- */
+  .magic-layer-1 {
+    position: absolute;
+    top: -50%; left: -50%; right: -50%; bottom: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, #020617 0%, #2e1065 25%, #000000 50%, #4c1d95 75%, #020617 100%);
+    opacity: 0.8;
+    /* Speeded up from 25s to 18s */
+    animation: magicSpin 18s linear infinite; 
+    z-index: 0;
+    filter: blur(50px);
+  }
+
+  .magic-layer-2 {
+    position: absolute;
+    top: -50%; left: -50%; right: -50%; bottom: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 180deg, transparent 0%, rgba(139, 92, 246, 0.2) 20%, transparent 40%, rgba(167, 139, 250, 0.3) 60%, transparent 100%);
+    mix-blend-mode: screen; 
+    /* Speeded up from 15s to 12s */
+    animation: magicCounterSpin 12s linear infinite;
+    z-index: 1;
+    filter: blur(30px);
+  }
+
+  @keyframes magicSpin { to { transform: rotate(360deg); } }
+  @keyframes magicCounterSpin { to { transform: rotate(-360deg); } }
+
+  /* --- LEFT SIDE: TEXT --- */
+  .text-section {
+    flex: 1; 
+    min-width: 300px;
+    padding: 40px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* --- RIGHT SIDE: VISUALS --- */
+  .visual-section {
+    flex: 0 0 320px; 
+    position: relative;
+    display: flex;
+    align-items: flex-end; 
+    justify-content: center;
+    z-index: 5;
+    padding-top: 20px; 
+  }
+
+  /* --- ENERGY MOTES --- */
+  .energy-mote {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    opacity: 0;
+    /* Z-Index 6 puts them IN FRONT of the character (who is Z-Index 5) */
+    z-index: 6; 
+    pointer-events: none;
+    animation: floatUp ease-in infinite;
+    mix-blend-mode: screen; /* Makes them glow against the dark character image */
+  }
+
+  /* Mote Variations (Randomized positions, colors, sizes) */
+  .mote-1 { width: 4px; height: 4px; left: 20%; background: #e879f9; box-shadow: 0 0 10px #e879f9; animation-duration: 4s; animation-delay: 0s; }
+  .mote-2 { width: 6px; height: 6px; left: 80%; background: #a78bfa; box-shadow: 0 0 12px #a78bfa; animation-duration: 5s; animation-delay: 1.5s; }
+  .mote-3 { width: 3px; height: 3px; left: 40%; background: #ffffff; box-shadow: 0 0 8px #ffffff; animation-duration: 3s; animation-delay: 2.5s; }
+  .mote-4 { width: 5px; height: 5px; left: 65%; background: #c084fc; box-shadow: 0 0 10px #c084fc; animation-duration: 4.5s; animation-delay: 0.5s; }
+  .mote-5 { width: 4px; height: 4px; left: 10%; background: #8b5cf6; box-shadow: 0 0 10px #8b5cf6; animation-duration: 6s; animation-delay: 3s; }
+  .mote-6 { width: 3px; height: 3px; left: 90%; background: #ddd6fe; box-shadow: 0 0 8px #ddd6fe; animation-duration: 3.5s; animation-delay: 1s; }
+  /* New Motes */
+  .mote-7 { width: 5px; height: 5px; left: 30%; background: #f0abfc; box-shadow: 0 0 10px #f0abfc; animation-duration: 4.2s; animation-delay: 0.8s; }
+  .mote-8 { width: 3px; height: 3px; left: 55%; background: #ffffff; box-shadow: 0 0 8px #ffffff; animation-duration: 3.8s; animation-delay: 2.2s; }
+  .mote-9 { width: 4px; height: 4px; left: 75%; background: #8b5cf6; box-shadow: 0 0 10px #8b5cf6; animation-duration: 5.5s; animation-delay: 1.2s; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(20px) scale(0.5); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-280px) scale(1.5); opacity: 0; }
+  }
+
+  /* --- CHARACTER ANIMATION --- */
+  .char-img-full {
+    width: 100%;
+    max-width: 300px; 
+    height: auto;
+    display: block;
+    margin-bottom: 0px; 
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));
+    z-index: 5; 
+    animation: deepBreathe 5s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  @keyframes deepBreathe {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); } 
+    100% { transform: scale(1); }
+  }
+
+  /* --- CALLOUT BOX --- */
+  .callout-box {
+    background: rgba(10, 10, 15, 0.6); 
+    border-left: 4px solid #a78bfa; 
+    padding: 24px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+
+  .callout-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 1.25em;
+    color: #a78bfa;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+  }
+
+  .icon-circle {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0 0 15px #7c3aed;
+  }
+
+  .callout-body {
+    line-height: 1.6;
+    color: #e2e8f0;
+    font-size: 1em;
+  }
+
+  .name-tag {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid #8b5cf6;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    color: #ddd6fe;
+    font-weight: 600;
+    z-index: 10;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  }
+
+  @media (max-width: 768px) {
+    .void-chaos-card { flex-direction: column; }
+    .visual-section { 
+      order: -1; width: 100%; height: 300px; flex: none;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+    }
+    .char-img-full { max-width: 240px; }
+    .text-section { padding: 30px 20px; }
+    .name-tag { right: 50%; transform: translateX(50%); bottom: 10px; }
+  }
+</style>
+
+<div class="void-chaos-card">
+
+  <!-- Background Layers -->
+  <div class="magic-layer-1"></div>
+  <div class="magic-layer-2"></div>
+
+  <!-- Left: Text -->
+  <div class="text-section">
+    <div class="callout-box">
+      <div class="callout-header">
+        <span class="icon-circle">?</span>
+        Unsure of something?
+      </div>
+      <div class="callout-body">
+        <strong>Ask away!</strong> Our community is welcoming, knowledgeable, and happy to help.
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Character -->
+  <div class="visual-section">
+
+    <!-- Energy Motes (9 Total, Sitting in front) -->
+    <div class="energy-mote mote-1"></div>
+    <div class="energy-mote mote-2"></div>
+    <div class="energy-mote mote-3"></div>
+    <div class="energy-mote mote-4"></div>
+    <div class="energy-mote mote-5"></div>
+    <div class="energy-mote mote-6"></div>
+    <div class="energy-mote mote-7"></div>
+    <div class="energy-mote mote-8"></div>
+    <div class="energy-mote mote-9"></div>
+
+    <img src="/assets/img/players/seauwanobg.png" alt="Seau'Wa" class="char-img-full">
+
+    <div class="name-tag">
+      Seau'Wa, played by Wild
+    </div>
+  </div>
+
+</div>
+
+<p><br></p>
 <div style="
   height: 10px;
   background:
