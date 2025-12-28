@@ -1657,7 +1657,7 @@ If you still can't find your folder, make sure to check that:</p>
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     display: flex;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: stretch; /* Both sides equal height */
     font-family: 'Segoe UI', system-ui, sans-serif;
     color: #e0e0e0;
   }
@@ -1670,31 +1670,33 @@ If you still can't find your folder, make sure to check that:</p>
     display: flex;
     flex-direction: column;
     z-index: 2; 
+    background: #15151a; /* Ensure text background is solid */
   }
 
   /* --- RIGHT SIDE: VISUALS --- */
   .chrono-visual-side {
-    flex: 1 1 240px; 
-    min-height: 100%; 
-    position: relative; 
-    background: #000;
-    overflow: visible; 
+    position: relative;
+    flex: 1 1 300px; 
+    min-height: 300px; /* Minimum height for mobile */
+    overflow: visible; /* Clips the threads at card edge */
   }
 
+  /* FIXED IMAGE: Forces image to fill the container */
   .chrono-img {
+    position: absolute;
+    top: 0; left: 0;
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
     object-position: center; 
     opacity: 0.9; 
-    display: block;
-    position: relative;
     z-index: 1;
   }
 
   /* --- THE MAGIC EMITTER --- */
   .clock-emitter {
     position: absolute;
+    /* Aligned to the watch in the image */
     bottom: 20.5%; 
     left: 59.3%;   
     width: 0;
@@ -1703,27 +1705,25 @@ If you still can't find your folder, make sure to check that:</p>
     pointer-events: none;
   }
 
-  /* 1. THE DIFFUSED GLOW (Fixed: No Box Shadow, No Blend Mode) */
+  /* 1. THE DIFFUSED GLOW */
   .clock-glow {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 350px; /* Larger area for smooth fade */
+    width: 350px; 
     height: 350px;
-    /* Pure gradient transparency = No Box Artifacts */
     background: radial-gradient(circle, 
-      rgba(255, 230, 150, 0.8) 0%,   /* Bright core */
-      rgba(212, 175, 55, 0.4) 25%,   /* Gold mid */
-      rgba(212, 175, 55, 0.1) 50%,   /* Faint edge */
-      transparent 70%                /* Complete transparency */
+      rgba(255, 230, 150, 0.9) 0%,   
+      rgba(212, 175, 55, 0.4) 30%,   
+      transparent 70%                
     );
-    animation: pulseClock 3s ease-in-out infinite;
+    animation: pulseClock 4s ease-in-out infinite;
   }
 
   @keyframes pulseClock {
-    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
     50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
   }
 
   /* 2. THE GOLDEN THREADS */
@@ -1754,7 +1754,7 @@ If you still can't find your folder, make sure to check that:</p>
     0% { width: 0; opacity: 0; }
     10% { opacity: 1; }
     60% { opacity: 0.5; }
-    100% { width: 750px; opacity: 0; } 
+    100% { width: 850px; opacity: 0; } 
   }
 
   /* 3. MOTES OF LIGHT */
@@ -1762,13 +1762,12 @@ If you still can't find your folder, make sure to check that:</p>
     position: absolute;
     background: #fff; 
     border-radius: 50%;
-    box-shadow: 0 0 6px 1px #d4af37; /* Stronger glow, smaller blur radius */
+    box-shadow: 0 0 6px 1px #d4af37;
     opacity: 0;
     z-index: 25; 
     animation: sparkleFloat linear infinite;
   }
 
-  /* Mote Logic */
   .mote-1  { width: 4px; height: 4px; animation-duration: 3s; animation-delay: 0s; --tx: -100px; --ty: -100px; }
   .mote-2  { width: 3px; height: 3px; animation-duration: 4s; animation-delay: 1.2s; --tx: -40px; --ty: -140px; }
   .mote-3  { width: 5px; height: 5px; animation-duration: 2.5s; animation-delay: 0.5s; --tx: 80px; --ty: -80px; }
@@ -1810,7 +1809,7 @@ If you still can't find your folder, make sure to check that:</p>
   /* Mobile */
   @media (max-width: 600px) {
     .chrono-card { flex-direction: column; }
-    .chrono-visual-side { height: 300px; order: -1; overflow: hidden; }
+    .chrono-visual-side { height: 300px; order: -1; }
     .clock-emitter { bottom: 20%; left: 50%; }
   }
 </style>
