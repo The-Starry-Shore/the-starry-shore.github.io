@@ -1322,8 +1322,6 @@
 <style>
     /* --- WRAPPER --- */
     .ss-card {
-        /* I increased max-width slightly to 1000px so side-by-side fits better, 
-           but it will shrink to fit 800px themes if needed */
         max-width: 100%; 
         background: #1e293b; /* Dark Slate */
         border: 2px solid #475569; /* Slate Border */
@@ -1385,6 +1383,7 @@
     .ss-btn-green { background: linear-gradient(145deg, #22c55e, #15803d); width: 100%; }
     .ss-btn-green:hover { background: linear-gradient(145deg, #4ade80, #16a34a); }
     .ss-btn-remove { background: #ef4444; padding: 5px 10px; }
+    .ss-btn-remove:hover { background: #dc2626; }
     .ss-btn-add { background: transparent; border: 1px dashed #f59e0b; color: #f59e0b; width: 100%; margin-top: 8px; }
     .ss-btn-add:hover { background: rgba(245, 158, 11, 0.1); }
 
@@ -1409,14 +1408,47 @@
     .ss-valid { color: #4ade80; }
     .ss-invalid { color: #ef4444; }
 
-    .ss-check-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: #0f172a; padding: 5px; border: 1px solid #475569; border-radius: 6px; }
-    @media (max-width: 1000px) { .ss-check-grid { grid-template-columns: repeat(2, 1fr); } }
-    .ss-check-item { display: flex; align-items: center; padding: 2px; cursor: pointer; font-size: 0.75em; color: #cbd5e1; overflow: hidden; white-space: nowrap; }
-    .ss-check-item:hover { background: rgba(255,255,255,0.05); }
-    .ss-check-item input { margin-right: 5px; }
+    /* --- PILLS (NEW SKILL STYLE) --- */
+    .ss-pill-container { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ss-pill-item input { display: none; /* Hide actual checkbox */ }
+
+    .ss-pill-item label {
+        display: inline-block;
+        padding: 4px 10px;
+        border: 1px solid #475569;
+        background: rgba(0,0,0,0.3);
+        border-radius: 15px; /* Pill Shape */
+        font-size: 0.75em;
+        color: #94a3b8;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s;
+    }
+
+    /* Hover State */
+    .ss-pill-item label:hover {
+        border-color: #64748b;
+        color: #e2e8f0;
+    }
+
+    /* Checked State */
+    .ss-pill-item input:checked + label {
+        background: #0ea5e9; /* Sky Blue */
+        border-color: #0ea5e9;
+        color: #fff;
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(14, 165, 233, 0.4);
+    }
+
+    /* Expertise Color Distinction */
+    #expertiseGrid .ss-pill-item input:checked + label {
+        background: #a855f7; /* Purple */
+        border-color: #a855f7;
+        box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+    }
 
     /* --- OUTPUT SIDE --- */
-    .ss-output-panel { position: sticky; top: 20px; } /* Keeps output visible while scrolling */
+    .ss-output-panel { position: sticky; top: 20px; } 
     .ss-output-area { background: #0f172a; color: #cbd5e1; font-family: monospace; padding: 10px; border: 1px solid #475569; border-radius: 6px; width: 100%; height: 500px; resize: vertical; margin-top: 10px; font-size: 0.85em; }
 
     .ss-import-info { font-size: 0.75em; color: #94a3b8; margin-top: 5px; font-style: italic; }
@@ -1440,6 +1472,11 @@
 
         <!-- LEFT COLUMN: INPUTS -->
         <div class="ss-input-panel">
+            <!-- CLEAR BUTTON (No Confirmation) -->
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                <button type="button" class="ss-btn ss-btn-remove" onclick="clearAllData()">⚠ Clear All</button>
+            </div>
+
             <div class="ss-section-header">1. Import from beyond (Optional)</div>
             <div class="ss-import-row">
                 <input type="text" id="charUrl" class="ss-input" placeholder="D&D Beyond URL...">
@@ -1511,14 +1548,15 @@
                     <input type="text" id="charLang" class="ss-input">
                 </div>
 
+                <!-- UPDATED SKILLS CONTAINER -->
                 <div class="ss-form-group">
                     <label class="ss-label">Proficient Skills</label>
-                    <div id="skillsGrid" class="ss-check-grid"></div>
+                    <div id="skillsGrid" class="ss-pill-container"></div>
                 </div>
 
                 <div class="ss-form-group">
                     <label class="ss-label">Expertise</label>
-                    <div id="expertiseGrid" class="ss-check-grid"></div>
+                    <div id="expertiseGrid" class="ss-pill-container"></div>
                 </div>
 
                 <div class="ss-form-group">
@@ -1619,10 +1657,7 @@
     ];
 
     const bgList = [
-        "Acolyte", "Anthropologist", "Archaeologist", "Athlete", "Charlatan", "City Watch", "Clan Crafter", "Cloistered Scholar", 
-        "Courtier", "Criminal", "Entertainer", "Faceless", "Faction Agent", "Far Traveler", "Fisher", "Folk Hero", "Gladiator", 
-        "Guild Artisan", "Haunted One", "Hermit", "House Agent", "Inheritor", "Investigator", "Knight", "Marine", "Mercenary Veteran", 
-        "Noble", "Outlander", "Pirate", "Sage", "Sailor", "Shipwright", "Smuggler", "Soldier", "Spy", "Urban Bounty Hunter", "Urchin", "Witchlight Hand"
+        "Aberrant Heir", "Acolyte", "Amnesiac", "Archaeologist", "Artisan", "Carouser", "Charlatan", "Chondathan Freebooter", "Criminal", "Crimson Aspirant", "Crossroads Gambler", "Cultist", "Dead Magic Dweller", "Dragon Cultist", "Druskenvald Dweller", "Emerald Enclave Caretaker", "Entertainer", "Experiment", "Farmer", "Flaming Fist Mercenary", "Genie Touched", "Ghostlight Passenger", "Guard", "Guide", "Harper", "Hermit", "House Agent", "House Cannith Heir", "House Deneith Heir", "House Ghallanda Heir", "House Jorasco Heir", "House Kundarak Heir", "House Lyrandar Heir", "House Medani Heir", "House Orien Heir", "House Phiarlan Heir", "House Sivis Heir", "House Tharashk Heir", "House Thuranni Heir", "House Vadalis Heir", "Ice Fisher", "Inquisitive", "Knight of the Gauntlet", "Lords' Alliance Vassal", "Merchant", "Moonwell Pilgrim", "Mulhorandi Tomb Raider", "Mythalkeeper", "Night Stalker", "Noble", "Purple Dragon Squire", "Rashemi Wanderer", "Reflected Wanderer", "Rest Warden", "Reveler", "Sage", "Sailor", "Scholar of the Forbidden", "Scribe", "Shadowmasters Exile", "Soldier", "Spellfire Initiate", "Vampire Devotee", "Vampire Survivor", "Wayfarer", "Wicker Weaver", "Zhentarim Mercenary"
     ];
 
     const pointBuyCosts = { 8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9 };
@@ -1692,7 +1727,7 @@
         grid.innerHTML = '';
         skillsList.forEach(skill => {
             const item = document.createElement('div');
-            item.className = 'ss-check-item';
+            item.className = 'ss-pill-item'; // UPDATED CLASS
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -1703,11 +1738,49 @@
             const label = document.createElement('label');
             label.htmlFor = checkbox.id;
             label.innerText = skill;
-            label.style.cursor = 'pointer';
+            // label.style.cursor = 'pointer'; // Handled in CSS now
 
             item.appendChild(checkbox); item.appendChild(label); grid.appendChild(item);
         });
     }
+
+    // --- NEW: CLEAR ALL FUNCTION (WITHOUT CONFIRM) ---
+    window.clearAllData = function() {
+        // 1. Reset standard form elements
+        document.getElementById('charForm').reset();
+
+        // 2. Clear manual inputs outside main loop or needing specific attention
+        document.getElementById('charUrl').value = '';
+        document.getElementById('sheetLink').value = '';
+        document.getElementById('output').value = '';
+        document.getElementById('statusMsg').innerText = '';
+
+        // 3. Reset Classes (Remove extra rows, reset first row)
+        const container = document.getElementById('classesContainer');
+        container.innerHTML = '';
+        addClassRow(); // Re-add default row
+
+        // 4. Reset Stats to 8
+        ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'].forEach(s => {
+            const el = document.getElementById('stat'+s);
+            if(el) el.value = 8;
+        });
+        calculatePoints();
+
+        // 5. Reset Checkboxes (Pills)
+        document.querySelectorAll('.ss-pill-item input').forEach(el => el.checked = false);
+
+        // 6. Reset Selects/Others
+        document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+        document.querySelectorAll('.other-input').forEach(i => i.value = '');
+        document.querySelectorAll('.ss-input-combo').forEach(d => d.classList.remove('show-other'));
+
+        // 7. Reset BG Bonuses
+        document.getElementById('bgBonusInputs').innerHTML = '';
+        document.getElementById('bgBonusInputs').classList.add('ss-hidden');
+
+        generateOutput();
+    };
 
     // EXPOSE GLOBAL FUNCTIONS (Required for HTML onclick events)
     window.addClassRow = function(defaultClass = "", defaultSub = "", defaultLvl = 1) {
@@ -1881,8 +1954,10 @@
     function populateForm(data, url) {
         document.getElementById('charName').value = data.name || "";
         document.getElementById('sheetLink').value = url;
-        const container = document.getElementById('classesContainer'); container.innerHTML = '';
+        const container = document.getElementById('classesContainer'); 
+        container.innerHTML = '';
 
+        // 1. Classes
         if (data.classes && data.classes.length > 0) {
             data.classes.forEach(cls => {
                 const cName = cls.definition.name;
@@ -1892,29 +1967,59 @@
             });
         } else { addClassRow(); }
 
+        // 2. Race & Background
         if (data.race) { const raceName = data.race.fullName || data.race.baseName; setDropdownValue('charSpecies', raceName, speciesList); }
         if (data.background && data.background.definition) { setDropdownValue('charBackground', data.background.definition.name, bgList); }
 
+        // 3. Stats
         const baseStats = calculateBaseStats(data);
         const stats = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'];
         stats.forEach(k => { document.getElementById('stat' + k).value = baseStats[k.toLowerCase()]; });
         calculatePoints();
 
+        // 4. Languages
         document.getElementById('charLang').value = parseModifiers(data, 'language').join(", ");
 
+        // 5. Skills (Now using the fixed parser)
         const ddbSkills = parseModifiers(data, 'proficiency', true);
         const ddbExpertise = parseModifiers(data, 'expertise');
+
+        // Reset checks
         document.querySelectorAll('#skillsGrid input').forEach(cb => cb.checked = false);
         document.querySelectorAll('#expertiseGrid input').forEach(cb => cb.checked = false);
 
         skillsList.forEach(s => {
             const safeId = s.replace(/[^a-zA-Z0-9]/g, '');
-            if (ddbSkills.some(ds => ds.includes(s))) { const cb = document.getElementById('skill_' + safeId); if (cb) cb.checked = true; }
-            if (ddbExpertise.some(de => de.includes(s))) { const cb = document.getElementById('exp_' + safeId); if (cb) cb.checked = true; }
+            if (ddbSkills.some(ds => ds === s)) { 
+                const cb = document.getElementById('skill_' + safeId); 
+                if (cb) cb.checked = true; 
+            }
+            if (ddbExpertise.some(de => de === s)) { 
+                const cb = document.getElementById('exp_' + safeId); 
+                if (cb) cb.checked = true; 
+            }
         });
 
+        // 6. Tools
         document.getElementById('charTools').value = parseModifiers(data, 'proficiency', false, true).join(", ");
-        const feats = data.feats.map(f => f.definition.name).join(", ");
+
+        // 7. Feats (With Junk Filter)
+        const junkKeywords = [
+            "Ability Score Increase", 
+            "Weapon Mastery", 
+            "Dark Bargain", 
+            "Spellcasting",
+            "Pact Magic", "Ability Score Improvements"
+        ];
+
+        const feats = data.feats
+            .map(f => f.definition.name)
+            .filter(name => {
+                // Return FALSE if the name contains any junk keyword
+                return !junkKeywords.some(junk => name.includes(junk));
+            })
+            .join(", ");
+
         document.getElementById('charFeats').value = feats;
         generateOutput();
     }
@@ -1952,20 +2057,39 @@
     function parseModifiers(data, type, isSkill = false, isTool = false) {
         let results = [];
         const allMods = Object.values(data.modifiers || {}).flat();
+
+        // D&D Beyond Magic Numbers:
+        // EntityTypeId 1958004211 = Skills
+        // EntityTypeId 174869515 = Armor (Shields are ID 4 here)
+        const SKILL_ENTITY_TYPE = 1958004211;
+
         const ddbSkills = {2:"Athletics",3:"Acrobatics",4:"Sleight of Hand",5:"Stealth",6:"Arcana",7:"History",8:"Investigation",9:"Nature",10:"Religion",11:"Animal Handling",12:"Insight",13:"Medicine",14:"Perception",15:"Survival",16:"Deception",17:"Intimidation",18:"Performance",19:"Persuasion"};
 
         allMods.forEach(m => {
             if (m.type === type) {
                 let name = m.friendlySubtypeName || m.friendlyTypeName || "";
+
                 if (isSkill) {
-                    if (m.entityId && ddbSkills[m.entityId]) name = ddbSkills[m.entityId];
-                    else if (name.includes(":")) name = name.split(":").pop().trim();
-                    if(name && !results.includes(name)) results.push(name);
+                    // FIX: Only map the ID to a name if it is ACTUALLY a skill entity
+                    if (m.entityTypeId === SKILL_ENTITY_TYPE && m.entityId && ddbSkills[m.entityId]) {
+                        name = ddbSkills[m.entityId];
+                    } 
+                    // Fallback for custom entries that might just be text
+                    else if (name && name.includes(":")) {
+                        name = name.split(":").pop().trim();
+                    }
+
+                    // Only add if we found a valid name AND that name is in our allowed list
+                    if(name && skillsList.includes(name)) {
+                        if (!results.includes(name)) results.push(name);
+                    }
                 } else if (isTool) {
                     if(m.entityTypeId === 2103445194 || name.toLowerCase().match(/(tool|kit|supplies|instrument)/)) {
                         if(name && !results.includes(name)) results.push(name);
                     }
-                } else { if(name && !results.includes(name)) results.push(name); }
+                } else { 
+                    if(name && !results.includes(name)) results.push(name); 
+                }
             }
         });
         return results;
