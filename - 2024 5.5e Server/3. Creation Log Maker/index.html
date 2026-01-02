@@ -1391,9 +1391,9 @@
     .ss-hidden { display: none !important; }
     .ss-show { display: grid !important; }
 
-    /* UPDATED COMBO STYLE FOR 50/50 SPLIT */
+    /* 50/50 SPLIT FOR OTHER INPUTS */
     .ss-input-combo { display: flex; gap: 5px; }
-    .ss-input-combo select { flex: 1; min-width: 0; } /* Allow select to shrink */
+    .ss-input-combo select { flex: 1; min-width: 0; }
     .ss-input-combo .other-input { display: none; flex: 1; min-width: 0; }
     .ss-input-combo.show-other .other-input { display: block; animation: fadein 0.3s; }
 
@@ -1411,21 +1411,44 @@
     .ss-valid { color: #4ade80; }
     .ss-invalid { color: #ef4444; }
 
-    /* --- PILLS (NEW SKILL STYLE) --- */
-    .ss-pill-container { display: flex; flex-wrap: wrap; gap: 6px; }
-    .ss-pill-item input { display: none; /* Hide actual checkbox */ }
+    /* --- UPDATED PILLS (6 PER ROW) --- */
+    .ss-pill-container { 
+        display: grid; 
+        grid-template-columns: repeat(6, 1fr); /* Force 6 Columns */
+        gap: 5px; 
+    }
+
+    .ss-pill-item {
+        display: block; /* Takes full grid cell */
+    }
+
+    .ss-pill-item input { display: none; }
 
     .ss-pill-item label {
-        display: inline-block;
-        padding: 4px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        padding: 4px 2px;
+
         border: 1px solid #475569;
         background: rgba(0,0,0,0.3);
-        border-radius: 15px; /* Pill Shape */
-        font-size: 0.75em;
+        border-radius: 6px; /* Slightly squarer for grid alignment */
+
+        font-size: 0.7em; /* Smaller font to fit words */
+        line-height: 1.1;
         color: #94a3b8;
         cursor: pointer;
         user-select: none;
         transition: all 0.2s;
+        word-break: break-word; /* Wrap long words if absolutely necessary */
+    }
+
+    /* On very small mobile screens, drop to 3 columns to prevent unreadable text */
+    @media (max-width: 500px) {
+        .ss-pill-container { grid-template-columns: repeat(3, 1fr); }
     }
 
     /* Hover State */
