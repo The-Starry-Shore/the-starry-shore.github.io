@@ -1390,8 +1390,11 @@
     /* --- COMPLEXITY HIDING --- */
     .ss-hidden { display: none !important; }
     .ss-show { display: grid !important; }
+
+    /* UPDATED COMBO STYLE FOR 50/50 SPLIT */
     .ss-input-combo { display: flex; gap: 5px; }
-    .ss-input-combo .other-input { display: none; flex: 1; }
+    .ss-input-combo select { flex: 1; min-width: 0; } /* Allow select to shrink */
+    .ss-input-combo .other-input { display: none; flex: 1; min-width: 0; }
     .ss-input-combo.show-other .other-input { display: block; animation: fadein 0.3s; }
 
     /* --- DYNAMIC ELEMENTS --- */
