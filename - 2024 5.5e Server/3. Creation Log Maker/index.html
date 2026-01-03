@@ -1973,7 +1973,7 @@
             populateForm(json.data, urlInput);
             status.innerText = "Data loaded successfully!"; status.style.color = "#4ade80";
         } catch (err) {
-            console.error(err); status.innerText = "Error: Could not fetch. You're character might be private, turn it public by going to character manger, then first page "home" then scroll down to the bottom and choose public"; status.style.color = "#ef4444";
+            console.error(err); status.innerText = "Error: Could not fetch. You're character might be private, turn it public by going to character manger, then first page home then scroll down to the bottom and choose public"; status.style.color = "#ef4444";
         } finally { setTimeout(() => status.innerText = "", 5000); }
     };
 
