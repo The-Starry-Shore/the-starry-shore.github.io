@@ -2170,7 +2170,7 @@
 **Feats:** ${getVal('charFeats')}
 **Other:** ${getVal('charOther')}`;
 
-        if (getVal('sheetLink')) md += `\n**Link:** ${getVal('sheetLink')}`;
+        if (getVal('sheetLink')) md += `\n**Link:** <${getVal('sheetLink')}>`;
 
         document.getElementById('output').value = md;
         const btn = document.getElementById('btnUpdate');
