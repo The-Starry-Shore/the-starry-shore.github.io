@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Spellbook</title>
+    <style>
+        :root {
+            /* Wiki Theme Colors */
+            --bg-main: #18181f; /* Deep dark background */
+            --bg-sidebar: #0f0f14; /* Darker sidebar */
+            --bg-card: #1f1f28; /* Slightly lighter card background */
+            --text-main: #d1d1e0; /* Off-white text */
+            --text-muted: #8b8b9e; /* Dim text */
+            
+            /* Accents based on the screenshot */
+            --wiki-purple: #9d72ff; /* Bright purple for headings */
+            --wiki-purple-dark: #563b8c; /* Dark purple for underlines */
+            --wiki-blue: #5ea3ea; /* Light blue for links and keywords */
+            --border-color: #2d2d3a;
+            
+            /* Prism Spell Colors */
+            --c-indigo: #818cf8;
+            --c-blue: #60a5fa;
+            --c-green: #4ade80;
+            --c-yellow: #fde047;
+            --c-orange: #fb923c;
+            --c-red: #f87171;
+            --c-violet: #c084fc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Wiki Breadcrumbs */
+        .breadcrumb {
+            color: var(--wiki-blue);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .breadcrumb span { color: var(--text-muted); }
+
+        /* Sidebar UI */
+        #sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+            overflow-y: auto;
+            transition: margin-left 0.3s ease;
+        }
+
+        #sidebar.collapsed {
+            margin-left: -300px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .close-sidebar-btn:hover { color: #fff; }
+
+        h1, h2, h3, h4 { margin: 0; font-weight: 600; }
+        
+        h1 { 
+            font-size: 1.4rem; 
+            color: var(--wiki-purple); 
+            margin-bottom: 5px;
+        }
+        
+        /* Collapsible Control Groups */
+        .control-group {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .control-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .control-group-header h3 {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        
+        .control-group-content { display: block; }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Color Badges */
+        .color-badge { padding: 2px 6px; border-radius: 3px; font-weight: bold; font-size: 0.75rem; color: #111; display: inline-block; }
+        .bg-indigo { background-color: var(--c-indigo); }
+        .bg-blue { background-color: var(--c-blue); }
+        .bg-green { background-color: var(--c-green); }
+        .bg-yellow { background-color: var(--c-yellow); }
+        .bg-orange { background-color: var(--c-orange); }
+        .bg-red { background-color: var(--c-red); }
+        .bg-violet { background-color: var(--c-violet); }
+
+        /* Main Content */
+        #main-content {
+            flex: 1;
+            padding: 30px 50px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* Open Menu Button */
+        #open-sidebar-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        #open-sidebar-btn:hover { background: var(--border-color); }
+
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--wiki-purple);
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        /* Rules Accordion */
+        .rules-container {
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .rules-header {
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--wiki-purple);
+        }
+        .rules-header:hover { background: rgba(0,0,0,0.4); }
+        .rules-content {
+            padding: 20px;
+            display: none; 
+            border-top: 1px solid var(--border-color);
+        }
+        .rules-content h3 { color: var(--wiki-blue); margin-top: 15px; margin-bottom: 10px; font-size: 1.1rem;}
+
+        .progress-tracker {
+            display: flex;
+            gap: 15px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .progress-stat {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .progress-stat span { color: var(--text-main); font-weight: bold;}
+        .progress-stat.ready span { color: var(--c-green); }
+
+        /* Section Headings (Matching the screenshot exactly) */
+        .level-section { margin-bottom: 50px; }
+        .level-section > h2 { 
+            font-size: 1.6rem; 
+            color: var(--wiki-purple); 
+            border-bottom: 2px solid var(--wiki-purple-dark); 
+            padding-bottom: 8px;
+            margin-bottom: 25px;
+            font-weight: normal;
+        }
+
+        .sphere-group { margin-bottom: 40px; }
+        .sphere-title { 
+            font-size: 1.2rem; 
+            color: var(--text-main); 
+            margin-bottom: 15px; 
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .spell-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        /* Spell Card (Flat Wiki Style) */
+        .spell-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .spell-card.learned { border-color: var(--c-green); box-shadow: 0 0 15px rgba(74, 222, 128, 0.05); }
+
+        .spell-header { 
+            display: flex; justify-content: space-between; align-items: flex-start; 
+            border-bottom: 2px solid var(--wiki-purple-dark); 
+            padding-bottom: 8px; 
+            margin-bottom: 15px;
+        }
+        .spell-title { font-size: 1.3rem; color: var(--wiki-purple); font-weight: normal;}
+        
+        .spell-controls { display: flex; gap: 8px; flex-shrink: 0; margin-top: 2px;}
+        .spell-controls button {
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-main); 
+            padding: 4px 10px; border-radius: 3px; cursor: pointer; transition: 0.2s; font-size: 0.75rem;
+        }
+        .spell-controls button:hover { background: var(--border-color); }
+        .spell-controls button.btn-learn.active { background: rgba(74, 222, 128, 0.1); border-color: var(--c-green); color: var(--c-green); }
+        .spell-controls button.btn-hide:hover { background: rgba(248, 113, 113, 0.1); border-color: var(--c-red); color: var(--c-red);}
+
+        .spell-keywords { font-size: 0.9rem; margin-bottom: 15px; }
+        .spell-keywords span { color: var(--wiki-blue); font-style: italic; }
+
+        .spell-meta { font-size: 0.85rem; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.15); padding: 10px; border: 1px solid var(--border-color);}
+        .spell-meta span strong { color: var(--text-main); font-weight: 500;}
+        
+        .spell-desc { margin-bottom: 15px; }
+        .spell-ascension { font-size: 0.9rem; font-style: italic; color: var(--text-muted); margin-bottom: 15px;}
+        
+        .color-effects { display: flex; flex-direction: column; gap: 10px;}
+        .color-effect-block { background: rgba(0,0,0,0.2); border-left: 2px solid var(--border-color); padding: 10px 15px; font-size: 0.9rem;}
+        .color-effect-block h4 { margin: 0 0 5px 0; display: flex; align-items: center; gap: 8px; font-weight: 500;}
+
+        .hidden-notice { text-align: center; color: var(--text-muted); padding: 30px; font-style: italic; border: 1px dashed var(--border-color); }
+
+        .locked-sphere {
+            opacity: 0.6;
+            background: rgba(0,0,0,0.2);
+            padding: 30px; border: 1px dashed var(--border-color);
+            text-align: center;
+        }
+        
+        button.action-btn, button.reset-btn { 
+            background: var(--bg-card); border: 1px solid var(--border-color); 
+            color: var(--text-main); padding: 8px; cursor: pointer; width: 100%; 
+            border-radius: 3px; margin-top: 8px; font-size: 0.85rem;
+        }
+        button.action-btn:hover { background: var(--border-color); }
+        button.reset-btn:hover { background: rgba(248, 113, 113, 0.1); border-color: var(--c-red); color: var(--c-red); }
+
+        .bypass-active { border: 1px solid var(--c-orange); background: rgba(251, 146, 60, 0.02) !important;}
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <h1>Prism Spellcasting</h1>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin:0;">Manage your grimoire.</p>
+            </div>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()" title="Close Sidebar">✕</button>
+        </div>
+
+        <!-- Display Options -->
+        <div class="control-group">
+            <div class="control-group-header" onclick="toggleGroup('opts-content', 'opts-icon')">
+                <h3>Display Options</h3>
+                <span id="opts-icon">▼</span>
+            </div>
+            <div id="opts-content" class="control-group-content">
+                <label class="checkbox-label" style="color: var(--c-orange); font-weight: bold; margin-bottom: 10px;">
+                    <input type="checkbox" id="bypass-toggle" onchange="toggleBypass()"> 🔓 Show All Locked Spells
+                </label>
+            </div>
+        </div>
+
+        <!-- Filter Colors -->
+        <div class="control-group">
+            <div class="control-group-header" onclick="toggleGroup('colors-content', 'colors-icon')">
+                <h3>Filter Colors</h3>
+                <span id="colors-icon">▼</span>
+            </div>
+            <div id="colors-content" class="control-group-content">
+                <div class="checkbox-grid" id="color-filters">
+                    <label class="checkbox-label"><input type="checkbox" value="Indigo" checked> <span class="color-badge bg-indigo">Indigo</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Blue" checked> <span class="color-badge bg-blue">Blue</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Green" checked> <span class="color-badge bg-green">Green</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Yellow" checked> <span class="color-badge bg-yellow">Yellow</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Orange" checked> <span class="color-badge bg-orange">Orange</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Red" checked> <span class="color-badge bg-red">Red</span></label>
+                    <label class="checkbox-label"><input type="checkbox" value="Violet" checked> <span class="color-badge bg-violet">Violet</span></label>
+                </div>
+                <p style="font-size: 0.75rem; color: #64748b; margin-top: 10px;">Uncheck colors to hide their specific augmentations from spell cards.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: auto;">
+            <button class="action-btn" onclick="clearHidden()">Restore Hidden Spells</button>
+            <button class="reset-btn" onclick="clearLearned()">Reset Learned Spells</button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content">
+        
+        <button id="open-sidebar-btn" onclick="toggleSidebar()">
+            <span>☰</span> Open Settings & Menu
+        </button>
+
+        <!-- Collapsible Rules Section -->
+        <div class="rules-container">
+            <div class="rules-header" onclick="toggleRules()">
+                <span>📖 Prism Spellcasting Rules (Work in Progress)</span>
+                <span id="rules-icon">▼</span>
+            </div>
+            <div class="rules-content" id="rules-content">
+                <p>All magic in Prism uses mana points instead of spell slots. These function somewhat the same except for the following:</p>
+                <ul>
+                    <li>All spell casters use a certain color of magic from the Prism to use magic, and that color's influence changes the hue of all of their spells to an effect specific to that color.</li>
+                    <li>You gain 1 mana point per round in combat (or 1 mana point an hour outside of combat.) Mana points generated outside of combat cannot be used in combat, so your pool refreshes to 1 at the start.</li>
+                    <li>You can choose to cast right away, or you can save your mana points to cast higher level spells or spells with greater augmentations.</li>
+                    <li>Some spells have a mana upkeep cost to sustain the spell. This mana upkeep cost is paid at the start of the spellcaster's turn. If the spellcaster does not pay the mana upkeep cost, then the spell's effect is removed.</li>
+                </ul>
+                <p>The casting of a spell is comprised of the following parameters to keep in mind: Prism Spells, Color (Hue), Spell Augment.</p>
+                <p>A character's Spellcasting attribute (for the purpose of testing) is the highest mental stat a character has.</p>
+                
+                <h3 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">Spell Ascension</h3>
+                <p>In Prism, you are able to upcast your spell, albeit in a different way:</p>
+                <ul>
+                    <li>Upcasting a spell from its base level costs +1 Mana and +1 APC per level, up to a maximum of 7.</li>
+                    <li>Spells with an upkeep duration have their mana upkeep cost increased by 1 Mana for each additional level.</li>
+                </ul>
+
+                <h3 style="color:var(--accent); margin-top:15px; margin-bottom:5px;">Spell Progression Tree</h3>
+                <p>Spells in Prism are separated not only by level, but also by spheres; groups of spells that share a category and similarity one to another.</p>
+                <p>The 1st level of these spells are comprised of four different categories. In order to advance to 2nd level spells or above, you must have at least 2 spells in each of that sphere's parent spheres.</p>
+                <p><em>For example: In order to be able to learn Conjura sphere spells, you need two spells from the Energy Sphere family; In order to learn Abjura sphere spells, you need to learn two spells in both the Spirit and Energy Spheres.</em></p>
+                <p>1st level spells have a base requirement of 1 APC and MPC to cast. 2nd level spells have a base requirement of 2 APC and MPC to cast.</p>
+            </div>
+        </div>
+
+        <div class="progress-tracker" id="progress-tracker">
+            <!-- Populated via JS -->
+        </div>
+
+        <div class="level-section">
+            <h2>1st Level Spells</h2>
+            <div id="l1-container"></div>
+        </div>
+
+        <div class="level-section">
+            <h2>2nd Level Spells</h2>
+            <div id="l2-container"></div>
+        </div>
+    </main>
+
+    <script>
+        // --- DATA STRUCTURE (ALL 40 SPELLS) ---
+        const spellsData = [
+            // ================= LEVEL 1 =================
+            // LEVEL 1 - ENERGY
+            { name: "Blast", level: 1, sphere: "Energy", keywords: "Energy, Attack, Harm", 
+              meta: { Range: "15 ft.", Target: "1 Enemy", Resolve: "Attack", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster makes a spell attack against a single target in range. If that spell attack hits, it deals 2d6 Force damage.",
+              ascension: "For each point of Ascension, increase the damage by 1d6.",
+              colors: {
+                  Indigo: "You may sacrifice 5 Hit Points as you cast this spell. If you do, you increase the die damage by one step. You can apply this effect twice instead at level 5, by sacrificing 10 Hit Points. You can apply this effect thrice instead at level 10, by sacrificing 15 Hit Points.",
+                  Blue: "You may Dreamwalk to a square adjacent to a creature affected by this spell as it resolves.",
+                  Green: "If an ally is affected by this spell, they are healed for the damage instead.",
+                  Yellow: "Enemies affected by this spell lose 1 point of Movement Rating. You gain a point of Movement Rating for each enemy affected. Both effects last for 1 round.",
+                  Orange: "Enemies that are defeated by this spell allow you to cast this spell again. This spell originates from the defeated creature's position. Casting this spell in this manner does not cost Action Points, but it does cost Mana Points.",
+                  Red: "When this spell affects an enemy, all allies adjacent to the target gain a +2 to their next damage roll.",
+                  Violet: "When this spell affects an enemy, if the damage roll has any doubles in it (consecutive doubles), this spell's Mana cost is refunded."
+              }
+            },
+            { name: "Bolt", level: 1, sphere: "Energy", keywords: "Energy, Harm",
+              meta: { Range: "60 ft.", Target: "1 Enemy", Resolve: "Opposed", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster chooses an enemy. That enemy is assaulted with a bolt of force, forcing an opposed roll between the caster and the target. The caster may use their Authority, Grace, Initiative or Wit. The target may use their Resilience, Stamina, Tenacity or Willpower. Should the caster succeed, they deal 1d6 points of Force damage. Should they win by 5 or more, they deal 2d6 damage instead.",
+              ascension: "Each time this spell is ascended, it strikes the target an additional time for each level it is ascended.",
+              colors: {
+                  Indigo: "The spell now gains an Upkeep cost of 5 Hit Points. Its effect occurs again at the end of each round after the first, for as long as the spell is upkept.",
+                  Blue: "The square the target was in is marked by this spell. The next time the caster would cast this spell again, that square is also affected by this spell again, affecting any creature within that square. A maximum number of these squares can be marked this way equal to 1 plus each level of the spell.",
+                  Green: "This spell can now target allies. If an ally is selected, they are not dealt damage. Instead they are imbued with Haste, the Tier of which is equal to the the level of the spell. The next attack that ally makes heals them an amount equal to twice the level of the spell.",
+                  Yellow: "This spell, when cast, allows the caster to move without APC. If the spell defeats an enemy, this movement is doubled.",
+                  Orange: "This spell has Overwhelm to an enemy that is damaged by it if the caster is Bloodied.",
+                  Red: "This spell imbues allies that are adjacent to the enemy this spell successfully damages. They are imbued with Heroism, the Tier of which is equal to the level of the spell.",
+                  Violet: "Whenever the rolls made on the opposed check would either match on the die result or total result, the caster is considered to have won, and the spell is cast again on another creature within range. The extra casts of this spell do not have an APC or MPC. This can only occur once per opposed check, per creature, per round."
+              }
+            },
+            { name: "Disruption", level: 1, sphere: "Energy", keywords: "Energy, Attack, Depower",
+              meta: { Range: "40 ft.", Target: "1 Enemy", Resolve: "Attack", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster fires a ray of energy at an enemy to disrupt the energies around them. This gives them a penalty of -1 on opposed checks of spells or abilities with the Magic Keyword. This spell does not stack.",
+              ascension: "For each level of ascension, the penalty is increased by 1.",
+              colors: {
+                  Indigo: "The caster also takes this penalty whenever the spell would successfully affect an enemy with this spell. In exchange, the penalty on the target is doubled for the first opposed check they make each round.",
+                  Blue: "While the spell is being upkept, whenever the affected target would fail an opposed check, that enemy is afflicted with Sightless, the Tier of which is equal to the level of the spell.",
+                  Green: "While the spell is being upkept, whenever the affected target would fail an opposed check, that enemy is afflicted with Silenced, the Tier of which is equal to the level of the spell.",
+                  Yellow: "While the spell is being upkept, whenever the affected target would fail an opposed check, that enemy is afflicted with Dazed, the Tier of which is equal to the level of the spell.",
+                  Orange: "While the spell is being upkept, whenever the affected target would fail an opposed check, that enemy is dealt Force damage equal to half of the difference of the results of the failed check. (Minimum of 1 / Maximum of 5)",
+                  Red: "While the spell is being upkept, the target is afflicted with the Marked affliction, the Tier of which is equal to the level of the spell. Whenever this enemy is dealt damage by an ally, the mark is consumed, and for 1 round, the penalty provided by the spell is increased by an amount equal to the total number of Tiers of Marked the creature had when the affliction was consumed.",
+                  Violet: "While this spell is being upkept, the caster has a bonus to opposed checks equal to the penalty the target is receiving from this spell."
+              }
+            },
+            { name: "Font", level: 1, sphere: "Energy", keywords: "Energy, Area, Harm",
+              meta: { Range: "30 ft. / 10 ft. Radius", Target: "Creatures", Resolve: "Opposed", Duration: "Instantaneous", Upkeep: "Instantaneous" },
+              desc: "The caster selects an area in range, causing a font of mana to open from the ground. All creatures in the radius of the spell must make an opposed attribute check againts the caster. The caster may use Authority, Competence, Presence or Sovereignty. Opposing creatures may use Resilience, Sovereignty, Tenacity or Willpower. Creatures that lose take 1d10 Force damage.",
+              ascension: "For each point of Ascension, the spell increases its radius by 5 ft. Every 3 points of Ascension adds an additional 1d10 of damage.",
+              colors: {
+                  Indigo: "The spell has its base radius changed to 15 ft., and the spell is instead centered on the caster. The caster automatically takes the damage of the spell, and applies half of the damage taken as additional damage to other creatures in range.",
+                  Blue: "Enemies that fail the opposed check of this spell are afflicted with Distracted for 1 round, as they are filled with visions from The Dream, the Tier of which is equal to the level of the spell.",
+                  Green: "Allies are not damaged by this spell. Instead, they are imbued with Regeneration, the Tier of which is equal to the level of the spell.",
+                  Yellow: "When this spell is cast, until the end of the next round, if another spell is cast, this spell repeats itself as an Echo, using the same parameters and targeting as when it was first cast. Once all of the Echo effects of this spell resolve, this effect fades.",
+                  Orange: "Whenever a creature would lose the opposed check of this spell, they can be moved to any space within the radius of this effect. It must always be closer to that creature’s enemy. The amount of squares moved is equal to the level of the spell.",
+                  Red: "This spell has its base radius changed to 15 ft., and is centered on the caster. This spell does not do damage. Instead, it reduces the damage of enemies that fail the opposed roll within range for 1 round. The amount of damage reduction is equal to the level of the spell. Elemental Augments can be applied to this spell.",
+                  Violet: "Allies dealt damage by this spell gain 1 point of Mana or Continental Resource they are missing. This spell can only affect an ally once per round in this way."
+              }
+            },
+            { name: "Infuse", level: 1, sphere: "Energy", keywords: "Energy, Afflict, Empower",
+              meta: { Range: "Touch", Target: "1 Weapon", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster touches a weapon, infusing it with mana to sharpen its edge. For the duration of the spell, the weapon deals 1 additional point of Force damage. If an Elemental augment is applied to this spell, it empowers Tier 1 of that Elemental affliction on the weapon instead.",
+              ascension: "Increase the damage by 1 or the Tier of the Elemental affliction by 1 tier for each level of ascension this spell benefits from.",
+              colors: {
+                  Indigo: "The caster infuses the weapon with the option to score an automatic Critical Hit whenever it hits an enemy with an attack. If this option is used, the weapon is destroyed afterwards.",
+                  Blue: "The caster infuses the weapon with a near ethereal form. The weapon becomes Resistant to Block and Parry attempts.",
+                  Green: "The weapon is further empowered with Tier I Life Drain.",
+                  Yellow: "Whenever this weapon would deal damage, the wielder may choose to store that damage. At any point in the combat, the wielder can decide to unleash this damage as extra damage on a damage roll this weapon makes. Only 1 instance of damage can be stored at a time.",
+                  Orange: "The wielder of the weapon gains Tier I Trance whenever this spell is cast. Whenever the wielder would lose all Tiers of Trance, the spell fades from the weapon.",
+                  Red: "The caster infuses the weapon with Enchanted instead of other Afflictions or empowerment. This Enchanted Tier is equal to the level of the spell, and applies to the attribute the wielder uses for parrying with the weapon.",
+                  Violet: "The damage bonus is doubled from this weapon, and is dealt to the wielder as well from enemy attacks. This damage cannot cause injuries. Whenever the wielder defeats an enemy, the wielder is healed an amount of Hit Points equal to the Spirit of the defeated enemy. If the wielder is Wounded, this healing is doubled."
+              }
+            },
+
+            // LEVEL 1 - MASS
+            { name: "Cure", level: 1, sphere: "Mass", keywords: "Mass, Heal",
+              meta: { Range: "Touch", Target: "Self/1 Ally", Resolve: "None", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The target is healed by an amount equal to the caster’s Authority, Presence or Sovereignty.",
+              ascension: "For each additional level of this spell, the healing is increased again by the caster’s Authority, Presence or Sovereignty.",
+              colors: {
+                  Indigo: "Duration – 1 Round. For the duration of the spell, whenever the recipient of the spell would be dealt damage, half of that damage heals their allies within 10ft.",
+                  Blue: "Duration – 1 Round. For the duration of the spell, whenever the recipient of this spell would be healed, the caster is healed for half that amount.",
+                  Green: "The target is imbued with Tier I Regeneration. If this spell is ascended, each point of mana spent this way increases the Tier of this Imbuement.",
+                  Yellow: "This spell does not heal. Instead, the number of Hit Points the recipient has is tracked by the spell. Then, at the start of the round, the recipient's HP is reset to this amount. This effect is disabled and negated if the recipient is afflicted with Numbed/Staggered.",
+                  Orange: "Resolve - Attack. This spell does not heal. Instead, this spell is treated as a spell attack. If this attack hits its target, it deals Necrotic damage equal to the caster’s Authority, Presence or Sovereignty. This spell is imbued with Tier I Life Drain (Regeneration).",
+                  Red: "Duration – 1 Round. The target of the spell increases all healing they receive for 1 round by an amount equal to their Spirit.",
+                  Violet: "Duration – 1 round. This spell does not heal. Instead, the target ignores the next instance of Injury it would receive. This effect does not stack."
+              }
+            },
+            { name: "Geist", level: 1, sphere: "Mass", keywords: "Mass, Artificial, Attack",
+              meta: { Range: "60 ft.", Target: "Enemies", Resolve: "Spell Attack", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster imbues a piece of terrain, object or other material that is used as a missile to attack their enemies. The attack is affected by the material it is composed of, which may allow the attack to gain different properties determined by the GM. The damage die is always 1d10 in either case.",
+              ascension: "Each level of this spell increases its damage by 1d10.",
+              colors: {
+                  Indigo: "The caster may sacrifice 5 Hit Points per level of this spell when they cast it. If they do, they infuse the Seep affliction onto this spell, the Tier of which is equal to the level of the spell.",
+                  Blue: "The caster causes the projectile to explode on successfully hitting an enemy with the spell. The explosion deals damage to all creatures within 10 ft. of the target.",
+                  Green: "The caster infuses the object with living flora, causing it to deal more damage. The die of damage is increased by 1 step.",
+                  Yellow: "The caster infuses the projectile with time dilatation, causing the spell to increase its range to 150 ft.",
+                  Orange: "The caster infuses the spell with explosive power. Targets dealt damage by this spell are afflicted with Tier I Prone.",
+                  Red: "The caster causes the projectile to become a cage. If it deals damage to a target, that target is afflicted with Tier I Staggered.",
+                  Violet: "The caster turns their projectile into crystal. Whenever this projectile would deal damage to a target, that target loses 1 Mana Point."
+              }
+            },
+            { name: "Harden", level: 1, sphere: "Mass", keywords: "Mass, Imbue",
+              meta: { Range: "Self", Target: "Self", Resolve: "None", Duration: "Instantaneous", Upkeep: "1 Mana Point" },
+              desc: "The caster infuses themselves with hardened flesh. They are imbued with Warded, the Tier of which is equal to the level of the spell.",
+              ascension: "See above for details.",
+              colors: {
+                  Indigo: "The caster incurs Seep in equal Tiers to their Warded Tiers. While this spell is active, whenever the target would take damage, that target's allies within 10 ft. are healed an amount equal to half the damage dealt.",
+                  Blue: "The caster incurs Anchored, the Tier of which is equal to the Tiers of Warded they possess.",
+                  Green: "While this spell is active, the caster is healed Hit Points equal to the spell’s level whenever they are missed by an enemy.",
+                  Yellow: "While this spell is active, the caster gains MR equal to the Tiers of Warded they possess.",
+                  Orange: "While this spell is active, the caster deals additional damage on reaction abilities and spells against creatures that attack it. This additional damage is equal to the Tiers of Warded the caster possesses.",
+                  Red: "While this spell is active, enemies that attack an ally within 10 ft. of the caster incur Taunt. Enemies that incur this Affliction have all taunt removed at the start of the round.",
+                  Violet: "While this spell is active, at the end of each round, there is a 50% chance the caster dissipates to the mirror realm. They return from this mirror realm adjacent to a creature or reflective surface randomly chosen at the start of their turn."
+              }
+            },
+            { name: "Push", level: 1, sphere: "Mass", keywords: "Mass, Area, Slow",
+              meta: { Range: "15 ft. Cone", Target: "Enemies", Resolve: "Opposed Attribute", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster attempts an opposed attribute check to enemies in range. The caster and the targets may both use their Authority, Competence, Cunning or Presence. if the caster succeeds, they push back enemies within range by 3 squares away from the caster.",
+              ascension: "For each level of this spell, increase the amount of squares enemies are moved by 2.",
+              colors: {
+                  Indigo: "The caster can also choose to knock themselves away from the direction they send enemies affected by this spell.",
+                  Blue: "The caster can choose any direction in which to move affected targets.",
+                  Green: "Targets the caster wins the opposing check against by 10 or more are also afflicted with Staggered, the Tier of which is equal to the level of the spell.",
+                  Yellow: "At the end of the round, all targets affected by this spell are affected by an Echo of the spell.",
+                  Orange: "The caster may move up the same number of squares that the affected enemies were moved. (Equal number of squares, not Total number).",
+                  Red: "The caster may affect allies in range of this spell, except they may choose any direction for them if they are affected.",
+                  Violet: "If an obstacle would cause an enemy not to move the full distance after being affected, the obstacle and the enemy take Force damage equal to the number of squares that target did not move."
+              }
+            },
+            { name: "Rupture", level: 1, sphere: "Mass", keywords: "Mass, Afflict",
+              meta: { Range: "15 ft.", Target: "1 Enemy", Resolve: "Opposed Attribute", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The Caster targets an enemy in range. They make an opposed attribute check, with the caster using their Cunning, Grace, Guile or Wit. The target may use their Guile, Resilience, Tenacity or Willpower. If the caster wins, the target is afflicted with Tier 1 Seep.",
+              ascension: "For each level of the spell, increase the Tier of Seep by 1.",
+              colors: {
+                  Indigo: "The caster incurs Tier I Seep. In exchange, the target takes immediate physical damage equal to the current Tiers of Seep they possess after the spell resolves.",
+                  Blue: "While the target is afflicted with Seep, they also incur Dazed, the Tier of which is equal to the level of the spell.",
+                  Green: "The caster transfers the blood of the vitae of the enemy to an ally. While the target is afflicted with Seep, each time that enemy would take damage from this affliction, the caster can heal an ally that is within 10ft of either themselves or the target.",
+                  Yellow: "The caster causes the temporal suffering of the target to increase. As such, whenever a negative effect would occur at the end of the round for the target, that effect triggers twice. This effect remains for as long as the target is afflicted with Seep.",
+                  Orange: "This spell now expends all Seep on the target instead, causing them to explode with Force damage equal to 4 times the Tier of the Seep the creature possessed. This also causes half of this damage to all creatures adjacent to the target.",
+                  Red: "Allies that attack and deal damage to the target treat those sources as if they have Tier I Life Drain. This effect lasts for as long as the target is afflicted with Seep.",
+                  Violet: "The caster treats damage sources they control as if they possess Tier I Mana Drain whenever they would damage a target affected by this spell. This effect lasts for as long as that target is afflicted with Seep."
+              }
+            },
+
+            // LEVEL 1 - MIND
+            { name: "Bless", level: 1, sphere: "Mind", keywords: "Mind, Imbue",
+              meta: { Range: "30 ft.", Target: "Self + Allies", Resolve: "None", Duration: "Fading", Upkeep: "None" },
+              desc: "The caster imbues themselves and allies within range with Tier I Blessed.",
+              ascension: "For each point of mana that ascends this spell, increase the base Tier of the Blessed Imbuement by I.",
+              colors: {
+                  Indigo: "Resolve – Wisdom Saving Throw. This spell now afflicts enemies in the area with Tier I Marked. This Mark is consumed whenever the enemy would make an attack. That attack receives a penalty equal to the Tier of the Marked Affliction. Spell Ascension affects this affliction instead of the Blessed imbuement.",
+                  Blue: "While the imbued is Blessed, they incur the Alert imbuement, the Tier of which is equal to the Tier of the Blessed imbuement.",
+                  Green: "Each creature affected by this spell also heals HP equal to the Tiers of Blessed the spell imbues on targets.",
+                  Yellow: "While the imbued is Blessed, they incur the Haste imbuement, the Tier of which is equal to the Tier of the Blessed imbuement.",
+                  Orange: "The base of the Blessed imbuement is now equal to the caster’s Authority, Cunning and Presence.",
+                  Red: "While the imbued is Blessed, they incur the Warded imbuement, the Tier of which is equal to the Tier of the Blessed imbuement.",
+                  Violet: "While the imbued is Blessed, they incur the Mana Drain (Saturated) imbuement, the Tier of which is equal to the Tier of the Blessed imbuement."
+              }
+            },
+            { name: "Clarity", level: 1, sphere: "Mind", keywords: "Mind, Empower, Heal",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster grants clarity to an ally in range, lowering the tiers of the Compulsed/Distracted and Dazed/Staggered afflictions by an amount equal to the level of the spell. This spell then heals the target an amount equal to the total Tiers of afflictions removed.",
+              ascension: "See above for details.",
+              colors: {
+                  Indigo: "The Caster sacrifices HP when this spell is cast. The amount of HP that is sacrificed is equal to the caster's Spirit. This damage is added as additional healing to targets healed by this spell.",
+                  Blue: "Whenever this spell would affect a target, a fog of dreams appears with a radius of 10 ft. At the end of the round, this fog echoes the spell’s effects in this area, then the spell’s effects fade.",
+                  Green: "Until the end of the round, if the target of this spell should receive an Affliction, they are healed an amount of Hit points equal to the Tier of that affliction.",
+                  Yellow: "At the end of the round in which a target is affected by this spell, they are imbued with Haste, the Tiers of which are equal to the Tiers of total afflictions the target is afflicted with.",
+                  Orange: "This spell does not remove the afflictions. Instead, the target has those afflictions added to their weapon and spell attacks until the end of the round.",
+                  Red: "A target healed by this spell imbues their adjacent allies with Regeneration, the Tier of which is equal to the level of the spell.",
+                  Violet: "The caster chooses 1 affliction the target is afflicted with. Those Tiers are removed, and the target gains Immunity to that affliction until the end of the round. However, they increase the Tiers of all OTHER afflictions they receive by 1 until the end of the round."
+              }
+            },
+            { name: "Doubt", level: 1, sphere: "Mind", keywords: "Mind, Afflict",
+              meta: { Range: "30 ft.", Target: "1 Enemy", Resolve: "Opposed Attribute check", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster instills doubt into an enemy in range. They must win an opposed attribute check, with the caster using their Authority, Competence, Grace or Sovereignty. The target may use their Resilience, Sovereignty, Tenacity or Willpower. If the caster wins, the target loses Courage equal to twice the level of this spell. If they have no Courage, they instead are afflicted with Tier 1 Horror.",
+              ascension: "For each level of the spell, the Tier of the Horror is increased by I.",
+              colors: {
+                  Indigo: "While a target is afflicted with the Horror Affliction from this spell, whenever the caster would lose Hit Points, the target loses half of those Hit Points.",
+                  Blue: "While a target is afflicted with the Horror Affliction from this spell, the caster Dreamwalks a number of squares towards the target whenever the target would move.",
+                  Green: "While a target is afflicted with the Horror Affliction from this spell, the target halves all sources of healing they would receive.",
+                  Yellow: "While a target is afflicted with the Horror Affliction from this spell, the caster has additional MR equal to the penalty to MR the target possesses.",
+                  Orange: "While a target is afflicted with the Horror Affliction from this spell, the caster increases the Tier of afflictions from spells they would inflict on the target by 1.",
+                  Red: "While a target is afflicted with the Horror Affliction from this spell, whenever an ally of the target within 15 ft. would fail an opposed attribute check, they incur Tier I Horror for 1 round.",
+                  Violet: "While a target is afflicted with the Horror Affliction from this spell, the caster takes on the humanoid visage of the target, or a malignant representation if they are not humanoid. This causes attacks against the caster from that creature to cause Psychic damage to the target equal to the level of the spell."
+              }
+            },
+            { name: "Flash", level: 1, sphere: "Mind", keywords: "Mind, Imbue",
+              meta: { Range: "Self", Target: "Self", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The Caster gazes into the future a few moments, foreseeing danger before it occurs. The caster is imbued with tier 1 Prepared.",
+              ascension: "For each level of the spell above 1st, the Tier of Prepared is increased by 1.",
+              colors: {
+                  Indigo: "Whenever the caster would spend an action augmented by the Prepared Imbuement, they heal an amount of Hit Points equal to half the damage they have dealt to themselves this combat.",
+                  Blue: "Whenever the caster would spend an action augmented by the Prepared Imbuement, if it was an ability with the Dash Keyword or movement, the caster may Dreamwalk to an ally within 30 ft., after the ability resolves.",
+                  Green: "Whenever the caster would spend an action augmented by the Prepared Imbuement, if it was an ability with the Heal Keyword, the caster heals an ally within 10 ft. by an amount equal to half the healing the caster has healed or been healed this round.",
+                  Yellow: "This spell can now be cast on allies instead of only the caster. The target now additionally affects allies, and the spell has a range of 30 ft. If an ally uses an action augmented by the Prepared Imbuement, the caster gains Prepared, the Tier of which is half of the Tier of the Prepared action.",
+                  Orange: "This spell empowers the next Attack action taken that is augmented with the Prepared Imbuement to also be treated as if it had the Keen imbuement, the Tier of which is equal to the Prepared Tiers of the action.",
+                  Red: "Whenever the caster would use an action with the Imbuement Keyword augmented by the Prepared Imbuement, the caster chooses an ally within 30 ft. That ally has all of its current imbuements increased by 1 Tier.",
+                  Violet: "Whenever the caster would cast a spell that was augmented by the Prepared Imbuement, that spell is Ascended by an amount equal to half the Prepared Tiers of the action. This allows the spell to be Ascended above the level of the caster."
+              }
+            },
+            { name: "Intrusion", level: 1, sphere: "Mind", keywords: "Mind, Attack, Harm",
+              meta: { Range: "30 ft.", Target: "1 Enemy", Resolve: "Attack", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster makes a spell attack against an enemy in range. If this attack hits, the caster deals 1d4 Psychic damage. Each time this spell is used against a target in a round, the damage from this spell is increased by an additional d4. This effect resets at the end of the round. (Other sources of this spell do not stack this effect)",
+              ascension: "For every 2 ascensions of this spell, the damage die is increased 1 step.",
+              colors: {
+                  Indigo: "Whenever the caster would cast this spell, they may choose to increase its damage by an additional 1d4. At the end of the round, the caster takes damage equal to the total number of d4s this spell does, including its normal stacking. This damage is considered sacrificed HP.",
+                  Blue: "A creature dealt damage by this spell has a direction of the caster's choice denied to them. They cannot move on their own power in that direction. Additional applications of this effect replace the previous choices.",
+                  Green: "At the end of the round, the caster rolls the damage of this spell. The caster may redistribute half of the result as healing to themselves or their allies within 10 ft.",
+                  Yellow: "The caster may roll the damage of this spell twice and use the higher result.",
+                  Orange: "This spell is now a melee spell attack and it has the Cleave Keyword.",
+                  Red: "A creature dealt damage by this spell is also afflicted with Tier I Taunt.",
+                  Violet: "A creature dealt damage by this attack is afflicted with Tier I Madness for the remainder of the combat. This does not stack, and it cannot affect a creature a second time, but the spell is still able to do damage."
+              }
+            },
+
+            // LEVEL 1 - SPIRIT
+            { name: "Commune", level: 1, sphere: "Spirit", keywords: "Spirit, Camp",
+              meta: { Range: "Touch", Target: "Encampment", Resolve: "10 Minutes of Chanting", Duration: "8 Hours", Upkeep: "1 Supply" },
+              desc: "The caster communes with the area to add a layer of spiritual protection over a campsite, cabin or other small building intended for rest. This protects those within from dream encounters.",
+              ascension: "Each Ascension increases the area and settlement size this spell can affect.",
+              colors: {
+                  Indigo: "The caster may take half of their Hit Points in damage. If they do, the encampment is immune to ambushing effects. The caster does not heal this damage on the next rest they would take.",
+                  Blue: "The caster opens the spirits of their allies, allowing only positive Dream encounters to occur to those within.",
+                  Green: "The caster imbues their allies with life energy as they sleep. This allows creatures within to recover from disease and curses as if they were in a comfortable settlement. If they already are, instead rolls against said conditions are rolled as if the creature was Resistant to them.",
+                  Yellow: "The caster provides the encampment with a temporal protection. This prevents time breaks, decay and other such effects to occur to those within.",
+                  Orange: "The caster quickens the inner ambition of their allies while they rest. When the rest is completed, all allies gain the camp effect of Carousing. This stacks with the actual effect of Carousing.",
+                  Red: "The caster strengthens the bonds of camaraderie of their allies within. The Aid Camp action can now be stacked by multiple creatures on a single roll for that camp action.",
+                  Violet: "The caster coaxes the natural magic of the land into the camp. This causes a random magical terrain to appear within, providing a random array of effects determined by the GM, and randomly determined to be for or against the party's well being."
+              }
+            },
+            { name: "Heroism", level: 1, sphere: "Spirit", keywords: "Spirit, Area, Imbue",
+              meta: { Range: "15 ft.", Target: "Allies", Resolve: "None", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster imbues all allies in range with Tier 1 Heroism.",
+              ascension: "Increase the Tier of the Heroism this spell imbues by an amount equal to the level of the spell.",
+              colors: {
+                  Indigo: "Targets of this spell can sacrifice Temporary Hit Points (THP) whenever they would deal damage. They add extra damage equal to half of the THP sacrificed. This effect lasts until the end of the round when this spell first affects the targets.",
+                  Blue: "Targets in range affected by this spell when it is cast can swap places with one another, dreamwalking to each other's positions.",
+                  Green: "Targets affected by this spell receive extra Temporary Hit Points (THP) whenever they would receive THP equal to the level of this spell. This extra THP can only be gained if the target is at full HP.",
+                  Yellow: "The target of this spell gains additional MR for every 5 Temporary Hit Points (THP) they have. This effect lasts until the end of the round.",
+                  Orange: "The caster chooses 1 of the targets of this spell. All of the other recipients lose half of their Temporary Hit Points (THP), and the chosen target receives double the amount of Courage they would receive from the next source of Courage until the end of the round.",
+                  Red: "Targets affected by this spell grant the Courage they would gain this round to adjacent Wounded/Shattered allies instead of themselves. If there are none, they do not gain Courage. This lasts until the end of the round.",
+                  Violet: "Targets affected by this spell have their current Temporary Hit Points (THP) adjusted to be equal to the target within range that has the lowest amount of THP above 0."
+              }
+            },
+            { name: "Potency", level: 1, sphere: "Spirit", keywords: "Spirit, Empower, Imbue",
+              meta: { Range: "Self", Target: "Self", Resolve: "Self", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster infuses their inner spirit with potency, imbuing themselves with Blessed, the Tier of which is equal to the level of this spell.",
+              ascension: "Each level of this spell above the 1st level grants 3 THP for each level of the spell.",
+              colors: {
+                  Indigo: "The Blessed effect is changed to Regeneration. In addition, for as long as the spell is being upkept, the target gains a bonus to their damage rolls with their weapon attacks equal to half of their current THP, up to a maximum of three times the caster’s Spirit. The target sacrifices Hit Points equal to this additional damage whenever it is dealt.",
+                  Blue: "While the spell is active, the caster can levitate up to 20 ft. The caster can adjust their elevation by spending Action Points to move equal to their normal MR. When the spell fades, the caster floats to the ground harmlessly.",
+                  Green: "The Blessed effect is changed to Inspired instead. In addition, while this spell is active, whenever the caster would receive THP, they are healed an equal amount of Hit Points instead.",
+                  Yellow: "The Blessed effect is changed to Haste instead. In addition, whenever the caster should win Initiative against all of the enemies in the current combat, they may move once without APC.",
+                  Orange: "While this spell is active, whenever the caster would deal damage to an enemy, they deal Force damage to adjacent enemies equal to the level of this spell. This spell cannot trigger itself, and its effect only triggers once per damage source per round.",
+                  Red: "While this spell is active, the caster is also imbued with Bestow of an equal Tier to the Blessed. Allies within the incurred aura gain a +1 bonus to attack rolls (this source of +1 does not stack with itself or other instances of Potency).",
+                  Violet: "The Blessed effect is changed to Saturated instead. In addition, while the spell is active, whenever the caster would gain mana, a random adjacent creature randomly gains Hit Points or takes Force damage equal to the amount of mana gained."
+              }
+            },
+            { name: "Protect", level: 1, sphere: "Spirit", keywords: "Spirit, Empower, Imbue",
+              meta: { Range: "30 ft.", Target: "Self/1 Ally", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "An ally within range is imbued with Tier I Warded.",
+              ascension: "For each point of mana that ascends this spell, increase the base Tier of the Warded Imbuement by I.",
+              colors: {
+                  Indigo: "Whenever the imbued would be attacked and dealt damage, the Tier of the Warded Imbuement is increased by I. This only occurs once per casting.",
+                  Blue: "While this spell is active, the caster and the target may Dreamwalk to each other's squares whenever either of them would be attacked. This occurs after the attack is resolved.",
+                  Green: "The target incurs the Regeneration, the Tier of which is equal to the Tier of the Warded Imbuement.",
+                  Yellow: "While this spell is active, the target has its Movement Rating increased by 2.",
+                  Orange: "Duration - 1 Round. Upkeep - None. The Tier of this spell's Warded Imbuement is equal to the number of enemies threatening the target in melee.",
+                  Red: "When this spell is cast on an ally that is Bloodied, this spell increases the base Tier of Warded by I. If they are Wounded/Shattered, the Tier is increased by II instead.",
+                  Violet: "Whenever an enemy would attack the imbued and miss the attack, the attacker takes Force damage equal to the caster’s Spirit."
+              }
+            },
+            { name: "Purity", level: 1, sphere: "Spirit", keywords: "Spirit, Empower, Heal",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster purifies an ally in range, lowering the tiers of the Poison/Toxic and Bleed/Seep afflictions by an amount equal to the level of the spell. This spell then heals the target an amount equal to the total tiers of afflictions removed.",
+              ascension: "See above for details.",
+              colors: {
+                  Indigo: "The caster sacrifices HP when this spell is cast, with the amount of HP that is sacrificed being equal to the caster's Spirit. This damage is added as additional healing to targets healed by this spell.",
+                  Blue: "Whenever this spell would affect a target, a fog of dreams appears with a radius of 10 ft. At the end of the round, this fog echoes the spell's effects in this area, after which the spell's effects fade.",
+                  Green: "Until the end of the round, if the target of this spell should receive an Affliction, they are healed an amount of Hit Points equal to the Tier of that affliction.",
+                  Yellow: "At the end of the round a target is affected by this spell, they are imbued with Haste, the Tiers of which are equal to the Tiers of total Afflictions the target is afflicted with.",
+                  Orange: "This spell doesn't remove the Afflictions. Instead, the target has those afflictions added to their weapon and spell attacks until the end of the round.",
+                  Red: "A target healed by this spell imbues their adjacent allies with Regeneration, the Tier of which is equal to the level of the spell.",
+                  Violet: "The caster chooses 1 Affliction the target is afflicted with. Those Tiers are removed, and the target gains Immunity to that affliction until the end of the round. However, they increase the Tiers of all OTHER afflictions they receive by I until the end of the round."
+              }
+            },
+
+            // ================= LEVEL 2 =================
+            // ABJURA (Energy + Spirit)
+            { name: "Absorb", level: 2, sphere: "Abjura", parent: ["Energy", "Spirit"], keywords: "Energy, Reaction, Spirit",
+              meta: { Range: "Self", Target: "Self", Resolve: "None", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster may cast this spell as they are dealt damage by a source that deals Elemental damage. The caster may make a Block check against the user of the source. The caster may use their Cunning, Guile or Sovereignty instead of the normal sub-attributes for Block. If this Block is successful, the caster rolls 2d6 as their Shield Rating. If they possess the Shield Specialist Feature, they may add their shield's SR in addition to this spell. If this reduces half of the total damage or more, the caster gains 1 Mana Point. If it reduces all of the damage, the caster gets 2 Mana Points instead.",
+              ascension: "For each point of Ascension, this spell adds a d6 of SR.", colors: {} },
+            { name: "Bulwark", level: 2, sphere: "Abjura", parent: ["Energy", "Spirit"], keywords: "Energy, Reaction, Spirit",
+              meta: { Range: "Self", Target: "15 ft. Radius", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster may cast this spell in response to a source with the Area Keyword. The caster is surrounded by a glyph that protects themselves and their allies within range. The caster and their allies receive a bonus to their contested attribute checks against sources with the Area Keyword equal to the caster's Spirit.",
+              ascension: "For each level this spell is ascended, the caster and their allies affected by this spell gain 10 Temporary Hit Points. This stacks with itself, but not other sources, and fades when the spells effects do.", colors: {} },
+            { name: "Mantle", level: 2, sphere: "Abjura", parent: ["Energy", "Spirit"], keywords: "Energy, Spirit",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster drapes the target in a protective mantle. While under the effects of this mantle, whenever the caster would cast a spell with the Self targeting parameters, the caster may treat the recipient of this spell as if they were the caster for targeting parameters in this way.",
+              ascension: "No effect.", colors: {} },
+            
+            // CONJURA (Energy x2)
+            { name: "Aspect", level: 2, sphere: "Conjura", parent: ["Energy", "Energy"], keywords: "Energy, Empower, Imbue",
+              meta: { Range: "Self", Target: "Self", Resolve: "None", Duration: "Rounds per Spirit", Upkeep: "None" },
+              desc: "The caster is infused with the aspect of an arcane warrior of the past. They deal additional Force damage with their weapons and spells equal to their current Spirit.",
+              ascension: "Whenever this spell is ascended, its duration is multiplied by an amount equal to the total Ascended level of the spell.", colors: {} },
+            { name: "Control Element", level: 2, sphere: "Conjura", parent: ["Energy", "Energy"], keywords: "Energy",
+              meta: { Range: "20 ft.", Target: "5 ft.", Resolve: "None", Duration: "8 Hours", Upkeep: "None" },
+              desc: "The caster exerts limited control over an element of fire, earth, water or wind within the range of the spell. This control allows movement of those elements within the range of the spell. This movement can do things such as making a stair case, calming waters and filling a sail with wind (if the range is sufficient), amongst other things. This spell cannot deal damage in anyway.",
+              ascension: "For each ascension of this spell, the caster can control and additional 5 ft. area and an additional 5 ft. of range.", colors: {} },
+            { name: "Lesser Creation", level: 2, sphere: "Conjura", parent: ["Energy", "Energy"], keywords: "Energy",
+              meta: { Range: "5 ft.", Target: "5 ft. Space", Resolve: "None", Duration: "8 Hours", Upkeep: "None" },
+              desc: "The caster may create an item that could exist in a 5 ft. square. This item may be a Kit, Light Armor, Shield, Tool, Weapon or other simple device. The maximum Steam value of this item cannot exceed 10. The item dissipates at the end of the duration. It is also impossible to hide its true nature, and it will always appear as a temporary item. These items cannot be consumed as Supplies.",
+              ascension: "This spell cannot be ascended. It does however add itself to Creation spells of greater levels, adding its square footage and steam value.", colors: {} },
+            
+            // GLAMORA (Energy + Mind)
+            { name: "Amania", level: 2, sphere: "Glamora", parent: ["Energy", "Mind"], keywords: "Energy, Mind, Imbue",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster imbues an ally with Tier I Keen. While imbued in this manner, the target maintains Keen whilst the spell is upkept. Each time the target would defeat an enemy, the Tier of Keen from this spell is increased by 1.",
+              ascension: "No effect.", colors: {} },
+            { name: "Anosognosia", level: 2, sphere: "Glamora", parent: ["Energy", "Mind"], keywords: "Energy, Mind, Affect",
+              meta: { Range: "20 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster casts this spell on the target, and the caster and the target make an opposed Willpower test, raising each of the target's imbuements by I Tier. Bonuses given by imbuements affected this way have their bonuses reversed (if able). At the end of the round, the reversal of these affects fade.",
+              ascension: "For each level of Ascension, the target takes Psychic damage equal to the total Tiers of the imbuements affected by this spell.", colors: {} },
+            { name: "Anxietous", level: 2, sphere: "Glamora", parent: ["Energy", "Mind"], keywords: "Energy, Mind, Afflict",
+              meta: { Range: "15 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster and the target make a contested Authority, Competence or Presence check. If the caster wins, the target is afflicted with Cursed, the tier of which is equal to the caster's Authority, Competence or Presence . The penalty of this affliction is applied to the attribute the target uses for attacks, for as long as they are affected by this spell.",
+              ascension: "For each Ascension, this spell gives the target Cowardice equal to the caster's Authority, Competence or Presence.", colors: {} },
+
+            // MYSTA (Spirit x2)
+            { name: "Beseech", level: 2, sphere: "Mysta", parent: ["Spirit", "Spirit"], keywords: "Spirit",
+              meta: { Range: "Self", Target: "Self", Resolve: "Spirit Test", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster may use their mana to form a question in an arcane formula, and seek the wisdom of any entities within the plane of its existence. They may ask if a particular task the caster intends to attempt will be met with triumph or disaster. The entity will answer truthfully, however, if triumph or disaster would not suffice, the entity can choose not to answer with a cryptic piece of advice or warning.",
+              ascension: "For each level of Ascension, the caster may ask an additional question.", colors: {} },
+            { name: "Sanctify", level: 2, sphere: "Mysta", parent: ["Spirit", "Spirit"], keywords: "Spirit, Area",
+              meta: { Range: "30 ft.", Target: "Area/Building (< 80 ft. diameter)", Resolve: "None", Duration: "8 Hours", Upkeep: "None" },
+              desc: "The caster uses their energy to sanctify a building or area with energy of an entity of the caster's choice. The caster then chooses one of the alignments of the entity chosen. This spell prevents creatures to enter or leave this affected target that are of the opposing alignment chosen (With Neutral Opposing Neutral).",
+              ascension: "For each level of Ascension, the area of this spell increases by 50 ft.", colors: {} },
+            { name: "Strand", level: 2, sphere: "Mysta", parent: ["Spirit", "Spirit"], keywords: "Spirit",
+              meta: { Range: "30 ft.", Target: "5 ft. Square", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster summons a strand of the tapestry in a selected space in range. Whenever a creature would enter this square, this strand is expended and ravels around that creature, and the creature is imbued with Tier 1 Trance.",
+              ascension: "No effect.", colors: {} },
+
+            // NECRA (Mass + Spirit)
+            { name: "Burst", level: 2, sphere: "Necra", parent: ["Mass", "Spirit"], keywords: "Mass, Spirit, Harm",
+              meta: { Range: "30 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster selects a target within range. The caster makes a contested Authority, Cunning or Guile check against the target's Stamina, Tenacity or Vigor. If the caster wins, the target takes 3 Necrotic damage for each Action Point they currently possess.",
+              ascension: "For each level of Ascension, increase the damage per Action Point by 1.", colors: {} },
+            { name: "Rattle", level: 2, sphere: "Necra", parent: ["Mass", "Spirit"], keywords: "Mass, Spirit, Economy",
+              meta: { Range: "Touch", Target: "1 Corpse", Resolve: "None", Duration: "8 Hours", Upkeep: "None" },
+              desc: "The caster causes the bones of a corpse to become animated, separating themselves from the flesh of the previous creature. The target corpse must be an humanoid corpse, and must contain bones in order to be affected by this spell. Once complete, the corpse sheds its flesh and rises under the caster's complete command. This creature is considered a Lost Skeleton, using the base creature template. Only one such creature can exist from this spell from this caster at a time.",
+              ascension: "For each level of Ascension, increase the total number of skeletons that can exist from this spell by 1.", colors: {} },
+            { name: "Wither", level: 2, sphere: "Necra", parent: ["Mass", "Spirit"], keywords: "Mass, Spirit, Area, Harm, Heal",
+              meta: { Range: "50 ft.", Target: "20 ft. Radius", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster selects an area within range. That area is marked by necromantic energy, with shadows and flowers beginning to appear on the ground. At the start of the next round, this area activates and is consumed. All enemies of the caster in the area take 2 points of Necrotic damage, and all allies are healed from the total damage deal by this spell, distributed amongst those allies by the caster. This spell cannot cause injuries. This spell does not stack in anyway.",
+              ascension: "For each level of Ascension, this spell deals an additional 2 points of damage.", colors: {} },
+
+            // PSYCHA (Mind x2)
+            { name: "Blank", level: 2, sphere: "Psycha", parent: ["Mind", "Mind"], keywords: "Mind, Depower",
+              meta: { Range: "30 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The caster and the target must make a contested Competence, Cunning, Guile or Willpower check. If the caster wins, the target loses all Tiers of a single Imbuement of the caster's choice.",
+              ascension: "For each level of Ascension, this spell allows for an additional Imbuement to be removed.", colors: {} },
+            { name: "Iron Will", level: 2, sphere: "Psycha", parent: ["Mind", "Mind"], keywords: "Mind, Empower, Imbue",
+              meta: { Range: "15 ft.", Target: "Self/1 Ally", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster imbues the target with the Enchanted Imbuement targeting the sub-attribute Willpower, the tier of which is equal to the caster's Spirit.",
+              ascension: "For each level of Ascension, this spell grants the target Courage equal to the caster's Spirit.", colors: {} },
+            { name: "Spiral", level: 2, sphere: "Psycha", parent: ["Mind", "Mind"], keywords: "Mind, Depower",
+              meta: { Range: "30 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "Instantaneous", Upkeep: "None" },
+              desc: "The target must make a contested Competence, Resilience, Tenacity or Willpower check against the caster's Authority, Competence, Guile or Presence. If the caster wins, the target has an Affliction of the caster's choice increased by I Tier.",
+              ascension: "For each level of Ascension, this spell allows for an additional affliction to be increased.", colors: {} },
+
+            // SENSIA (Mass + Mind)
+            { name: "Depress", level: 2, sphere: "Sensia", parent: ["Mass", "Mind"], keywords: "Mass, Mind, Depower, Harm",
+              meta: { Range: "20 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster makes a contested attribute check against the target. The caster uses their Competence, Cunning or Sovereignty. The Target may use their Resilience, Tenacity or Willpower. If the caster wins, for the duration of the spell, the target is infused with an overwhelming sense of failure. During this time, if the target would miss an attack, they take Psychic damage equal to the caster's Spirit. In addition, when this damage is taken, the target reduces 1 Tier from every Imbuement they are benefiting from.",
+              ascension: "For each level of Ascension, the caster deals 3 additional Psychic damage when the damage effect of this spell is triggered.", colors: {} },
+            { name: "Elation", level: 2, sphere: "Sensia", parent: ["Mass", "Mind"], keywords: "Mass, Mind, Empower",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster infuses an ally with the pure joy of battle. During the duration of this spell, whenever the target would score a Critical Hit, they are healed Hit Points equal to the caster's Spirit, and the target also reduces the Tiers of any Affliction they are suffering from by this same amount.",
+              ascension: "For each level of Ascension, this spell grants the next attack the target makes to be a Critical Hit if the attack hits. This stacks with each level of Ascension.", colors: {} },
+            { name: "Envelop", level: 2, sphere: "Sensia", parent: ["Mass", "Mind"], keywords: "Mass, Mind, Area, Harm",
+              meta: { Range: "30 ft.", Target: "Creatures within 20 ft. Radius", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "All targets within this area track each attack they would hit. At the end of the round, all attacks hit that are allied with the caster are tallied against the caster's enemies. Whichever side has hit more attacks, deals Psychic damage to the other, equal to the difference of these tallied scores.",
+              ascension: "For each level of Ascension, this spell has its target radius increased by 20 ft.", colors: {} },
+
+            // TRANSMA (Mass x2)
+            { name: "Edge", level: 2, sphere: "Transma", parent: ["Mass", "Mass"], keywords: "Mass, Imbue",
+              meta: { Range: "20 ft.", Target: "1 Ally", Resolve: "None", Duration: "1 Round", Upkeep: "None" },
+              desc: "The caster imbues the target with Keen, the Tier of which is equal to the caster's Authority, Competence or Presence.",
+              ascension: "No effect.", colors: {} },
+            { name: "Mutate", level: 2, sphere: "Transma", parent: ["Mass", "Mass"], keywords: "Mass, Imbue",
+              meta: { Range: "Self", Target: "Self", Resolve: "None", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster infuses themselves with magic, and causes a mutation to occur within them. This mutation takes on one of the following manifestations: Claws - The caster gains claws, and may use them like a Skinwalker. Fangs - The caster gains fangs, and can make a Bite attack as a natural weapon. Hunter's Eyes - The caster gains a bonus to Perception and Investigation checks equal to the caster's Spirit. Scales - The caster gains a veil of scales over their body that grants the caster a bonus to their AC equal to half of their Spirit.",
+              ascension: "For each level of Ascension, the caster may choose an additional mutation.", colors: {} },
+            { name: "Sabotage", level: 2, sphere: "Transma", parent: ["Mass", "Mass"], keywords: "Mass, Afflict, Curse",
+              meta: { Range: "15 ft.", Target: "1 Enemy", Resolve: "Contested", Duration: "Upkeep", Upkeep: "1 Mana Point" },
+              desc: "The caster attempts a contested Cunning, Grace or Vigor check against the target's Resilience, Tenacity or Vigor. If the caster wins, the target is afflicted with Cursed, the Tier of which is equal to the caster's Cunning, Grace or Vigor. While afflicted by this Curse, the target has a penalty to a sub-attribute of your choice equal to the Tier of the Cursed.",
+              ascension: "No effect.", colors: {} }
+        ];
+
+        // --- APP STATE ---
+        let state = {
+            activeColors: ['Indigo', 'Blue', 'Green', 'Yellow', 'Orange', 'Red', 'Violet'],
+            learned: JSON.parse(localStorage.getItem('prism_learned')) || [],
+            hidden: JSON.parse(localStorage.getItem('prism_hidden')) || [],
+            bypassLocks: false
+        };
+
+        const l2SphereParents = {
+            Abjura: { req: { Energy: 2, Spirit: 2 }, info: "Energy + Spirit" },
+            Conjura: { req: { Energy: 2 }, info: "Energy x2" },
+            Glamora: { req: { Energy: 2, Mind: 2 }, info: "Energy + Mind" },
+            Mysta: { req: { Spirit: 2 }, info: "Spirit x2" },
+            Necra: { req: { Mass: 2, Spirit: 2 }, info: "Mass + Spirit" },
+            Psycha: { req: { Mind: 2 }, info: "Mind x2" },
+            Sensia: { req: { Mass: 2, Mind: 2 }, info: "Mass + Mind" },
+            Transma: { req: { Mass: 2 }, info: "Mass x2" }
+        };
+
+        // --- DOM ELEMENTS ---
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+        const l1Container = document.getElementById('l1-container');
+        const l2Container = document.getElementById('l2-container');
+        const trackerContainer = document.getElementById('progress-tracker');
+        const rulesContent = document.getElementById('rules-content');
+        const rulesIcon = document.getElementById('rules-icon');
+
+        // --- INITIALIZATION ---
+        document.querySelectorAll('#color-filters input').forEach(box => {
+            box.addEventListener('change', (e) => {
+                if(e.target.checked) {
+                    if(!state.activeColors.includes(e.target.value)) state.activeColors.push(e.target.value);
+                } else {
+                    state.activeColors = state.activeColors.filter(c => c !== e.target.value);
+                }
+                renderApp();
+            });
+        });
+
+        // --- FUNCTIONS ---
+        function toggleSidebar() {
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                openSidebarBtn.style.display = 'none';
+            } else {
+                sidebar.classList.add('collapsed');
+                openSidebarBtn.style.display = 'flex';
+            }
+        }
+
+        function toggleGroup(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                icon.textContent = "▼";
+            } else {
+                content.style.display = "none";
+                icon.textContent = "▲";
+            }
+        }
+
+        function toggleRules() {
+            if (rulesContent.style.display === "none" || rulesContent.style.display === "") {
+                rulesContent.style.display = "block";
+                rulesIcon.textContent = "▲";
+            } else {
+                rulesContent.style.display = "none";
+                rulesIcon.textContent = "▼";
+            }
+        }
+
+        function toggleBypass() {
+            const toggle = document.getElementById('bypass-toggle');
+            state.bypassLocks = toggle.checked;
+            
+            // Add visual flair to the page to indicate bypass mode
+            const mainContent = document.getElementById('main-content');
+            if (state.bypassLocks) {
+                mainContent.classList.add('bypass-active');
+            } else {
+                mainContent.classList.remove('bypass-active');
+            }
+            
+            renderApp();
+        }
+
+        function saveState() {
+            localStorage.setItem('prism_learned', JSON.stringify(state.learned));
+            localStorage.setItem('prism_hidden', JSON.stringify(state.hidden));
+        }
+
+        function toggleLearn(spellName) {
+            if(state.learned.includes(spellName)) {
+                state.learned = state.learned.filter(s => s !== spellName);
+            } else {
+                state.learned.push(spellName);
+            }
+            saveState();
+            renderApp();
+        }
+
+        function toggleHide(spellName) {
+            if(!state.hidden.includes(spellName)) {
+                state.hidden.push(spellName);
+            }
+            saveState();
+            renderApp();
+        }
+
+        function clearHidden() {
+            state.hidden = [];
+            saveState();
+            renderApp();
+        }
+
+        function clearLearned() {
+            state.learned = [];
+            saveState();
+            renderApp();
+        }
+
+        function getSphereCounts() {
+            let counts = { Energy: 0, Mass: 0, Mind: 0, Spirit: 0 };
+            state.learned.forEach(spellName => {
+                let s = spellsData.find(x => x.name === spellName);
+                if(s && s.level === 1) counts[s.sphere]++;
+            });
+            return counts;
+        }
+
+        // --- RENDERING ---
+        function generateSpellCardHTML(spell) {
+            if(state.hidden.includes(spell.name)) return '';
+
+            const isLearned = state.learned.includes(spell.name);
+            const btnClass = isLearned ? 'btn-learn active' : 'btn-learn';
+            const btnText = isLearned ? '📖 Learned' : '📖 Learn';
+
+            let metaHTML = '';
+            for(const [key, val] of Object.entries(spell.meta)) {
+                metaHTML += `<span><strong>${key}:</strong> ${val}</span>`;
+            }
+
+            let colorsHTML = '';
+            if(spell.colors && Object.keys(spell.colors).length > 0) {
+                state.activeColors.forEach(color => {
+                    if(spell.colors[color]) {
+                        colorsHTML += `
+                            <div class="color-effect-block">
+                                <h4><span class="color-badge bg-${color.toLowerCase()}">${color}</span> Effect</h4>
+                                ${spell.colors[color]}
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            return `
+                <div class="spell-card ${isLearned ? 'learned' : ''}">
+                    <div class="spell-header">
+                        <div>
+                            <div class="spell-title">${spell.name}</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">${spell.sphere} Sphere</div>
+                        </div>
+                        <div class="spell-controls">
+                            <button class="${btnClass}" onclick="toggleLearn('${spell.name}')">${btnText}</button>
+                            <button class="btn-hide" onclick="toggleHide('${spell.name}')">👁️ Hide</button>
+                        </div>
+                    </div>
+                    <div style="color:var(--text-muted); font-size: 0.8rem; margin-bottom:10px; font-style:italic;">${spell.keywords}</div>
+                    <div class="spell-meta">${metaHTML}</div>
+                    <div class="spell-desc">${spell.desc}</div>
+                    <div class="spell-ascension"><strong>Ascension:</strong> ${spell.ascension}</div>
+                    <div class="color-effects">
+                        ${colorsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderApp() {
+            const counts = getSphereCounts();
+            
+            // Render Tracker
+            trackerContainer.innerHTML = `
+                <div style="font-size:0.9rem; color:var(--text-muted)">L1 Sphere Progress:</div>
+                <div class="progress-stat ${counts.Energy >= 2 ? 'ready' : ''}">Energy: <span>${counts.Energy}</span>/2</div>
+                <div class="progress-stat ${counts.Mass >= 2 ? 'ready' : ''}">Mass: <span>${counts.Mass}</span>/2</div>
+                <div class="progress-stat ${counts.Mind >= 2 ? 'ready' : ''}">Mind: <span>${counts.Mind}</span>/2</div>
+                <div class="progress-stat ${counts.Spirit >= 2 ? 'ready' : ''}">Spirit: <span>${counts.Spirit}</span>/2</div>
+            `;
+
+            // Group L1 Spells
+            const l1Spheres = ['Energy', 'Mass', 'Mind', 'Spirit'];
+            l1Container.innerHTML = '';
+
+            l1Spheres.forEach(sphere => {
+                const sSpells = spellsData.filter(s => s.level === 1 && s.sphere === sphere);
+                let cardsHtml = sSpells.map(generateSpellCardHTML).join('');
+
+                if(sSpells.length > 0 && cardsHtml.trim() !== '') {
+                    l1Container.innerHTML += `
+                        <div class="sphere-group">
+                            <div class="sphere-title">${sphere} Sphere</div>
+                            <div class="spell-grid">${cardsHtml}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            if(l1Container.innerHTML === '') {
+                l1Container.innerHTML = `<div class="hidden-notice">All Level 1 spells are currently hidden. Use the sidebar to restore them.</div>`;
+            }
+
+            // Render L2 Spells
+            l2Container.innerHTML = '';
+            
+            for(const [sphere, data] of Object.entries(l2SphereParents)) {
+                let unlocked = state.bypassLocks;
+                
+                if (!unlocked) {
+                    unlocked = true;
+                    for(const [reqSphere, reqCount] of Object.entries(data.req)) {
+                        if(counts[reqSphere] < reqCount) unlocked = false;
+                    }
+                }
+
+                if(unlocked) {
+                    const sSpells = spellsData.filter(s => s.level === 2 && s.sphere === sphere);
+                    let cardsHtml = sSpells.map(generateSpellCardHTML).join('');
+                    
+                    if(cardsHtml.trim() !== '') {
+                        l2Container.innerHTML += `
+                            <div class="sphere-group">
+                                <div class="sphere-title">${sphere} Sphere <span style="font-size:0.8rem; color:var(--text-muted); text-transform:none;">(Requires: ${data.info})</span></div>
+                                <div class="spell-grid">${cardsHtml}</div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    l2Container.innerHTML += `
+                        <div class="sphere-group">
+                            <div class="locked-sphere">
+                                <h3 style="color:var(--text-muted)">🔒 ${sphere} Sphere Locked</h3>
+                                <p style="font-size:0.9rem; margin-top:5px;">Requires: ${data.info}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            if(l2Container.innerHTML === '') {
+                 l2Container.innerHTML = `<div class="hidden-notice">All Level 2 spells are currently hidden. Use the sidebar to restore them.</div>`;
+            }
+        }
+
+        // INIT
+        renderApp();
+
+    </script>
+</body>
+</html>
